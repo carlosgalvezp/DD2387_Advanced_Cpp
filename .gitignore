@@ -1,0 +1,13 @@
+#  Executable files
+*.o
+*.out
+*.exe
+
+# Folders
+build
+
+#	Other garbage
+*~
+*.gz
+*.user
+*.pro
