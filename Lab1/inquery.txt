@@ -22,7 +22,6 @@ Answer: The object file (.o) is the result of compiling a certain .cpp file, BEF
 
 
 
-
 0.2  HELLO WORLD
 -------------------------------------------------------------------------------
 :::: What is the purpose of `std::cout`, `std::cerr`, and `std::clog`,
