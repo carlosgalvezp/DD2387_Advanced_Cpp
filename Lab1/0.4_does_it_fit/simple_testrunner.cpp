@@ -35,8 +35,14 @@ public:
 
 static class TestDescription_MyTestSuite_test3 : public CxxTest::RealTestDescription {
 public:
- TestDescription_MyTestSuite_test3() : CxxTest::RealTestDescription( Tests_MyTestSuite, suiteDescription_MyTestSuite, 33, "test3" ) {}
+ TestDescription_MyTestSuite_test3() : CxxTest::RealTestDescription( Tests_MyTestSuite, suiteDescription_MyTestSuite, 32, "test3" ) {}
  void runTest() { suite_MyTestSuite.test3(); }
 } testDescription_MyTestSuite_test3;
+
+static class TestDescription_MyTestSuite_test4 : public CxxTest::RealTestDescription {
+public:
+ TestDescription_MyTestSuite_test4() : CxxTest::RealTestDescription( Tests_MyTestSuite, suiteDescription_MyTestSuite, 45, "test4" ) {}
+ void runTest() { suite_MyTestSuite.test4(); }
+} testDescription_MyTestSuite_test4;
 
 #include <cxxtest/Root.cpp>

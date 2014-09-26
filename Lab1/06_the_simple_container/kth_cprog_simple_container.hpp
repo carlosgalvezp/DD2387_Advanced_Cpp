@@ -74,7 +74,7 @@ public:
      * @return a copy of the value at position idx
      * @throw std:out_of_range if idx not valid
      */
-    unsigned int operator[](const std::size_t idx) const;
+    const unsigned int& operator[](const std::size_t idx) const;
 
     /**
      * @brief operator []

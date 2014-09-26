@@ -1,6 +1,6 @@
 #include <iostream>
 #include <stdexcept>
-#include "uintvector.h"     // inkludera din headerfil har
+#include "kth_cprog_simple_container.hpp"     // inkludera din headerfil har
 
 //int main()
 //{
@@ -63,6 +63,7 @@ int main()
     b = b;                 // hmm: se till att inte minnet som skall behallas frigors
 #endif
 
+    UIntVector f(0);
     return 0;
 }
 

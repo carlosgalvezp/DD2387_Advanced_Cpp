@@ -114,7 +114,9 @@ int count_if_followed_by (char const * p, int len, char a, char b) {
      especially in the case of `count_if_followed_by`?
 --------------------------------------------------------------------------------
 
-Answer: ...
+Answer: Because we need to make sure that we only access the memory positions reserved
+to the array. Otherwise the program can crash with a segmentation fault (if we are lucky)
+or in the worst case it can still work but using unspecified data.
 
 --------------------------------------------------------------------------------
 
@@ -189,15 +191,14 @@ no_ref(), since the input parameter is not passed by reference.
 
 Answer: The object "a" is destroyed when we exit the function no_ref: the local variable
 was created when entering the function, in the stack, and when we go out of the scope
-that variable is destroyed.
+that variable is destroyed. Afterwards, the objects "a", "b", "c", "d" and "aa" are destroyed
+from the stack when main() finishes.
 
 --------------------------------------------------------------------------------
 :::: What will happen if we try to free the dynamically allocated
 :::: memory through `delete p`, instead of `delete [] p`?
 
-Answer: The behaviour in C++ is undefined. In this case, it only deletes the first element
-of the array invoking the destructor, but after that we get a segmentation fault since
-we did not delete the whole array.
+Answer: The behaviour in this is undefined, according to the C++ standard. In this case, it only deletes the first element of the array invoking the destructor, but after that we get a segmentation fault since we did not delete the whole array.
 
 --------------------------------------------------------------------------------
 :::: valgrind indicates that there is something wrong with birth.cpp; what, and
@@ -268,7 +269,9 @@ this problem.
 :::: and why?
 --------------------------------------------------------------------------------
 
-Answer: ...
+Answer: We should have two versions of operator[]. One that is marked as const, which
+provides a read-only reference to the object. Thus we can do for instance int a = v[0];
+The second version, without 'const', provides a read/write reference, so we can modify the content of the vector: v[0] = 5;
 
 --------------------------------------------------------------------------------
 :::: The semantics of copying a UIntVector might not be trivial; why must we 
@@ -276,7 +279,12 @@ Answer: ...
 :::: it for us?
 --------------------------------------------------------------------------------
 
-Answer: ...
+Answer: When implementing the copy constructor, we make sure to make a deep copy of the
+internal container, element by element. If we let the compiler generate the code for us, 
+it would create a copy of the variable unsigned int *data_, but nothing more. In other words:
+the copied UIntVector would have a its pointer data_ pointing to the OLD container, which is not
+what we want. This can cause a problem if we then destroy the original UIntVector: the container
+disappears and the new UIntVector's pointer is invalid. 
 
 --------------------------------------------------------------------------------
 
@@ -288,14 +296,23 @@ Answer: ...
 :::: but the type of `source` must meet certain requirements; what are they?
 --------------------------------------------------------------------------------
 
-Answer: ...
+Answer: According to the C++ documentation, the type of 'source' must be iterable.
+For this, the following conditions are required:
+
+-There must exist a begin() and end() methods that return an iterator to the beginning and
+end of the structure, respectively.
+
+-The iterator itself must support operator*, operator!= and operator++.
 
 --------------------------------------------------------------------------------
 :::: The C++ Standard sometimes state that a type in the Standard Library is
 :::: "unspecified"; why do you think that is?
 --------------------------------------------------------------------------------
 
-Answer: ...
+Answer: It means that we can return any type (it is unspecified), as long as it fulfills
+several conditions. For instance, in the Lab, even though we return unspecified
+for the functions begin(), end() and find(), we know that the actual type that
+we return must be a RandomAccessIterator.
 
 --------------------------------------------------------------------------------
 

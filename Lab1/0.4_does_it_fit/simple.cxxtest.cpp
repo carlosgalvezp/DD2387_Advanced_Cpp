@@ -18,28 +18,41 @@ public:
         TS_ASSERT_EQUALS(result, 1);
     }
     void test2 () {
+        char const  data[6] = {'G','X','G','X','G','G'};
+        int  const test_len = 5;
+
+        int  const   result = count_if_followed_by (data, test_len, 'X', 'G');
+
+        // SYNOPSIS:
+        //   result should be 2 since there are two sequences in [data[0], data[5])
+
+        TS_ASSERT_EQUALS(result, 2);
+    }
+
+    void test3 () {
         char const  data[6] = {'G','G','X','G','X','G'};
         int  const test_len = 5;
 
         int  const   result = count_if_followed_by (data, test_len, 'X', 'G');
 
         // SYNOPSIS:
-        //   result should be undefined since the length specified is 6,
-        //   and it could happen that another G is in memory outside the array.
+        //   result should be 1 since there is only one 'XG' pair in the range
+	// [data[0], data[5])
 
         TS_ASSERT_EQUALS(result, 1);
     }
 
-    void test3 () {
-        char const  data[6] = {'G','G','X','G','X','G'};
-        int  const test_len = 6;
+    void test4(){
+        char const  data[6] = {'X','G'};
+        int  const test_len = 1;
 
-        int  const   result = count_if_followed_by (data, test_len, 'G', '3');
+        int  const   result = count_if_followed_by (data, test_len, 'X', 'G');
 
         // SYNOPSIS:
-        //   result should be undefined since the length specified is 6,
-        //   and it could happen that there is a 3 in memory outside the array.
+	// The result should be 0 since it should only analyze the first character
 
         TS_ASSERT_EQUALS(result, 0);
     }
+
+
 };
