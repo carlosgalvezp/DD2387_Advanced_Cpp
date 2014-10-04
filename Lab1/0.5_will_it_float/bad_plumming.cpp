@@ -13,4 +13,5 @@ int main () {
     const int size = 5;
     Data ** v = new Data * [size];
     foo(v, size);
+
 }

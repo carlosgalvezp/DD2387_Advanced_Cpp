@@ -1,6 +1,6 @@
-#include "kth_cprog_template_container.hpp"             // inkludera din headerfil har
+#include "kth_cprog_template_container2.hpp"             // inkludera din headerfil har
 #include <assert.h>             // assert(b) ger felmeddelande om b falsk
-
+#include <vector>
 void test_kth();
 
 void test_reset();
@@ -19,9 +19,9 @@ void test_kth();
 void test_master();
 
 struct T1 {
-    T1 () {++object_count; }
-    T1 (T1 const&) {++object_count; }
-    ~T1 () {--object_count; }
+    T1 () {std::cout << "Default constructor" << std::endl; ++object_count; }
+    T1 (T1 const&){ std::cout << "Copy constructor" << std::endl; ++object_count; }
+    ~T1 () {std::cout << "Destructor" << std::endl; --object_count; }
     static unsigned int object_count;
 };
 
@@ -30,15 +30,31 @@ unsigned int T1::object_count = 0;
 
 int main()
 {
-    test_kth();
-    test_reset();
-    test_push();
-    test_insert();
-    test_clear();
-    test_erase();
-    test_bug();
-    test_operators();
+//    test_kth();
+//    test_reset();
+//    test_push();
+//    test_insert();
+//    test_clear();
+//    test_erase();
+//    test_bug();
+//    test_operators();
+    test_master();
     return 0;
+}
+
+void test_master()
+{
+    {
+        Vector<T1> v1 (3); assert (T1::object_count == 3 && v1.capacity () >= 3);
+        Vector<T1> v2; assert (T1::object_count == 3);
+        v1.push_back (T1{}); assert (T1::object_count == 4 && v1.capacity () >= 4);
+        v2 = v1; assert (T1::object_count == 8);
+        v2.erase (1); assert (T1::object_count == 7);
+        v2.erase (1); assert (T1::object_count == 6);
+        v1.reset();
+    }
+    assert (T1::object_count == 0);
+
 }
 
 void test_kth()

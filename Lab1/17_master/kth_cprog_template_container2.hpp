@@ -7,6 +7,7 @@
 #include <stdexcept>
 #include <iterator>
 #include <type_traits>
+#include <memory>
 
 #define INITIAL_SIZE 10
 
@@ -155,7 +156,7 @@ private:
     T* data_;
     std::size_t size_;
     std::size_t capacity_;
-
+    std::allocator<T> allocator;
     /**
      * @brief Computes the capacity of the array, as twice the size
      * @param size
@@ -202,7 +203,7 @@ Vector<T>::Vector()
     // ** Allocate space
     size_ = 0;
     capacity_ = computeCapacity(size_);
-    data_ = new T[capacity_];
+    data_ = allocator.allocate(capacity_ * sizeof(T));
 }
 
 /**
@@ -217,15 +218,12 @@ Vector<T>::Vector(const std::size_t size)
     // ** Allocate space
     size_ = size;
     capacity_ = computeCapacity(size_);
-    data_ = new T[capacity_];
-
-    std::cout << "Initializing elements..."<<std::endl;
+    data_ = allocator.allocate(capacity_ * sizeof(T));
 
     // ** Initialize elements
     for(std::size_t i = 0; i < size_; ++i)
     {
-        std::cout << i << std::endl;
-        data_[i] = T();
+        data_[i] = *(new(data_ + i)T()); // Create new T at the address data_ + i
     }
 }
 
@@ -241,12 +239,12 @@ Vector<T>::Vector(const Vector<T>& src)
     // ** Allocate space
     size_ = src.size();
     capacity_ = src.capacity();
-    data_ = new T[capacity_];
+    data_ = allocator.allocate(capacity_ * sizeof(T));
 
     // ** Copy elements
     for(std::size_t i = 0; i < size_; ++i)
     {
-        data_[i] = src.data_[i];
+        data_[i] = *(new(data_ + i) T(src.data_[i]));
     }
 }
 
@@ -262,13 +260,13 @@ Vector<T>::Vector(const std::initializer_list<T>& src)
     // ** Allocate space
     size_ = src.size();
     capacity_ = computeCapacity(size_);
-    data_ = new T[capacity_];
+    data_ = allocator.allocate(capacity_ * sizeof(T));
 
     // ** Copy elements
     std::size_t i = 0;
     for(auto it = src.begin(); it < src.end(); it++, ++i)
     {
-        data_[i] = *it;
+        data_[i] = *(new(data_ + i)T(*it));
     }
 }
 
@@ -285,12 +283,12 @@ Vector<T>::Vector(const std::size_t size, const T& src)
     // ** Allocate space
     size_ = size;
     capacity_ = computeCapacity(size_);
-    data_ = new T[capacity_];
+    data_ = allocator.allocate(capacity_ * sizeof(T));
 
     // ** Copy elements
     for(std::size_t i = 0; i < size_; ++i)
     {
-        data_[i] = src;
+        data_[i] = *(new(data_ + i) T(src));
     }
 }
 
@@ -327,15 +325,16 @@ Vector<T>& Vector<T>::operator= (const Vector<T>& src)
     if(&src != this) // Check self-assignment
     {
         // ** Reallocate space if needed
-        if (src.size() > size_)
+        if (src.size() > capacity_)
         {
-            delete [] data_;
-            data_ = new T[src.size()];
+            allocator.deallocate(data_, capacity_);
+            capacity_ = computeCapacity(capacity_);
+            data_ = allocator.allocate(capacity_ * sizeof(T));
         }
         // ** Copy src resources
         for(std::size_t i = 0; i < src.size(); i++)
         {
-            data_[i] = src.data_[i];
+            data_[i] = *(new(data_+i)T(src.data_[i]));
         }
         size_ = src.size();
     }
@@ -355,7 +354,7 @@ Vector<T>& Vector<T>::operator= (Vector<T>&& src)
     if(&src != this) // Self-assignment check
     {
         // ** Release own resources
-        delete [] data_;
+        free(data_);
 
         // ** Get src resources
         data_ = src.data_;
@@ -401,7 +400,12 @@ T& Vector<T>::operator[](const std::size_t idx)
 template<typename T>
 Vector<T>::~Vector()
 {
-    delete[] data_;
+    // ** Destruct every element
+    for (auto it = begin(); it != end(); ++it)
+        it->~T();
+
+    // ** Free memory
+    allocator.deallocate(data_,capacity_);
     size_ = 0;
     capacity_ = 0;
 }
@@ -413,7 +417,10 @@ template<typename T>
 void Vector<T>::reset()
 {
     for(std::size_t i = 0; i < size_; ++i)
-        data_[i] = T();
+    {
+        data_[i].~T();
+        data_[i] = *(new(data_ + i) T());
+    }
 }
 
 /**
@@ -426,27 +433,28 @@ void Vector<T>::push_back(const T& src)
     // ** Check size
     if (size_ < capacity_) //No need to allocate more memory
     {
-        data_[size_] = src;
+        data_[size_] = *(new(data_ + size_)T(src));
         size_++;
     }
     else
     {
         // ** Reallocate data
+        std::size_t oldCapacity = capacity_;
         capacity_ = computeCapacity(capacity_);
-        T* newData = new T[capacity_];
+        T* newData = allocator.allocate(capacity_ * sizeof(T));
 
         // ** Move data
         for (std::size_t i = 0; i < size_; ++i)
         {
-            newData[i] = data_[i];
+            newData[i] = std::move(data_[i]);
         }
 
         // ** Add new element
-        newData[size_] = src;
+        newData[size_] = *(new(data_ + size_)T(src));
         size_++;
 
         // ** Delete old data
-        delete [] data_;
+        allocator.deallocate(data_, oldCapacity);
 
         // ** Reassign data
         data_ = newData;
@@ -472,7 +480,7 @@ void Vector<T>::insert(const std::size_t idx, const T& src)
         expand(idx);
 
         // ** Put the element
-        data_[idx] = src;
+        data_[idx] = *(new(data_ + idx)T(src));
     }
 }
 
@@ -486,6 +494,10 @@ void Vector<T>::erase(const std::size_t idx)
     // ** Check boundaries
     check_bounds(idx);
 
+    // ** Remove element
+    T& x = data_[idx];
+    x.~T();
+
     // ** Shrink array
     shrink(idx);
 }
@@ -496,6 +508,10 @@ void Vector<T>::erase(const std::size_t idx)
 template<typename T>
 void Vector<T>::clear()
 {
+    // ** Remove elements
+    for (auto it = begin(); it != end(); ++it)
+        it->~T();
+
     size_ = 0;
 }
 
@@ -615,11 +631,12 @@ void Vector<T>::expand(const std::size_t idx)
     // ** Allocate more memory if needed
     T* newData;
     bool allocated(false);
+    double oldCapacity = capacity_;
 
     if (size_ >= capacity_)
     {
         capacity_ = computeCapacity(capacity_);
-        newData = new T[capacity_];
+        newData = allocator.allocate(capacity_ * sizeof(T));
         allocated = true;
     }
     else
@@ -640,7 +657,7 @@ void Vector<T>::expand(const std::size_t idx)
 
     // ** Reassign memory
     if(allocated)
-        delete[] data_;
+        allocator.deallocate(data_, oldCapacity);
 
     data_ = newData;
     size_++;
