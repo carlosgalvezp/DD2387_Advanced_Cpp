@@ -1,5 +1,5 @@
-#ifndef VECTOR_H
-#define VECTOR_H
+#ifndef SAFE_VECTOR_H
+#define SAFE_VECTOR_H
 
 #include <cstdlib>
 #include <cmath>
@@ -7,64 +7,68 @@
 #include <stdexcept>
 #include <iterator>
 #include <type_traits>
+#include <mutex>
+#include <thread>
+#include <vector>
+
 
 #define INITIAL_SIZE 10
 
 template <typename T>
-class Vector
-{       
+class SafeVector
+{
 public:
-    typedef T* iterator_t;
+    typedef T* iterator;
 
     /**
      * @brief Default constructor
      */
-    Vector();
+    SafeVector();
 
     /**
      * @brief Constructor with size
      * @param size
      */
-    explicit Vector(const std::size_t size);
+    explicit SafeVector(const std::size_t size);
 
     /**
      * @brief Copy-constructor
      * @param src
      */
-    Vector(const Vector<T>& src);
+    SafeVector(const SafeVector<T>& src);
 
     /**
      * @brief Constructor using initializer_list
      * @param src
      */
-    explicit Vector(const std::initializer_list<T>& src);
+    explicit SafeVector(const std::initializer_list<T>& src);
 
     /**
      * @brief Creates a vector of "size" elements, all with the value of "src"
      * @param size the number of elements
      * @param src the value to be copied to every element
      */
-    explicit Vector(const std::size_t size, const T& src);
+    explicit SafeVector(const std::size_t size, const T& src);
 
     /**
      * @brief Move-constructor
      * @param src
      */
-    explicit Vector(Vector<T>&& src);
+    explicit SafeVector(SafeVector<T>&& src);
 
     /**
      * @brief Copy-assignment operator
      * @param src
      * @return
      */
-    Vector<T>& operator= (const Vector<T>& src);
+    SafeVector<T>& operator= (const SafeVector<T>& src);
 
     /**
      * @brief Move-assignment operator
      * @param src
      * @return
      */
-    Vector<T>& operator= (Vector<T>&& src);
+    SafeVector<T>& operator= (SafeVector<T>&& src);
 
     /**
      * @brief operator [] (read-only)
@@ -83,7 +87,7 @@ public:
     /**
      * @brief Default destructor
      */
-    ~Vector();
+    ~SafeVector();
 
     /**
      * @brief reset Assigns every element of the vector the value T()
@@ -130,20 +134,34 @@ public:
      * @brief Iterator to the beginning of the vector
      * @return
      */
-    iterator_t begin() const;
+    iterator begin() const;
 
     /**
      * @brief Iterator to the end of the vector
      * @return
      */
-    iterator_t end() const;
+    iterator end() const;
 
     /**
      * @brief Finds the position of the array where the object src is found
      * @param src
      * @return An iterator to the position, or end() if not found
      */
-    iterator_t find(const T& src) const;
+    iterator find(const T& src) const;
+
+    /**
+     * @brief Swaps 2 elements, thread-safe. It locks the whole vector
+     * @param idx1
+     * @param idx2
+     */
+    void safeswap(std::size_t idx1, std::size_t idx2);
+
+    /**
+     * @brief Swaps 2 elements, thread-sage. It only locks the elements
+     * @param idx1
+     * @param idx2
+     */
+    void safeswap2(std::size_t idx1, std::size_t idx2);
 
     /**
      * @brief Prints the vector contents
@@ -155,6 +173,8 @@ private:
     T* data_;
     std::size_t size_;
     std::size_t capacity_;
+    std::mutex mutex_; // The problem is that mutexes are NOT movable, so the class becomes not-movable
+    std::mutex* mutexes_; // Array of mutex for individual lock
 
     /**
      * @brief Computes the capacity of the array, as twice the size
@@ -195,7 +215,7 @@ private:
  * @brief Default constructor
  */
 template<typename T>
-Vector<T>::Vector()
+SafeVector<T>::SafeVector()
 {
     check_type();
 
@@ -203,6 +223,7 @@ Vector<T>::Vector()
     size_ = 0;
     capacity_ = computeCapacity(size_);
     data_ = new T[capacity_];
+    mutexes_ = new std::mutex[size_];
 }
 
 /**
@@ -210,7 +231,7 @@ Vector<T>::Vector()
  * @param size the initial size
  */
 template<typename T>
-Vector<T>::Vector(const std::size_t size)
+SafeVector<T>::SafeVector(const std::size_t size)
 {
     check_type();
 
@@ -227,6 +248,7 @@ Vector<T>::Vector(const std::size_t size)
         std::cout << i << std::endl;
         data_[i] = T();
     }
+    mutexes_ = new std::mutex[size_];
 }
 
 /**
@@ -234,7 +256,7 @@ Vector<T>::Vector(const std::size_t size)
  * @param src
  */
 template<typename T>
-Vector<T>::Vector(const Vector<T>& src)
+SafeVector<T>::SafeVector(const SafeVector<T>& src)
 {
     check_type();
 
@@ -248,6 +270,7 @@ Vector<T>::Vector(const Vector<T>& src)
     {
         data_[i] = src.data_[i];
     }
+    mutexes_ = new std::mutex[size_];
 }
 
 /**
@@ -255,7 +278,7 @@ Vector<T>::Vector(const Vector<T>& src)
  * @param src
  */
 template<typename T>
-Vector<T>::Vector(const std::initializer_list<T>& src)
+SafeVector<T>::SafeVector(const std::initializer_list<T>& src)
 {
     check_type();
 
@@ -270,6 +293,7 @@ Vector<T>::Vector(const std::initializer_list<T>& src)
     {
         data_[i] = *it;
     }
+    mutexes_ = new std::mutex[size_];
 }
 
 /**
@@ -278,7 +302,7 @@ Vector<T>::Vector(const std::initializer_list<T>& src)
  * @param src the value to be copied to every element
  */
 template<typename T>
-Vector<T>::Vector(const std::size_t size, const T& src)
+SafeVector<T>::SafeVector(const std::size_t size, const T& src)
 {
     check_type();
 
@@ -292,6 +316,7 @@ Vector<T>::Vector(const std::size_t size, const T& src)
     {
         data_[i] = src;
     }
+    mutexes_ = new std::mutex[size_];
 }
 
 /**
@@ -299,7 +324,7 @@ Vector<T>::Vector(const std::size_t size, const T& src)
  * @param src
  */
 template<typename T>
-Vector<T>::Vector(Vector<T>&& src)
+SafeVector<T>::SafeVector(SafeVector<T>&& src)
 {
     check_type();
 
@@ -320,7 +345,7 @@ Vector<T>::Vector(Vector<T>&& src)
  * @return
  */
 template<typename T>
-Vector<T>& Vector<T>::operator= (const Vector<T>& src)
+SafeVector<T>& SafeVector<T>::operator= (const SafeVector<T>& src)
 {
     check_type();
 
@@ -348,7 +373,7 @@ Vector<T>& Vector<T>::operator= (const Vector<T>& src)
  * @return
  */
 template<typename T>
-Vector<T>& Vector<T>::operator= (Vector<T>&& src)
+SafeVector<T>& SafeVector<T>::operator= (SafeVector<T>&& src)
 {
     check_type();
 
@@ -376,7 +401,7 @@ Vector<T>& Vector<T>::operator= (Vector<T>&& src)
  * @return
  */
 template<typename T>
-const T& Vector<T>::operator[](const std::size_t idx) const
+const T& SafeVector<T>::operator[](const std::size_t idx) const
 {
     check_bounds(idx);
     return data_[idx];
@@ -388,7 +413,7 @@ const T& Vector<T>::operator[](const std::size_t idx) const
  * @return
  */
 template<typename T>
-T& Vector<T>::operator[](const std::size_t idx)
+T& SafeVector<T>::operator[](const std::size_t idx)
 {
     check_bounds(idx);
     return data_[idx];
@@ -399,9 +424,10 @@ T& Vector<T>::operator[](const std::size_t idx)
  * @brief Default destructor
  */
 template<typename T>
-Vector<T>::~Vector()
+SafeVector<T>::~SafeVector()
 {
     delete[] data_;
+    delete[] mutexes_;
     size_ = 0;
     capacity_ = 0;
 }
@@ -410,7 +436,7 @@ Vector<T>::~Vector()
  * @brief reset Assigns every element of the vector the value T()
  */
 template<typename T>
-void Vector<T>::reset()
+void SafeVector<T>::reset()
 {
     for(std::size_t i = 0; i < size_; ++i)
         data_[i] = T();
@@ -421,7 +447,7 @@ void Vector<T>::reset()
  * @param src
  */
 template<typename T>
-void Vector<T>::push_back(const T& src)
+void SafeVector<T>::push_back(const T& src)
 {
     // ** Check size
     if (size_ < capacity_) //No need to allocate more memory
@@ -459,7 +485,7 @@ void Vector<T>::push_back(const T& src)
  * @param src
  */
 template<typename T>
-void Vector<T>::insert(const std::size_t idx, const T& src)
+void SafeVector<T>::insert(const std::size_t idx, const T& src)
 {
     if(idx == size_)
         push_back(src);
@@ -481,7 +507,7 @@ void Vector<T>::insert(const std::size_t idx, const T& src)
  * @param idx
  */
 template<typename T>
-void Vector<T>::erase(const std::size_t idx)
+void SafeVector<T>::erase(const std::size_t idx)
 {
     // ** Check boundaries
     check_bounds(idx);
@@ -494,7 +520,7 @@ void Vector<T>::erase(const std::size_t idx)
  * @brief Removes every element, making size == 0
  */
 template<typename T>
-void Vector<T>::clear()
+void SafeVector<T>::clear()
 {
     size_ = 0;
 }
@@ -505,7 +531,7 @@ void Vector<T>::clear()
  * @return
  */
 template<typename T>
-std::size_t Vector<T>::size() const
+std::size_t SafeVector<T>::size() const
 {
     return size_;
 }
@@ -515,7 +541,7 @@ std::size_t Vector<T>::size() const
  * @return
  */
 template<typename T>
-std::size_t Vector<T>::capacity() const
+std::size_t SafeVector<T>::capacity() const
 {
     return capacity_;
 }
@@ -525,7 +551,7 @@ std::size_t Vector<T>::capacity() const
  * @return
  */
 template<typename T>
-typename Vector<T>::iterator_t Vector<T>::begin() const
+typename SafeVector<T>::iterator SafeVector<T>::begin() const
 {
     return data_;
 }
@@ -535,7 +561,7 @@ typename Vector<T>::iterator_t Vector<T>::begin() const
  * @return
  */
 template<typename T>
-typename Vector<T>::iterator_t Vector<T>::end() const
+typename SafeVector<T>::iterator SafeVector<T>::end() const
 {
     return data_ + size_;
 }
@@ -546,7 +572,7 @@ typename Vector<T>::iterator_t Vector<T>::end() const
  * @return An iterator to the position, or end() if not found
  */
 template<typename T>
-typename Vector<T>::iterator_t Vector<T>::find(const T& src) const
+typename SafeVector<T>::iterator SafeVector<T>::find(const T& src) const
 {
     for (auto it = begin(); it < end(); it++)
     {
@@ -556,11 +582,61 @@ typename Vector<T>::iterator_t Vector<T>::find(const T& src) const
     return end();
 }
 
+/* This operation is much safer: other threads can't operate on the data
+ * until the current thread has finished.
+ * However, it will be slower: one could think of speeding the swap process
+ * by having several threads swapping different positions of the vector.
+ * This is not possible with this approach.
+ **/
+template<typename T>
+void SafeVector<T>::safeswap(std::size_t idx1, std::size_t idx2)
+{
+    std::lock_guard<std::mutex> locker(mutex_); // Unlocks when the object is destroyed => no dead-locks if exception happens
+    std::cout << "["<< std::this_thread::get_id() << "] Swapping " << idx1 << " and " << idx2 << "..."<<std::endl;
+    check_bounds(idx1); check_bounds(idx2);
+
+    T tmp = data_[idx1]; // Create a temporal copy
+    data_[idx1] = std::move(data_[idx2]);
+    data_[idx2] = std::move(tmp); // Don't need tmp => std::move
+    std::cout << "["<< std::this_thread::get_id() << "] Finished swapping" << std::endl;
+}
+
+/*
+ * This operation allows for multiple swapping at the same time, given that
+ * the positions are different for every thread.
+ *
+ * This however poses a big deadlock problem, contrary to the previous approach,
+ * which is deadlock-free. Say that a thread wants to swap 2 and 3 and other
+ * thread will swap 3 and 2. They will acquire positions 2 and 3 in the first place.
+ * However, when they need to acquire positions 3 and 2 respectively, these will
+ * be already locked by the other thread. Therefore we have a deadlock.
+ * */
+template<typename T>
+void SafeVector<T>::safeswap2(std::size_t idx1, std::size_t idx2)
+{
+    std::cout << "["<< std::this_thread::get_id() << "] Swapping " << idx1 << " and " << idx2 << "..."<<std::endl;
+    check_bounds(idx1); check_bounds(idx2);
+
+    mutexes_[idx1].lock();// Lock first element (no one can write while I read it)
+    T tmp = data_[idx1];
+
+    mutexes_[idx2].lock(); //Lock second element (I am writing on it)
+    data_[idx1] = std::move(data_[idx2]);
+
+    mutexes_[idx1].unlock(); // Unlock the first one (finished reading and writing)
+
+    data_[idx2] = std::move(tmp); // Don't need tmp => std::move
+    mutexes_[idx2].unlock(); // Unlock the second one (finished reading and writing)
+
+    std::cout << "["<< std::this_thread::get_id() << "] Finished swapping" << std::endl;
+    mutex_.unlock();
+}
+
 /**
  * @brief Prints the vector contents
  */
 template<typename T>
-void Vector<T>::print() const
+void SafeVector<T>::print() const
 {
     for(std::size_t i = 0; i < size_; ++i)
     {
@@ -575,7 +651,7 @@ void Vector<T>::print() const
  * @return
  */
 template<typename T>
-std::size_t Vector<T>::computeCapacity(const std::size_t size) const
+std::size_t SafeVector<T>::computeCapacity(const std::size_t size) const
 {
     return size != 0? size*2 : INITIAL_SIZE;
 }
@@ -585,7 +661,7 @@ std::size_t Vector<T>::computeCapacity(const std::size_t size) const
  * @param idx
  */
 template<typename T>
-void Vector<T>::check_bounds(const std::size_t idx) const
+void SafeVector<T>::check_bounds(const std::size_t idx) const
 {
     if(idx < 0 || idx >= size_ )
     {
@@ -597,7 +673,7 @@ void Vector<T>::check_bounds(const std::size_t idx) const
  * @brief Checks whether the type T is both Move-Construtible and Move-Assignable
  */
 template<typename T>
-void Vector<T>::check_type() const
+void SafeVector<T>::check_type() const
 {
     static_assert(std::is_move_constructible<T>::value,
                   "The input type is not move-constructible!");
@@ -610,7 +686,7 @@ void Vector<T>::check_type() const
  * @param idx
  */
 template<typename T>
-void Vector<T>::expand(const std::size_t idx)
+void SafeVector<T>::expand(const std::size_t idx)
 {
     // ** Allocate more memory if needed
     T* newData;
@@ -651,7 +727,7 @@ void Vector<T>::expand(const std::size_t idx)
  * @param idx
  */
 template<typename T>
-void Vector<T>::shrink(const std::size_t idx)
+void SafeVector<T>::shrink(const std::size_t idx)
 {
     // ** Move data
     for (std::size_t i = 0; i < size_-1; ++i)

@@ -19,12 +19,15 @@ class Vector<bool>
 {
 public:
     typedef bool value_type;
-    template<bool x> class iterator_internal;
+    template<bool is_const> class iterator_internal;
 
     template<bool is_const>
     class reference_internal
     {
-        friend class iterator_internal<is_const>;
+        friend class iterator_internal<true>;
+        friend class iterator_internal<false>;
+        friend class reference_internal<!is_const>;
+
         public:
             typedef typename std::conditional<is_const, const Vector<bool>*,
                                                               Vector<bool>*>::type ref_data_type;
@@ -40,7 +43,7 @@ public:
                 update(idx_);
             }
 
-            reference_internal(const reference_internal& src) //Allows from implicit conversion non-const to const
+            reference_internal(const reference_internal<false>& src) //Allows from implicit conversion non-const to const
             {
                 ptr_ = src.ptr_;
                 mask_ = src.mask_;
@@ -97,6 +100,7 @@ public:
     class iterator_internal : std::iterator<std::random_access_iterator_tag, bool>
     {
     public:
+        friend class iterator_internal<!is_const>;
 
         typedef typename std::conditional<is_const, Vector<bool>::const_reference,
                                                     Vector<bool>::reference>::type reference_type;
@@ -106,6 +110,7 @@ public:
         typedef std::ptrdiff_t                      difference_type;
         typedef reference_type                      reference;
         typedef iterator_internal<is_const>         pointer;
+
         iterator_internal(){}
 
         iterator_internal(const reference_type& ref): ref_(ref){}
@@ -116,11 +121,8 @@ public:
 
         bool operator!= (const iterator_internal& other) const {return !(*this == other);}
 
-        iterator_internal& operator++()
-        {
-            ref_.idx_ = ref_.idx_ + 1;
-            return *this;
-        }
+        iterator_internal& operator++(){ref_.idx_++; ref_.update(ref_.idx_); return *this;}
+        iterator_internal& operator--(){ref_.idx_--; ref_.update(ref_.idx_); return *this;}
 
         iterator_internal& operator++(int)
         {
@@ -139,22 +141,22 @@ public:
         std::ptrdiff_t operator-(const std::size_t size)        { return ref_.idx_ - size;          }
         std::ptrdiff_t operator-(const iterator_internal& src)  { return ref_.idx_ - src.ref_.idx_; }
 
-        iterator_internal& operator-=(const std::size_t size)      { ref_.idx_ -= size;         return *this;}
-        iterator_internal& operator-=(const iterator_internal& src){ ref_.idx_ -= src.ref_idx_; return *this;}
+        iterator_internal& operator-=(const std::size_t size)      { ref_.idx_ -= size; ref_.update(ref_.idx_);         return *this;}
+        iterator_internal& operator-=(const iterator_internal& src){ ref_.idx_ -= src.ref_idx_;ref_.update(ref_.idx_);  return *this;}
 
 
-        iterator_internal& operator+(const std::size_t size)       {ref_.idx_ += size;          return *this;}
-        iterator_internal& operator+(const iterator_internal& src) {ref_.idx_ += src.ref_.idx_; return *this;}
+        iterator_internal& operator+(const std::size_t size)       {ref_.idx_ += size;   ref_.update(ref_.idx_);        return *this;}
+        iterator_internal& operator+(const iterator_internal& src) {ref_.idx_ += src.ref_.idx_;ref_.update(ref_.idx_);  return *this;}
 
-        iterator_internal& operator+=(const std::size_t size)      {ref_.idx_ += size;          return *this;}
-        iterator_internal& operator+=(const iterator_internal& src){ref_.idx_ += src.ref_.idx_; return *this;}
+        iterator_internal& operator+=(const std::size_t size)      {ref_.idx_ += size;ref_.update(ref_.idx_);           return *this;}
+        iterator_internal& operator+=(const iterator_internal& src){ref_.idx_ += src.ref_.idx_; ref_.update(ref_.idx_); return *this;}
 
     private:
         reference_type ref_;
     };
 
-    typedef iterator_internal<true> const_iterator;
-    typedef iterator_internal<false> iterator;
+    typedef iterator_internal<true>  const_iterator;
+    typedef iterator_internal<false>       iterator;
 
     /**
      * @brief Default constructor
@@ -257,7 +259,7 @@ public:
      * @brief Iterator to the beginning of the vector
      * @return
      */
-    iterator begin(); // const
+    iterator begin();
 
     /**
      * @brief Const-iterator to the beginning of the vector
@@ -269,7 +271,7 @@ public:
      * @brief Iterator to the end of the vector
      * @return
      */
-    iterator end(); // const;
+    iterator end();
 
     /**
      * @brief Const-iterator to the end of the vector
@@ -607,143 +609,3 @@ void Vector<bool>::check_bounds(const std::size_t idx) const
 }
 
 #endif // VECTOR_BOOL_H
-//    class reference //XXXX Change it so that when we change idx, it automatically changes mask and n_elems
-//    {
-//        friend class iterator_internal<false>;
-//    public:
-//        reference(): ptr_(nullptr){}
-
-//        explicit reference(Vector<bool>* ptr)
-//        {
-//            ptr_ = ptr;
-//        }
-
-//        explicit reference(Vector<bool>* ptr, std::size_t idx)
-//        {
-//            ptr_ = ptr;
-//            idx_ = idx;
-//            update(idx_);
-//        }
-
-//        reference(const reference& src) //Allows from implicit conversion non-const to const
-//        {
-//            ptr_ = src.ptr_;
-//            mask_ = src.mask_;
-//            idx_ = src.idx_;
-//            n_elem_ = src.n_elem_;
-//        }
-
-//        ~reference()
-//        {
-//            ptr_ = nullptr;
-//            idx_ = mask_ = n_elem_ = 0;
-//        }
-
-//        operator bool() const
-//        {
-//            return ptr_->data_[n_elem_] & mask_;
-//        }
-
-//        reference operator=(bool x)
-//        {
-//            if(x)   ptr_->data_[n_elem_] |=   mask_;
-//            else    ptr_->data_[n_elem_] &=  ~mask_;
-//            return *this;
-//        }
-
-//        reference operator=(const reference& src) //can use both non-const and const
-//        {
-//            if(src) ptr_->data_[n_elem_] |=   mask_;
-//            else    ptr_->data_[n_elem_] &=  ~mask_;
-//            return *this;
-//        }
-
-//        bool operator==(const reference& src)
-//        {
-//            return ptr_ == src.ptr_ && idx_ == src.idx_;
-//        }
-
-//    private:
-//        Vector<bool>* ptr_;
-//        std::size_t idx_;
-//        storage_type mask_;
-//        std::size_t n_elem_;
-
-//        void update(std::size_t idx)
-//        {
-//            // ** Compute mask and n_element
-//            n_elem_ = idx_/sizeof(storage_type);
-//            std::size_t position = idx % sizeof(storage_type);
-//            mask_ = 1 << position;
-//        }
-//    };
-
-//    class const_reference
-//    {
-//        friend class iterator_internal<true>;
-//    public:
-//        const_reference(): ptr_(nullptr){}
-
-//        explicit const_reference(const Vector<bool>* ptr)
-//        {
-//            ptr_ = ptr;
-//        }
-
-//        explicit const_reference(const Vector<bool>* ptr, std::size_t idx)
-//        {
-//            ptr_ = ptr;
-//            idx_ = idx;
-//            update(idx_);
-//        }
-
-//        const_reference(const const_reference& src)
-//        {
-//            ptr_ = src.ptr_;
-//            mask_ = src.mask_;
-//            idx_ = src.idx_;
-//            n_elem_ = src.n_elem_;
-//        }
-
-//        ~const_reference()
-//        {
-//            ptr_ = nullptr;
-//            idx_ = mask_ = n_elem_ = 0;
-//        }
-
-//        operator bool() const
-//        {
-//            return ptr_->data_[n_elem_] & mask_;
-//        }
-
-//        const_reference operator=(bool x)
-//        {
-//            if(x)   ptr_->data_[n_elem_] |=   mask_;
-//            else    ptr_->data_[n_elem_] &=  ~mask_;
-//            return *this;
-//        }
-
-//        const_reference operator=(const const_reference& src) //can use both non-const and const
-//        {
-//            if(src) ptr_->data_[n_elem_] |=   mask_;
-//            else    ptr_->data_[n_elem_] &=  ~mask_;
-//            return *this;
-//        }
-
-//        bool operator==(const const_reference& src)
-//        {
-//            return ptr_ == src.ptr_ && idx_ == src.idx_;
-//        }
-//    private:
-//        const Vector<bool>* ptr_;
-//        std::size_t idx_;
-//        storage_type mask_;
-//        std::size_t n_elem_;
-
-//        void update(std::size_t idx)
-//        {
-//            // ** Compute mask and n_element
-//            n_elem_ = idx_/sizeof(storage_type);
-//            std::size_t position = idx % sizeof(storage_type);
-//            mask_ = 1 << position;
-//        }
-//    };
