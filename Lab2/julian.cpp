@@ -5,20 +5,33 @@ namespace lab2
 
 Julian::Julian()
 {
-    date_from_julian(julian_day_, day_, month_, year_); // Base already computed julian_day_
+    // Base already computed julian_day_, but date in Gregorian format -> convert
+    date_from_julian(julian_day_, day_, month_, year_);
 }
 
-Julian::Julian(int day, int month, int year)
-    :Date_impl(day, month, year)
+Julian::Julian(int year, int month, int day)
+    :Date_impl(year, month, day)
 {
+    check_date(day, month, year);
     julian_day_ = julian_from_date(day, month, year);
 }
 
-Julian::Julian(int day, int month, int year, const std::vector<std::string>& day_names,
-                                             const std::vector<std::string>& month_names)
-    :Date_impl(day, month, year, day_names, month_names)
+Julian::Julian(const Date& src)
+    :Date_impl(src)
 {
-    julian_day_ = julian_from_date(day, month, year);
+    date_from_julian(julian_day_, day_, month_, year_);
+}
+
+Date& Julian::operator=(const Date& src)
+{
+    if(&src != this)
+    {
+        days_week_ = day_names_.size();
+        months_year_ = month_names_.size();
+        julian_day_ = src.mod_julian_day() + MOD_JULIAN_DATE_DIFF;
+        date_from_julian(julian_day_, day_, month_, year_);
+    }
+    return *this;
 }
 
 Julian::~Julian(){}
@@ -27,6 +40,7 @@ bool Julian::is_leap_year(int year) const{return year % 4 == 0;}
 
 void Julian::date_from_julian(double julian, int &day, int &month, int &year) const
 {
+    // ** From http://www.calendarhome.com/plugins/content/calendarhomecontent/converter/calendar.js
     double z, a, b, c, d, e;
     double td = julian;
 
@@ -50,6 +64,7 @@ void Julian::date_from_julian(double julian, int &day, int &month, int &year) co
 
 double Julian::julian_from_date(int day, int month, int year) const
 {
+    // ** From http://www.calendarhome.com/plugins/content/calendarhomecontent/converter/calendar.js
     if (year < 1) {
         year++;
     }
@@ -57,7 +72,6 @@ double Julian::julian_from_date(int day, int month, int year) const
         year--;
         month += 12;
     }
-
     return ((floor((365.25 * (year + 4716))) +
             floor((30.6001 * (month + 1))) +
             day) - 1524.5);

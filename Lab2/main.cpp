@@ -1,8 +1,9 @@
 #include <iostream>
+#include <fstream>
 #include "date.h"
 #include "gregorian.h"
 #include "julian.h"
-#include "calendar.hpp"
+#include "calendar.h"
 
 using namespace lab2;
 
@@ -11,13 +12,22 @@ void test2();
 void test3();
 
 void test4();
+
+void testBugs();
 int main()
 {
-//    test1();
-//    test2();
     test3();
-//    test4();
     return 0;
+}
+
+void testBugs()
+{
+    std::multiset<int> a;
+    {
+        int x (5);
+        a.insert(x);
+    }
+    std::cout << *(a.begin()) << std::endl;
 }
 
 void test1()
@@ -82,11 +92,21 @@ void test2()
 
 void test3()
 {
+    time_t tp;
+    time(&tp);
+    set_k_time(tp);
     Calendar<Gregorian> cal;
-    cal.add_event("Tenta", 28, 10, 2014);
-    cal.add_event("Flytta till Spanien", 30, 10, 2014);
-    cal.add_event("Blabla", 31, 9, 2014);
-//    cal.set_format(Calendar<Gregorian>::format::iCalendar);
-    cal.set_format(Calendar<Gregorian>::format::cal);
+    cal.add_event("Asd", 28, 11, 2014);
+    cal.add_event("ASD2", 30, 12, 2014);
+    cal.add_event("ASd3", 31, 12, 2014);
+    cal.set_format(Calendar<Gregorian>::format::iCalendar);
+//    cal.set_format(Calendar<Gregorian>::format::list);
+//    cal.set_format(Calendar<Gregorian>::format::cal);
     std::cout << cal;
+
+    // Write to file
+    std::ofstream file;
+    file.open("/home/carlos/Desktop/test_cal.ics");
+    file << cal;
+    file.close();
 }

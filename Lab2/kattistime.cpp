@@ -9,7 +9,7 @@
  * solving it the wrong way.
  */
 
-#include "kattis_time.h"
+#include "kattistime.h"
 #include <cassert>
 
 /* Anonymous namespace */

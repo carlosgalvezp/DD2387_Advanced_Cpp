@@ -2,8 +2,6 @@
 
 namespace lab2
 {
-
-Date::Date(){}
 Date::~Date(){}
 
 std::ostream& operator<<(std::ostream& os, const Date& d)
@@ -13,73 +11,61 @@ std::ostream& operator<<(std::ostream& os, const Date& d)
     return os;
 }
 
+int mod(int a, int b)
+{
+    return (a%b+b)%b;
+}
+
+int sign(double x)
+{
+    if (x >= 0)
+        return 1;
+    else
+        return -1;
+}
+
 // =============================================================================
 // =============================================================================
 // =============================================================================
 
 Date_impl::Date_impl()
-    : days_week_(N_DAYS_WEEK_DEFAULT),
-      months_year_(N_MONTHS_YEAR_DEFAULT)
 {
-    day_names_ = day_names_default;
-    month_names_ = month_names_default;
-
+    days_week_ = day_names_.size();
+    months_year_ = month_names_.size();
+    // Get current date (GMT). This is Gregorian, so we will convert later to Julian if needed
     currentDate(day_, month_, year_);
     julian_day_ = julian_day_default(day_, month_, year_);
 }
 
+Date_impl::Date_impl(const Date &src)
+{
+    days_week_ = day_names_.size();
+    months_year_ = month_names_.size();
+    julian_day_ = src.mod_julian_day() + MOD_JULIAN_DATE_DIFF;
+}
+
+Date_impl::Date_impl(int year, int month, int day):
+    day_(day), month_(month), year_(year)
+{
+    days_week_ = day_names_.size();
+    months_year_ = month_names_.size();
+}
+
 Date_impl::~Date_impl(){}
-
-Date_impl::Date_impl(int day, int month, int year):
-    day_(day), month_(month), year_(year),
-    days_week_(N_DAYS_WEEK_DEFAULT),
-    months_year_(N_MONTHS_YEAR_DEFAULT)
-{
-    check_date(day, month, year);
-
-    day_names_ = day_names_default;
-    month_names_ = month_names_default;
-
-    julian_day_ = julian_day_default(day_, month_, year_);
-}
-
-Date_impl::Date_impl(int day, int month, int year,
-                     const std::vector<std::string> &day_names,
-                     const std::vector<std::string> &month_names):
-    day_(day), month_(month), year_(year),
-    days_week_(day_names.size()),
-    months_year_(month_names.size())
-{
-    check_date(day, month, year);
-
-    day_names_ = day_names;
-    month_names_ = month_names;
-    julian_day_ = julian_day_default(day_, month_, year_);
-}
 
 int Date_impl::year()  const{ return year_;}
 int Date_impl::month() const{ return month_;}
 int Date_impl::day()   const{ return day_;}
 
-int Date_impl::week_day()         const{ return ((int)(julian_day_ + 1.5)) % days_per_week();}
+int Date_impl::week_day()         const{ return ((int)(julian_day_ + 0.5) % days_per_week()) + 1;}
 int Date_impl::days_this_month()  const{ return days_in_month(month_, year_);}
 
 int Date_impl::days_in_month(int month, int year) const
 {
-    if(month == 2) // February
-    {
-        if (is_leap_year(year))
-            return 29;
-        else
-            return 28;
-    }
+    if(month == 2 && is_leap_year(year)) // February
+        return 29;
     else
-    {
-        if( (month < 7 && month % 2 != 0) || (month >=7 && month % 2 == 0))
-            return 31;
-        else
-            return 30;
-    }
+        return month_n_days_[month-1];
 }
 
 int Date_impl::days_per_week()    const{ return days_week_;}
@@ -109,19 +95,36 @@ int Date_impl::operator -(const Date &src)   const {return mod_julian_day() - sr
 
 Date& Date_impl::add_month(int n)
 {
-    int next_month = ((month_-1 + n)% (months_year_)) + 1;
-    int n_years = floor(n/months_year_);
-    int next_year = year_ + n_years + (int)(n > 0? next_month < month_ : next_month > month_);
+    for(int i = 0; i < abs(n); ++i) // Add/subtract 1 month n times
+    {
+        int next_month, next_year;
+        if(month() == 1 && sign(n) == -1) // One year less
+        {
+            next_month = months_per_year();
+            next_year = year() - 1;
+        }
+        else if (month() == months_per_year() && sign(n) == 1) // one year more
+        {
+            next_month = 1;
+            next_year = year() + 1;
+        }
+        else // just add/subtract 1 month
+        {
+            next_month = month() + sign(n);
+            next_year = year();
+        }
 
-    if(day_ > days_in_month(next_month, next_year)) // Can't do it => just add n x 30 days
-    {
-        julian_day_ += n*30;
-        date_from_julian(julian_day_, day_, month_, year_);
-    }
-    else // Don't change the day
-    {
-        month_ = next_month;
-        year_ = next_year;
+        if(day_ > days_in_month(next_month, next_year)) // Can't do it => just add/subtract 30 days
+        {
+            julian_day_ += 30*sign(n);
+            date_from_julian(julian_day_, day_, month_, year_);
+        }
+        else // Don't change the day
+        {
+            month_ = next_month;
+            year_ = next_year;
+            julian_day_ = julian_from_date(day_, month_, year_);
+        }
     }
     return *this;
 }
@@ -135,6 +138,7 @@ Date& Date_impl::add_year(int n)
         day_ = max_day;
     year_ = next_year;
 
+    julian_day_ = julian_from_date(day_, month_, year_);
     return *this;
 }
 
@@ -143,14 +147,12 @@ int Date_impl::mod_julian_day()              const {return julian_day_ - MOD_JUL
 void Date_impl::check_date(int day, int month, int year) const
 {
     // ** Check for negatives
-    if (day <= 0 || month <=0 || year <=0)  throw std::out_of_range("Invalid date!");
+    if (day <= 0 || month <=0 || year <=0) {throw std::out_of_range("Invalid date!");}
 
     // ** Check days and months
-    if (month > months_year_)               throw std::out_of_range("Invalid date!");
-    if (day > days_in_month(month, year))   throw std::out_of_range("Invalid date!");
+    if (month > months_year_)               {throw std::out_of_range("Invalid date!");}
+    if (day > days_in_month(month, year))   {throw std::out_of_range("Invalid date!");}
 }
-
-const std::vector<std::string>& Date_impl::get_day_names() const{return day_names_;}
 
 void Date_impl::currentDate(int &day, int &month, int &year)
 {
@@ -178,6 +180,9 @@ double Date_impl::julian_day_default(int day, int month, int year)
             - floor(y/100.0) + floor(y/400.0) - 32045.5;
     return julian;
 }
+
+// For extra exercise
+const std::vector<std::string>& Date_impl::get_day_names() const {return day_names_;}
 
 } // namespace lab2
 

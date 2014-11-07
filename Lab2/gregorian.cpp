@@ -2,19 +2,31 @@
 
 namespace lab2
 {
-Gregorian::Gregorian(){} // Base computed everything by default
+Gregorian::Gregorian(){} // Base (Date_impl) computed everything by default
 
-Gregorian::Gregorian(int day, int month, int year)
-    :Date_impl(day, month, year)
+Gregorian::Gregorian(int year, int month, int day)
+    :Date_impl(year, month, day)
 {
+    check_date(day, month, year);
     julian_day_ = julian_from_date(day, month, year);
 }
 
-Gregorian::Gregorian(int day, int month, int year, const std::vector<std::string>& day_names,
-                                                   const std::vector<std::string>& month_names)
-    :Date_impl(day, month, year, day_names, month_names)
+Gregorian::Gregorian(const Date& src)
+    :Date_impl(src)
 {
-    julian_day_ = julian_from_date(day, month, year);
+    date_from_julian(julian_day_, day_, month_, year_);
+}
+
+Date& Gregorian::operator=(const Date& src)
+{
+    if(&src != this)
+    {
+        days_week_ = day_names_.size();
+        months_year_ = month_names_.size();
+        julian_day_ = src.mod_julian_day() + MOD_JULIAN_DATE_DIFF;
+        date_from_julian(julian_day_, day_, month_, year_);
+    }
+    return *this;
 }
 
 Gregorian::~Gregorian(){}
@@ -32,6 +44,7 @@ double Gregorian::julian_from_date(int day, int month, int year) const
 
 void Gregorian::date_from_julian(double julian, int &day, int &month, int &year) const
 {
+    // ** From http://www.calendarhome.com/plugins/content/calendarhomecontent/converter/calendar.js
     double wjd, depoch, quadricent, dqc, cent, dcent, quad, dquad, yindex, yearday, leapadj;
     double jd = julian;
 
@@ -54,10 +67,5 @@ void Gregorian::date_from_julian(double julian, int &day, int &month, int &year)
 
     month = floor((((yearday + leapadj) * 12) + 373) / 367.0);
     day = (wjd - julian_from_date(1, month, year)) + 1;
-}
-
-double Gregorian::mod(double a, double b) const
-{
-    return a - (b * floor(a / b));
 }
 } //namespace lab2

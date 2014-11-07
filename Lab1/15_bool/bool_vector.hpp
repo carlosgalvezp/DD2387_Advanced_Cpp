@@ -100,7 +100,7 @@ public:
     class iterator_internal : std::iterator<std::random_access_iterator_tag, bool>
     {
     public:
-        friend class iterator_internal<!is_const>;
+        friend class iterator_internal<!is_const>; // For implicit conversion non-const to const
 
         typedef typename std::conditional<is_const, Vector<bool>::const_reference,
                                                     Vector<bool>::reference>::type reference_type;
@@ -137,9 +137,20 @@ public:
         bool operator>=(const iterator_internal& src)   const {  return ref_.idx_ <= src.ref_.idx_;}
 
         bool operator*() const {return ref_;}
+        reference_type& operator*() {return ref_;}
 
         std::ptrdiff_t operator-(const std::size_t size)        { return ref_.idx_ - size;          }
         std::ptrdiff_t operator-(const iterator_internal& src)  { return ref_.idx_ - src.ref_.idx_; }
+
+        iterator_internal operator-(const std::size_t size)  const
+        {
+            reference_internal<is_const> r(ref_);
+            r.idx_ -= size;
+            r.update(r.idx_);
+            return iterator_internal(r);
+        }
+
+        iterator_internal operator-(const iterator_internal& src) const { return operator-(src.ref_.idx_);}
 
         iterator_internal& operator-=(const std::size_t size)      { ref_.idx_ -= size; ref_.update(ref_.idx_);         return *this;}
         iterator_internal& operator-=(const iterator_internal& src){ ref_.idx_ -= src.ref_idx_;ref_.update(ref_.idx_);  return *this;}
