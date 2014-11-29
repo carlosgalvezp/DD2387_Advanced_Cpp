@@ -16,139 +16,41 @@ class Vector
 {       
 public:
     typedef T* iterator;
+    typedef const T* const_iterator;
 
-    /**
-     * @brief Default constructor
-     */
     Vector();
-
-    /**
-     * @brief Constructor with size
-     * @param size
-     */
-    explicit Vector(const std::size_t size);
-
-    /**
-     * @brief Copy-constructor
-     * @param src
-     */
     Vector(const Vector<T>& src);
-
-    /**
-     * @brief Constructor using initializer_list
-     * @param src
-     */
+    explicit Vector(const std::size_t size);
     explicit Vector(const std::initializer_list<T>& src);
-
-    /**
-     * @brief Creates a vector of "size" elements, all with the value of "src"
-     * @param size the number of elements
-     * @param src the value to be copied to every element
-     */
     explicit Vector(const std::size_t size, const T& src);
-
-    /**
-     * @brief Move-constructor
-     * @param src
-     */
     explicit Vector(Vector<T>&& src);
 
-    /**
-     * @brief Copy-assignment operator
-     * @param src
-     * @return
-     */
     Vector<T>& operator= (const Vector<T>& src);
-
-    /**
-     * @brief Move-assignment operator
-     * @param src
-     * @return
-     */
     Vector<T>& operator= (Vector<T>&& src);
 
-    /**
-     * @brief operator [] (read-only)
-     * @param idx
-     * @return
-     */
     const T& operator[](const std::size_t idx) const;
-
-    /**
-     * @brief operator [] (read/write)
-     * @param idx
-     * @return
-     */
     T& operator[](const std::size_t idx);
 
-    /**
-     * @brief Default destructor
-     */
     ~Vector();
 
-    /**
-     * @brief reset Assigns every element of the vector the value T()
-     */
     void reset();
 
-    /**
-     * @brief Adds an element at the end of the vector
-     * @param src
-     */
     void push_back(const T& src);
-
-    /**
-     * @brief Inserts an element before the position given by idx
-     * @param idx
-     * @param src
-     */
     void insert(const std::size_t idx, const T& src);
-
-    /**
-     * @brief Erases the element at the position given by idx
-     * @param idx
-     */
     void erase(const std::size_t idx);
-
-    /**
-     * @brief Removes every element, making size == 0
-     */
     void clear();
-
-    /**
-     * @brief The size of the array (number of elements)
-     * @return
-     */
     std::size_t size() const;
-
-    /**
-     * @brief The capacity of the array
-     * @return
-     */
     std::size_t capacity() const;
 
-    /**
-     * @brief Iterator to the beginning of the vector
-     * @return
-     */
-    iterator begin() const;
+    iterator begin();
+    const_iterator begin() const;
 
-    /**
-     * @brief Iterator to the end of the vector
-     * @return
-     */
-    iterator end() const;
+    iterator end();
+    const_iterator end() const;
 
-    /**
-     * @brief Finds the position of the array where the object src is found
-     * @param src
-     * @return An iterator to the position, or end() if not found
-     */
-    iterator find(const T& src) const;
+    iterator find(const T& src);
+    const_iterator find(const T& src) const;
 
-    /**
-     * @brief Prints the vector contents
-     */
     void print() const;
 
 private:
@@ -156,35 +58,16 @@ private:
     T* data_;
     std::size_t size_;
     std::size_t capacity_;
-    std::allocator<T> allocator;
-    /**
-     * @brief Computes the capacity of the array, as twice the size
-     * @param size
-     * @return
-     */
+    std::allocator<T> allocator_;
+
     std::size_t computeCapacity(const std::size_t size) const;
 
-    /**
-     * @brief Checks whether idx is a valid index
-     * @param idx
-     */
     void check_bounds(const std::size_t idx) const;
 
-    /**
-     * @brief Checks whether the type T is both Move-Construtible and Move-Assignable
-     */
     void check_type() const;
 
-    /**
-     * @brief Increases the array size and copies the content after idx
-     * @param idx
-     */
     void expand(const std::size_t idx);
 
-    /**
-     * @brief Shrinks the array starting from the idx position
-     * @param idx
-     */
     void shrink(const std::size_t idx);
 };
 
@@ -203,7 +86,7 @@ Vector<T>::Vector()
     // ** Allocate space
     size_ = 0;
     capacity_ = computeCapacity(size_);
-    data_ = allocator.allocate(capacity_ * sizeof(T));
+    data_ = allocator_.allocate(capacity_ * sizeof(T));
 }
 
 /**
@@ -218,12 +101,12 @@ Vector<T>::Vector(const std::size_t size)
     // ** Allocate space
     size_ = size;
     capacity_ = computeCapacity(size_);
-    data_ = allocator.allocate(capacity_ * sizeof(T));
+    data_ = allocator_.allocate(capacity_ * sizeof(T));
 
     // ** Initialize elements
     for(std::size_t i = 0; i < size_; ++i)
     {
-        data_[i] = *(new(data_ + i)T()); // Create new T at the address data_ + i
+        data_[i] = *(new(data_ + i) T()); // Create new T at the address data_ + i
     }
 }
 
@@ -239,7 +122,7 @@ Vector<T>::Vector(const Vector<T>& src)
     // ** Allocate space
     size_ = src.size();
     capacity_ = src.capacity();
-    data_ = allocator.allocate(capacity_ * sizeof(T));
+    data_ = allocator_.allocate(capacity_ * sizeof(T));
 
     // ** Copy elements
     for(std::size_t i = 0; i < size_; ++i)
@@ -260,7 +143,7 @@ Vector<T>::Vector(const std::initializer_list<T>& src)
     // ** Allocate space
     size_ = src.size();
     capacity_ = computeCapacity(size_);
-    data_ = allocator.allocate(capacity_ * sizeof(T));
+    data_ = allocator_.allocate(capacity_ * sizeof(T));
 
     // ** Copy elements
     std::size_t i = 0;
@@ -283,7 +166,7 @@ Vector<T>::Vector(const std::size_t size, const T& src)
     // ** Allocate space
     size_ = size;
     capacity_ = computeCapacity(size_);
-    data_ = allocator.allocate(capacity_ * sizeof(T));
+    data_ = allocator_.allocate(capacity_ * sizeof(T));
 
     // ** Copy elements
     for(std::size_t i = 0; i < size_; ++i)
@@ -321,16 +204,22 @@ template<typename T>
 Vector<T>& Vector<T>::operator= (const Vector<T>& src)
 {
     check_type();
-
     if(&src != this) // Check self-assignment
     {
-        // ** Reallocate space if needed
+        // Destroy current elements and free memory
+        for(auto it = begin(); it < end(); ++it)
+        {
+            it->~T();
+        }
+        allocator_.deallocate(data_, capacity_);
+
+        // ** Recompute capacity if needed
         if (src.size() > capacity_)
         {
-            allocator.deallocate(data_, capacity_);
-            capacity_ = computeCapacity(capacity_);
-            data_ = allocator.allocate(capacity_ * sizeof(T));
+            capacity_ = computeCapacity(src.capacity());
         }
+
+        data_ = allocator_.allocate(capacity_ * sizeof(T));
         // ** Copy src resources
         for(std::size_t i = 0; i < src.size(); i++)
         {
@@ -354,7 +243,9 @@ Vector<T>& Vector<T>::operator= (Vector<T>&& src)
     if(&src != this) // Self-assignment check
     {
         // ** Release own resources
-        free(data_);
+        for(auto it = begin(); it < end(); ++it)
+            it->~T();
+        allocator_.deallocate(data_, capacity_);
 
         // ** Get src resources
         data_ = src.data_;
@@ -405,7 +296,7 @@ Vector<T>::~Vector()
         it->~T();
 
     // ** Free memory
-    allocator.deallocate(data_,capacity_);
+    allocator_.deallocate(data_,capacity_);
     size_ = 0;
     capacity_ = 0;
 }
@@ -441,7 +332,7 @@ void Vector<T>::push_back(const T& src)
         // ** Reallocate data
         std::size_t oldCapacity = capacity_;
         capacity_ = computeCapacity(capacity_);
-        T* newData = allocator.allocate(capacity_ * sizeof(T));
+        T* newData = allocator_.allocate(capacity_ * sizeof(T));
 
         // ** Move data
         for (std::size_t i = 0; i < size_; ++i)
@@ -454,7 +345,7 @@ void Vector<T>::push_back(const T& src)
         size_++;
 
         // ** Delete old data
-        allocator.deallocate(data_, oldCapacity);
+        allocator_.deallocate(data_, oldCapacity);
 
         // ** Reassign data
         data_ = newData;
@@ -541,9 +432,30 @@ std::size_t Vector<T>::capacity() const
  * @return
  */
 template<typename T>
-typename Vector<T>::iterator Vector<T>::begin() const
+typename Vector<T>::iterator Vector<T>::begin()
 {
     return data_;
+}
+
+/**
+ * @brief Const iterator to the beginning of the vector
+ * @return
+ */
+template<typename T>
+typename Vector<T>::const_iterator Vector<T>::begin() const
+{
+    return data_;
+}
+
+
+/**
+ * @brief Iterator to the end of the vector
+ * @return
+ */
+template<typename T>
+typename Vector<T>::iterator Vector<T>::end()
+{
+    return data_ + size_;
 }
 
 /**
@@ -551,7 +463,7 @@ typename Vector<T>::iterator Vector<T>::begin() const
  * @return
  */
 template<typename T>
-typename Vector<T>::iterator Vector<T>::end() const
+typename Vector<T>::const_iterator Vector<T>::end() const
 {
     return data_ + size_;
 }
@@ -562,7 +474,23 @@ typename Vector<T>::iterator Vector<T>::end() const
  * @return An iterator to the position, or end() if not found
  */
 template<typename T>
-typename Vector<T>::iterator Vector<T>::find(const T& src) const
+typename Vector<T>::iterator Vector<T>::find(const T& src)
+{
+    for (auto it = begin(); it < end(); it++)
+    {
+        if (*it == src)
+            return it;
+    }
+    return end();
+}
+
+/**
+ * @brief Finds the position of the array where the object src is found
+ * @param src
+ * @return An iterator to the position, or end() if not found
+ */
+template<typename T>
+typename Vector<T>::const_iterator Vector<T>::find(const T& src) const
 {
     for (auto it = begin(); it < end(); it++)
     {
@@ -636,7 +564,7 @@ void Vector<T>::expand(const std::size_t idx)
     if (size_ >= capacity_)
     {
         capacity_ = computeCapacity(capacity_);
-        newData = allocator.allocate(capacity_ * sizeof(T));
+        newData = allocator_.allocate(capacity_ * sizeof(T));
         allocated = true;
     }
     else
@@ -657,7 +585,7 @@ void Vector<T>::expand(const std::size_t idx)
 
     // ** Reassign memory
     if(allocated)
-        allocator.deallocate(data_, oldCapacity);
+        allocator_.deallocate(data_, oldCapacity);
 
     data_ = newData;
     size_++;

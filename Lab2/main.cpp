@@ -96,7 +96,8 @@ void test3()
     time(&tp);
     set_k_time(tp);
     Calendar<Gregorian> cal;
-    cal.add_event("Asd", 28, 11, 2014);
+//    cal.set_date(2014,12,1);
+    cal.add_event("Asd", 13, 11, 2014);
     cal.add_event("ASD2", 30, 12, 2014);
     cal.add_event("ASd3", 31, 12, 2014);
     cal.set_format(Calendar<Gregorian>::format::iCalendar);

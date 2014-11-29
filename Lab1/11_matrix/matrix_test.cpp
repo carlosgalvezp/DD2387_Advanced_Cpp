@@ -2,10 +2,7 @@
 
 int main()
 {
-    Matrix a(10,10);
-    Matrix b(a);
-    Matrix c = a;
-    c = b;
+
 
     Matrix x(2,2);
     x[0][0] = 3;
@@ -24,4 +21,13 @@ int main()
     stream >> m;
     std::cout << m;
     return 0;
+}
+
+void test1()
+{
+    // ** Test constructors, copy, assignment
+    Matrix a(10,10);
+    Matrix b(a);
+    Matrix c = a;
+    c = b;
 }

@@ -1,4 +1,4 @@
-#include "kth_cprog_template_container2.hpp"             // inkludera din headerfil har
+#include "kth_cprog_template_container.hpp"             // inkludera din headerfil har
 #include <assert.h>             // assert(b) ger felmeddelande om b falsk
 #include <vector>
 void test_kth();
@@ -17,6 +17,8 @@ void test_bug();
 void test_kth();
 
 void test_master();
+
+void test_kattis();
 
 struct T1 {
     T1 () {std::cout << "Default constructor" << std::endl; ++object_count; }
@@ -38,8 +40,25 @@ int main()
 //    test_erase();
 //    test_bug();
 //    test_operators();
-    test_master();
+//    test_master();
+    test_kattis();
+    std::cout << "NUMBER: "<<T1::object_count<<std::endl;
     return 0;
+}
+
+void test_kattis()
+{
+    T1  t1,t2,t3;
+    std::cout << "Creating vector a"<<std::endl;
+    Vector<T1> a{t1,t2,t3};
+    std::cout << "Creating vector b"<<std::endl;
+    Vector<T1> b(10);
+    std::cout << "Creating vector c"<<std::endl;
+    Vector<T1> c(0);
+    std::cout << "Copy a to c"<<std::endl;
+    c = a;
+    std::cout << "Copy b to a"<<std::endl;
+    b = a;
 }
 
 void test_master()

@@ -11,20 +11,20 @@ class Matrix
 {
  public:
     typedef unsigned int index; //not so good, can create confusion with variable name
-    
-    class matrix_row : private Vector< int >
+
+    class matrix_row : public Vector< int > // Changed to public inheritance
     {
     public:
         matrix_row( std::size_t s = 0) : Vector< int >( s ) {}
         using Vector<int>::operator[];
         using Vector<int>::size;
     private:
-        friend std::istream& operator>>( std::istream&, Matrix& ); // Why is this here??
+//        friend std::istream& operator>>( std::istream&, Matrix& ); // Why is this here??
     };
     
     Matrix();
     explicit Matrix(std::size_t rows, std::size_t cols);
-    Matrix(const Matrix& src);
+    Matrix(const Matrix& src);      // Copy constructor
     explicit Matrix(int size);
     ~Matrix( );
     
@@ -36,7 +36,8 @@ class Matrix
     Matrix operator-( ) const;
     
     Matrix& transpose( );
-    
+    static Matrix identity(std::size_t size);
+
     matrix_row& operator[]( index i );
     const matrix_row& operator[]( index i ) const;
     
