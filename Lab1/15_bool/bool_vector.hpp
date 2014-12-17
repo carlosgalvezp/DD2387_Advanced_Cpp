@@ -676,4 +676,39 @@ void swap(Vector<bool>::reference& r1, Vector<bool>::reference& r2)
     r2 = r1;
     r1 = tmp;
 }
+
+storage_type vectorToInt(const Vector<bool> &v)
+{
+    storage_type result = 0;
+    for(std::size_t i = 0; i < v.size(); ++i)
+    {
+        result += v[i]*pow(2,i);
+    }
+    return result;
+}
+
+Vector<bool> intToVector(storage_type x)
+{
+    // ** Compute size
+    Vector<bool> v;
+    if(x == 0)
+    {
+        v = Vector<bool>(1);
+        v[0] = 0;
+    }
+    else
+    {
+        std::size_t size = ceil(log2(x+1));
+        v = Vector<bool>(size);
+        std::size_t quotient = x, i = 0;
+        while(quotient > 1)
+        {
+            v[i++] = quotient % 2;
+            quotient = floor(quotient/2.0);
+        }
+        v[i] = true;
+    }
+    return v;
+}
+
 #endif // VECTOR_BOOL_H

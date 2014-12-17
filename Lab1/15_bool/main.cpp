@@ -9,13 +9,15 @@ void testReference();
 void testKTH();
 void testMove();
 void testSwap();
+void testIntConversion();
 
 int main()
 {
 //    testReference();
-    testKTH();
+//    testKTH();
 //    testMove();
 //    testSwap();
+    testIntConversion();
     return 0;
 }
 
@@ -108,5 +110,19 @@ void testKTH()
     v.print();
 }
 
+void testIntConversion()
+{
+    Vector<bool> v(10);
+    v[5] = true;
 
+    std::cout << "Vector to int"<<std::endl;
+    v.print();
+    std::cout << vectorToInt(v)<<std::endl;
+
+    std::cout << "Int to vector" <<std::endl;
+    int n = 1133;
+    Vector<bool> v2 = intToVector(n);
+    std::cout << "N = "<<n<<std::endl;
+    v2.print();
+}
 
