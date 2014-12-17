@@ -14,10 +14,10 @@ void testIntConversion();
 int main()
 {
 //    testReference();
-//    testKTH();
+    testKTH();
 //    testMove();
 //    testSwap();
-    testIntConversion();
+//    testIntConversion();
     return 0;
 }
 
@@ -25,6 +25,7 @@ void testSwap()
 {
     // ** Swap vectors
     Vector<bool> v1(31);
+    std::cout << "============================"<<std::endl;
     v1[3] = v1[5] = 1;
     Vector<bool> v2(31);
 
@@ -41,8 +42,8 @@ void testSwap()
     v2.print();
 
     // ** Swap references and iterators
-    Vector<bool>::iterator it1(Vector<bool>::reference(&v2,3));
-    Vector<bool>::iterator it2(Vector<bool>::reference(&v2,0));
+    Vector<bool>::iterator it1(&v2,3);
+    Vector<bool>::iterator it2(&v2,0);
 
     swap(*it1, *it2);
     std::cout << "Swapped dereference of v2 at positions 0 and 3"<<std::endl;
@@ -96,16 +97,20 @@ void testKTH()
 
     std::cout << "SUBTRACTION: " <<v.end() - v.begin() << std::endl;
 
+    std::cout << "COPY"<<std::endl;
     Vector<bool> w; // tom vektor
     std::copy(v.begin(), v.end(), std::back_inserter(w));
     w.print();
 
     std::cout << "STD::DISTANCE " << std::distance(v.begin(), v.end())<<std::endl;
     Vector<bool>::iterator it = v.begin();
+
+    std::cout << "ADVANCE" << std::endl;
     std::cout << *it<< std::endl;
     std::advance(it, 2);
     std::cout << *it << std::endl;
 
+    std::cout << "SORT"<<std::endl;
     std::sort(v.begin(), v.end());
     v.print();
 }

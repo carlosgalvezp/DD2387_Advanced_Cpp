@@ -18,30 +18,30 @@ template<> // Template class specialization
 class Vector<bool>
 {
 public:
-    typedef bool value_type;
-    template<bool is_const> class iterator_;
+    typedef bool                                value_type;
+    class iterator;
+    class const_iterator;
 
 // =============================================================================
 // =============================================================================
-
-    template<bool is_const>
-    class reference_
+    class const_reference
     {
-        friend class iterator_<true>;
-        friend class iterator_<false>;
-
+        friend class const_iterator;
+        friend class iterator;
         public:
-            typedef typename std::conditional<is_const, const Vector<bool>*,
-                                                              Vector<bool>*>::type ref_data_type;
+            typedef Vector<bool>* data_type;
 
-            explicit reference_(ref_data_type ptr, std::size_t idx)
+            const_reference()
+                : ptr_(nullptr){}
+
+            explicit const_reference(const Vector<bool>* ptr, std::size_t idx)
             {
-                ptr_ = ptr;
+                ptr_ = const_cast<data_type>(ptr);
                 idx_ = idx;
                 update(idx_);
             }
 
-            reference_(const reference_& src) //Allows from implicit conversion non-const to const
+            const_reference(const const_reference& src)  // Copy constructor
             {
                 ptr_    = src.ptr_;
                 mask_   = src.mask_;
@@ -49,7 +49,7 @@ public:
                 n_elem_ = src.n_elem_;
             }
 
-            ~reference_()
+            ~const_reference()
             {
                 ptr_ = nullptr;
                 idx_ = mask_ = n_elem_ = 0;
@@ -60,27 +60,14 @@ public:
                 return ptr_->data_[n_elem_] & mask_;
             }
 
-            reference_<false>& operator=(bool x)                // This can only be done with non-const ref
-            {
-                if(x)   ptr_->data_[n_elem_] |=   mask_;
-                else    ptr_->data_[n_elem_] &=  ~mask_;
-                return *this;
-            }
 
-            reference_<false>& operator=(const reference_& src) // This can only be done with non-const ref
-            {
-                if(src) ptr_->data_[n_elem_] |=   mask_;
-                else    ptr_->data_[n_elem_] &=  ~mask_;
-                return *this;
-            }
-
-            bool operator==(const reference_& src) const
+            bool operator==(const_reference src) const
             {
                 return ptr_ == src.ptr_ && idx_ == src.idx_;
             }
 
-        private:
-            ref_data_type ptr_;
+        protected:
+            data_type ptr_;
             std::size_t idx_;
             storage_type mask_;
             std::size_t n_elem_;
@@ -92,133 +79,236 @@ public:
                 std::size_t position = idx % sizeof(storage_type);
                 mask_ = 1 << position;
             }
-        };
-    typedef reference_<true> const_reference;
-    typedef reference_<false>      reference;
+    };
 
-// =============================================================================
-// =============================================================================
-
-    template<bool is_const>
-    class iterator_ : std::iterator<std::random_access_iterator_tag, bool>
+    class reference: public const_reference
     {
     public:
-        friend class iterator_<!is_const>; // For implicit conversion non-const to const
+        friend class const_iterator;
+        friend class iterator;
 
-        typedef typename std::conditional<is_const, Vector<bool>::const_reference,
-                                                    Vector<bool>::reference>::type reference_type;
-        // ** Iterator traits
-        typedef bool                                value_type;
-        typedef std::random_access_iterator_tag     iterator_category;
-        typedef std::ptrdiff_t                      difference_type;
-        typedef reference_type                      reference;
-        typedef void*                               pointer;
+        typedef Vector<bool>* data_type;
 
-        iterator_(){}
+        reference(){}
 
-        iterator_(const reference_type& ref)
-            : ref_(ref){}
+        reference(const reference& src) // Copy constructor
+            : const_reference(src) {}
 
-        iterator_(const iterator_& src)
-            : ref_(src.ref_){}
+        explicit reference(const_reference src)
+            : const_reference(src) {}
 
-        bool operator== (const iterator_& other) const
+        explicit reference(const Vector<bool>* ptr, std::size_t idx)
+            : const_reference(ptr, idx) {}
+
+        reference operator=(bool x)
         {
-            return ref_ == other.ref_;
-        }
-
-        bool operator!= (const iterator_& other) const
-        {
-            return !(*this == other);
-        }
-
-//        iterator_& operator++()
-        iterator_ operator++()
-        {
-            ref_.idx_++;
-            ref_.update(ref_.idx_);
+            if(x)   ptr_->data_[n_elem_] |=   mask_;
+            else    ptr_->data_[n_elem_] &=  ~mask_;
             return *this;
         }
 
-//        iterator_& operator--()
-        iterator_ operator--()
+        reference operator=(reference src)
         {
-            ref_.idx_--;
-            ref_.update(ref_.idx_);
+            if(src) ptr_->data_[n_elem_] |=   mask_;
+            else    ptr_->data_[n_elem_] &=  ~mask_;
             return *this;
-        }
-
-        iterator_ operator++(int)
-        {
-            iterator_ tmp(*this);
-            ++(*this);
-            return tmp;
-        }
-
-        bool operator< (const iterator_& src)   const {  return ref_.idx_ <  src.ref_.idx_;}
-        bool operator> (const iterator_& src)   const {  return ref_.idx_ >  src.ref_.idx_;}
-        bool operator<=(const iterator_& src)   const {  return ref_.idx_ <= src.ref_.idx_;}
-        bool operator>=(const iterator_& src)   const {  return ref_.idx_ >= src.ref_.idx_;}
-
-        reference_type& operator*()                   {  return ref_;}
-
-        iterator_ operator-(const std::size_t size)
-        {
-            ref_.idx_ -= size;
-            ref_.update(ref_.idx_);
-            return *this;
-        }
-
-        difference_type operator-(const iterator_& src)
-        {
-            return ref_.idx_ - src.ref_.idx_;
-        }
-
-        iterator_ operator-(const std::size_t size)  const
-        {
-            iterator_ tmp(*this);
-            tmp.ref_.idx_ -= size;
-            tmp.ref_.update(tmp.ref_.idx_);
-            return tmp;
-        }
-
-        iterator_& operator-=(const std::size_t size)
-        {
-            ref_.idx_ -= size;
-            ref_.update(ref_.idx_);
-            return *this;
-        }
-
-        iterator_ operator+(const std::size_t size)
-        {
-            iterator_ tmp(*this);
-            tmp.ref_.idx_ += size;
-            tmp.ref_.update(tmp.ref_.idx_);
-            return tmp;
-        }
-
-        iterator_& operator+=(const std::size_t size)
-        {
-            ref_.idx_ += size;
-            ref_.update(ref_.idx_);
-            return *this;
-        }
-
-        reference_type operator[](const std::size_t idx)
-        {
-            return *(*this + idx);
         }
 
     private:
-        reference_type ref_;
+
     };
 
 // =============================================================================
 // =============================================================================
 
-    typedef iterator_<true>  const_iterator;
-    typedef iterator_<false>       iterator;
+    class const_iterator : std::iterator<std::random_access_iterator_tag, bool>
+    {
+    public:
+        typedef Vector<bool>* data_type;
 
+        // ** Iterator traits
+        typedef bool                                value_type;
+        typedef std::random_access_iterator_tag     iterator_category;
+        typedef std::ptrdiff_t                      difference_type;
+        typedef Vector<bool>::const_reference       reference;
+        typedef void*                               pointer;
+
+        const_iterator(){}
+
+        const_iterator(const const_iterator& src)
+            : ptr_(src.ptr_), idx_(src.idx_){}
+
+        explicit const_iterator(const Vector<bool>* ptr, std::size_t idx)
+            : idx_(idx)
+        {
+            ptr_ = const_cast<data_type>(ptr);
+        }
+
+        bool operator== (const_iterator other) const
+        {
+            return ((this->ptr_ == other.ptr_) && (this->idx_ == other.idx_));
+        }
+
+        bool operator!= (const_iterator other) const
+        {
+            return !(*this == other);
+        }
+
+        bool operator< (const_iterator src)   const {  return idx_ <  src.idx_;}
+        bool operator> (const_iterator src)   const {  return idx_ >  src.idx_;}
+        bool operator<=(const_iterator src)   const {  return idx_ <= src.idx_;}
+        bool operator>=(const_iterator src)   const {  return idx_ >= src.idx_;}
+
+        reference operator*()                        const
+        {
+            return reference(ptr_, idx_);
+        }
+
+        const_iterator operator-(const std::size_t size)  const
+        {
+            Vector<bool>::const_iterator tmp(*this);
+            tmp.idx_ -= size;
+            return tmp;
+        }
+
+        const_iterator operator+(const std::size_t size)
+        {
+            Vector<bool>::const_iterator tmp(*this);
+            tmp.idx_ += size;
+            return tmp;
+        }
+
+
+        difference_type operator-(const_iterator src)
+        {
+            return idx_ - src.idx_;
+        }
+
+        const_iterator operator++()
+        {
+            idx_++;
+            return *this;
+        }
+
+        const_iterator operator--()
+        {
+            idx_--;
+            return *this;
+        }
+
+        const_iterator operator++(int)
+        {
+            Vector<bool>::iterator tmp(*this);
+            ++(*this);
+            return tmp;
+        }
+
+        const_iterator operator-=(const std::size_t size)
+        {
+            idx_ -= size;
+            return *this;
+        }
+
+        const_iterator operator+=(const std::size_t size)
+        {
+            idx_ += size;
+            return *this;
+        }
+
+        reference operator[](const std::size_t idx)
+        {
+            return *(*this + idx);
+        }
+    protected:
+        data_type ptr_;
+        std::size_t idx_;
+    };
+
+    class iterator : public const_iterator
+    {
+    public:
+        // ** Iterator traits
+        typedef bool                                value_type;
+        typedef std::random_access_iterator_tag     iterator_category;
+        typedef std::ptrdiff_t                      difference_type;
+        typedef Vector<bool>::reference             reference;
+        typedef void*                               pointer;
+
+        iterator (){}
+
+        iterator (const iterator& src)
+            : const_iterator(src){}
+
+        explicit iterator (const Vector<bool>* ptr, std::size_t idx)
+            : const_iterator(ptr, idx){}
+
+        explicit iterator (const_iterator src)
+            : const_iterator(src){}
+
+        reference operator*()
+        {
+            return reference(ptr_, idx_);
+        }
+
+        reference operator[](const std::size_t idx)
+        {
+            return reference(ptr_, idx_ + idx);
+        }
+
+        iterator operator-(const std::size_t size)  const
+        {
+            Vector<bool>::iterator tmp(*this);
+            tmp.idx_ -= size;
+            return tmp;
+        }
+
+        iterator operator+(const std::size_t size)
+        {
+            Vector<bool>::iterator tmp(*this);
+            tmp.idx_ += size;
+            return tmp;
+        }
+
+
+        difference_type operator-(iterator src)
+        {
+            return idx_ - src.idx_;
+        }
+
+        iterator operator++()
+        {
+            idx_++;
+            return *this;
+        }
+
+        iterator operator--()
+        {
+            idx_--;
+            return *this;
+        }
+
+        iterator operator++(int)
+        {
+            Vector<bool>::iterator tmp(*this);
+            ++(*this);
+            return tmp;
+        }
+
+        iterator operator-=(const std::size_t size)
+        {
+            idx_ -= size;
+            return *this;
+        }
+
+        iterator operator+=(const std::size_t size)
+        {
+            idx_ += size;
+            return *this;
+        }
+    };
+
+// =============================================================================
+// =============================================================================
     /**
      * @brief Default constructor
      */
@@ -600,26 +690,22 @@ std::size_t Vector<bool>::capacity() const
 
 Vector<bool>::iterator Vector<bool>::begin()
 {
-    Vector<bool>::reference r(this,0);
-    return Vector<bool>::iterator(r);
+    return Vector<bool>::iterator(this, 0);
 }
 
 Vector<bool>::const_iterator Vector<bool>::begin() const
 {
-    Vector<bool>::const_reference r(this,0);
-    return Vector<bool>::const_iterator(r);
+    return Vector<bool>::const_iterator(this, 0);
 }
 
 Vector<bool>::iterator Vector<bool>::end()
 {
-    Vector<bool>::reference r(this,size_);
-    return Vector<bool>::iterator(r);
+    return Vector<bool>::iterator(this, size());
 }
 
 Vector<bool>::const_iterator Vector<bool>::end() const
 {
-    Vector<bool>::const_reference r(this,size_);
-    return Vector<bool>::const_iterator(r);
+    return Vector<bool>::const_iterator(this, size());
 }
 
 Vector<bool>::iterator Vector<bool>::find(const bool& src)
@@ -670,7 +756,7 @@ void Vector<bool>::check_bounds(const std::size_t idx) const
 }
 
 // ** Required for sort
-void swap(Vector<bool>::reference& r1, Vector<bool>::reference& r2)
+void swap(Vector<bool>::reference r1, Vector<bool>::reference r2)
 {
     bool tmp = r2;
     r2 = r1;
