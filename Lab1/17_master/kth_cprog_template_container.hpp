@@ -58,7 +58,7 @@ private:
     T* data_;
     std::size_t size_;
     std::size_t capacity_;
-    std::allocator<T> allocator_;
+    std::allocator<T> allocator_; // Allows to allocate memory without constructing objects
 
     std::size_t computeCapacity(const std::size_t size) const;
 
@@ -184,7 +184,12 @@ Vector<T>::Vector(Vector<T>&& src)
 {
     check_type();
 
-    // ** Move the data
+    // ** Release own resources
+    for(auto it = begin(); it < end(); ++it)
+        it->~T();
+    allocator_.deallocate(data_, capacity_);
+
+    // ** Move the data    
     data_ = src.data_;
     size_ = src.size_;
     capacity_ = src.capacity_;

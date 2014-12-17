@@ -1,0 +1,34 @@
+// FAILURES WITH MATRICES
+
+=== Matrix01.o ===
+-Subtraction
+-Default constructor and << operator
+
+=== Matrix02.o ===
+-Multiplication of matrices
+-Default constructor and << operator 
+
+=== Matrix03.o ===
+- Assigment operator
+- Index operator (DO A PROPER INDEX OPERATOR TEST!!)
+
+=== Matrix04.o ===
+-Subtraction
+-<< operator sets the matrix size to 0!!
+-Addition
+
+=== Matrix05.o ===
+-Default constructor initializes a 3x3 matrix. That's not specified anywhere
+
+=== Matrix06.o ===
+-Transpose
+
+=== Matrix07.o ===
+-Multiplication between 1-dimensional matrix and other
+
+=== Matrix08.o ===
+-Multiplication between 1-dimensional matrix and other
+
+=== Matrix09.o ===
+-Subtraction
+-Multiplication

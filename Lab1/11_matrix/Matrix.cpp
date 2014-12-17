@@ -9,6 +9,8 @@ Matrix::Matrix()
 
 Matrix::Matrix(std::size_t rows, std::size_t cols)
 {
+    if(rows < 0 || cols < 0)
+        throw std::out_of_range("[Matrix::Matrix(std::size_t, std::size_t)] size < 0!");
     m_rows_ = rows;
     m_cols_ = cols;
     for(std::size_t i = 0; i < rows; ++i)
@@ -29,11 +31,14 @@ Matrix::Matrix( const Matrix& src)
 
 Matrix::Matrix(int size)
 {
+    if(size < 0)
+        throw std::out_of_range("[Matrix::Matrix(int)] size < 0!");
     m_rows_ = size;
     m_cols_ = size;
     for(std::size_t i = 0; i < m_rows_; ++i)
     {
         m_vectors_.push_back(matrix_row(m_cols_));
+        (*this)[i][i] = 1;
     }
 }
 
@@ -58,7 +63,8 @@ Matrix& Matrix::operator= (const Matrix& src)
 Matrix Matrix::operator+ (const Matrix& src) const
 {
     // ** Check dimensions
-    assert(m_rows_ == src.m_rows_ && m_cols_ == src.m_cols_);
+    if(!(m_rows_ == src.m_rows_ && m_cols_ == src.m_cols_))
+        throw std::out_of_range("[Matrix::operator+] dimensions don't match!");
 
     // ** Create output matrix
     Matrix m(src.m_rows_, src.m_cols_);
@@ -66,7 +72,7 @@ Matrix Matrix::operator+ (const Matrix& src) const
     // ** Add
     for(std::size_t i = 0; i < m_rows_; ++i)
     {        
-        for(std::size_t j = 0; i < m_cols_; ++i)
+        for(std::size_t j = 0; j < m_cols_; ++j)
         {
             m[i][j] = (*this)[i][j] + src[i][j];
         }        
@@ -76,8 +82,17 @@ Matrix Matrix::operator+ (const Matrix& src) const
 
 Matrix Matrix::operator* ( const Matrix& src) const
 {
+    // ** Check for 1-dimension matrix (scalar)
+    if(src.cols() == 1 && src.rows() == 1)
+        return this->operator*(src[0][0]);
+
+    // ** Check for "this" begin 1-dimension matrix (scalar)
+    if(this->cols() == 1 && this->rows() == 1)
+        return src.operator *((*this)[0][0]);
+
     // ** Check dimensions
-    assert(m_cols_ == src.m_rows_);
+    if(m_cols_ != src.m_rows_)
+        throw std::out_of_range("[Matrix::operator*] dimensions don't match!");
 
     // ** Create output matrix
     Matrix m(m_rows_, src.m_cols_);
@@ -116,7 +131,8 @@ Matrix Matrix::operator* (int x) const
 Matrix Matrix::operator-(const Matrix& src) const // this - src
 {
     // ** Check dimensions
-    assert(m_rows_ == src.m_rows_ && m_cols_ == src.m_cols_);
+    if(!(m_rows_ == src.m_rows_ && m_cols_ == src.m_cols_))
+        throw std::out_of_range("[Matrix::operator-] dimensions don't match!");
 
     // ** Create output matrix
     Matrix m(m_rows_, m_cols_);
@@ -124,7 +140,7 @@ Matrix Matrix::operator-(const Matrix& src) const // this - src
     // ** Subtract
     for(std::size_t i = 0; i < m_rows_; ++i)
     {
-        for(std::size_t j = 0; i < m_cols_; ++i)
+        for(std::size_t j = 0; j < m_cols_; ++j)
         {
             m[i][j] = (*this)[i][j] - src[i][j];
         }
@@ -140,7 +156,7 @@ Matrix Matrix::operator-() const
     // ** Negate elements
     for(std::size_t i = 0; i < m_rows_; ++i)
     {
-        for(std::size_t j = 0; i < m_cols_; ++i)
+        for(std::size_t j = 0; j < m_cols_; ++j)
         {
             m[i][j] = -(*this)[i][j];
         }
@@ -154,7 +170,7 @@ Matrix& Matrix::transpose()
     Matrix& m = *(this);
     for(std::size_t i = 0; i < m_rows_; ++i)
     {
-        for(std::size_t j = 0; i < m_cols_; ++i)
+        for(std::size_t j = i; j < m_cols_; ++j)
         {
             int tmp = m[i][j];
             m[i][j] = m[j][i];
@@ -163,6 +179,19 @@ Matrix& Matrix::transpose()
     }
     return *this;
 }
+
+//Matrix& Matrix::identity()
+//{
+//    assert(this->m_cols_ == this->m_rows_);
+//    for(std::size_t i = 0; i < m_rows_; ++i)
+//    {
+//        for(std::size_t j = 0; j < m_cols_; ++j)
+//        {
+//            (*this)[i][j] = i == j ? 1 : 0;
+//        }
+//    }
+//    return *this;
+//}
 
 Matrix::matrix_row& Matrix::operator[]( index i )
 {
@@ -204,12 +233,12 @@ std::istream& operator>> (std::istream& is, Matrix& src)
         std::string s;
         is >> s; // Get next token
 
-        if(s == "[" || s == ";")
+        if(s == "[" || s == ";") // new row
         {
             src.m_vectors_.push_back(Matrix::matrix_row());
             src.m_rows_++;
         }
-        else
+        else // new element in row
         {
             try // Don't crash in case of " " and "]"
             {

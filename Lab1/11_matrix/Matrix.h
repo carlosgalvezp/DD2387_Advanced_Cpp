@@ -12,14 +12,14 @@ class Matrix
  public:
     typedef unsigned int index; //not so good, can create confusion with variable name
 
-    class matrix_row : public Vector< int > // Changed to public inheritance
+    class matrix_row : private Vector< int > // Private inheritance to use only some functions from vector
     {
     public:
-        matrix_row( std::size_t s = 0) : Vector< int >( s ) {}
+        explicit matrix_row( std::size_t s = 0) : Vector< int >( s ) {}
         using Vector<int>::operator[];
         using Vector<int>::size;
     private:
-//        friend std::istream& operator>>( std::istream&, Matrix& ); // Why is this here??
+        friend std::istream& operator>>( std::istream&, Matrix& );
     };
     
     Matrix();
@@ -36,7 +36,6 @@ class Matrix
     Matrix operator-( ) const;
     
     Matrix& transpose( );
-    static Matrix identity(std::size_t size);
 
     matrix_row& operator[]( index i );
     const matrix_row& operator[]( index i ) const;
@@ -52,7 +51,9 @@ class Matrix
     std::size_t                 m_rows_;
     std::size_t                 m_cols_;
     
-    friend std::istream& operator>> ( std::istream&, Matrix& ); // need also operator<<!
+    friend std::istream& operator>> ( std::istream&, Matrix& );
+    // Need friend in >> since I need to setup all the internal variables.
+    // Don't need friend in << since I just read and the operator[] is public
 };
 
 std::istream& operator>> ( std::istream&, Matrix& );

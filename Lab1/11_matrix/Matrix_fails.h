@@ -28,14 +28,15 @@ class Matrix
     public:
         matrix_row( std::size_t s = 0) : Vector< int >( s ) {} // Should be explicit
         using Vector<int>::operator [];
+	// Need also using Vector<int>::size(), otherwise we cannot know the row size!
     private:
         friend std::istream& operator>>( std::istream&, Matrix& ); // Required since private inheritance
     };
     
     Matrix( );
-    Matrix( std::size_t, std::size_t ); // Should be explicit
+    Matrix( std::size_t, std::size_t ); 	// Should be explicit
     Matrix( const Matrix& ); 
-    Matrix(int size); // Should be explicit
+    Matrix(int size); 				// Should be explicit
     ~Matrix( );
     
     Matrix& operator= ( const Matrix& );
@@ -46,6 +47,7 @@ class Matrix
     Matrix operator-( ) const;
     
     Matrix& transpose( );
+    // The Identity function is missing
     
     matrix_row& operator[]( index i );
     const matrix_row& operator[]( index i ) const;
@@ -60,11 +62,12 @@ class Matrix
     std::size_t                 m_cols;
     
     void add_row( );            // Non mandatory help function
-    friend std::istream& operator>> ( std::istream&, Matrix& ); // Need also friend operator<<
+    friend std::istream& operator>> ( std::istream&, Matrix& ); 
+    // No need for friend operator << since using operator[] is public
 };
 
 std::istream& operator>> ( std::istream&, Matrix& );
-std::ostream& operator<< ( std::ostream&, Matrix& );
+std::ostream& operator<< ( std::ostream&, Matrix& ); //should use const Matrix&
 Matrix operator* ( int, const Matrix& );
 
 #endif // MATRIX_H

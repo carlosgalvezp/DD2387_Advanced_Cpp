@@ -4,11 +4,16 @@
 #include <exception>
 #include <vector>
 
-
+// Big struct so that it takes time to process it => easy to see deadlocks
 struct A
 {
-    std::vector<int> v;
-    A(){v.resize(100000);}
+    std::vector<int> v1,v2,v3;
+    A()
+    {
+        v1.resize(1000000);
+        v2.resize(1000000);
+        v3.resize(1000000);
+    }
 
 };
 

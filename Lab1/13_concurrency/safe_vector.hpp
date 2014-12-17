@@ -157,7 +157,7 @@ public:
     void safeswap(std::size_t idx1, std::size_t idx2);
 
     /**
-     * @brief Swaps 2 elements, thread-sage. It only locks the elements
+     * @brief Swaps 2 elements, thread-safe. It only locks the elements
      * @param idx1
      * @param idx2
      */
@@ -614,22 +614,20 @@ void SafeVector<T>::safeswap(std::size_t idx1, std::size_t idx2)
 template<typename T>
 void SafeVector<T>::safeswap2(std::size_t idx1, std::size_t idx2)
 {
+    using std::swap;
+    if(idx1 < idx2)
+        swap(idx1,idx2);
+
     std::cout << "["<< std::this_thread::get_id() << "] Swapping " << idx1 << " and " << idx2 << "..."<<std::endl;
     check_bounds(idx1); check_bounds(idx2);
 
-    mutexes_[idx1].lock();// Lock first element (no one can write while I read it)
+    std::lock_guard<std::mutex> locker1(mutexes_[idx1]);// Lock first element (no one can write while I read it)
     T tmp = data_[idx1];
 
-    mutexes_[idx2].lock(); //Lock second element (I am writing on it)
+    std::lock_guard<std::mutex> locker2(mutexes_[idx2]);// Lock first element (no one can write while I read it)
     data_[idx1] = std::move(data_[idx2]);
-
-    mutexes_[idx1].unlock(); // Unlock the first one (finished reading and writing)
-
     data_[idx2] = std::move(tmp); // Don't need tmp => std::move
-    mutexes_[idx2].unlock(); // Unlock the second one (finished reading and writing)
-
     std::cout << "["<< std::this_thread::get_id() << "] Finished swapping" << std::endl;
-    mutex_.unlock();
 }
 
 /**

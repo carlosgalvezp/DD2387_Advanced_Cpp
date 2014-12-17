@@ -219,12 +219,9 @@ Vector<T>::Vector(const std::size_t size)
     capacity_ = computeCapacity(size_);
     data_ = new T[capacity_];
 
-    std::cout << "Initializing elements..."<<std::endl;
-
     // ** Initialize elements
     for(std::size_t i = 0; i < size_; ++i)
     {
-        std::cout << i << std::endl;
         data_[i] = T();
     }
 }

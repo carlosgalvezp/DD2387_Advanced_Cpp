@@ -15,42 +15,26 @@ class Hypercube
 {
 public:
     Hypercube(){}
+    explicit Hypercube(unsigned int m)    {data_ = Vector<Hypercube<n-1>>(m, Hypercube<n-1>(m)); }
 
-    Hypercube(unsigned int m)
-    {
-        data = Vector<Hypercube<n-1>>(m, Hypercube<n-1>(m));
-    }
-
-    Hypercube<n-1>& operator[](std::size_t idx)
-    {
-        return data[idx];
-    }
+          Hypercube<n-1>& operator[](std::size_t idx)       {  return data_[idx];  }
+    const Hypercube<n-1>& operator[](std::size_t idx) const {  return data_[idx];  }
 
 private:
-    Vector<Hypercube<n-1>> data;
+    Vector<Hypercube<n-1>> data_; // Recursive inheritance
 };
 
-template <>
-class Hypercube<1>
+template <>             // Specialization
+class Hypercube<1>      // Base case: n = 1
 {
 public:
     Hypercube(){}
-    Hypercube(unsigned int m)
-    {
-        data = Vector<int>(m);
-    }
+    explicit Hypercube(unsigned int m)    {        data_ = Vector<int>(m);    }
 
-    int& operator[](std::size_t idx)
-    {
-        return data[idx];
-    }
+          int& operator[](std::size_t idx)          {        return data_[idx];    }
+    const int& operator[](std::size_t idx) const    {        return data_[idx];    }
 
 private:
-    Vector<int> data;
+    Vector<int> data_;
 };
-
-
-// ============================================================
-// ============================================================
-
 #endif // HYPERCUBE_H
