@@ -17,7 +17,7 @@ class SafeVector
     typedef typename std::unique_ptr<T[]> SmartPtr;
 
     template<typename S>
-    friend void swap(SafeVector<S> &&v1, SafeVector<S> &&v2);
+    friend void swap(SafeVector<S> &v1, SafeVector<S> &v2);
 
 public:
     typedef T* iterator_t;
@@ -63,7 +63,7 @@ public:
      * @param src
      * @return
      */
-    SafeVector<T>& operator= (SafeVector<T> src);
+    SafeVector<T>& operator= (const SafeVector<T>& src);
 
     /**
      * @brief Move-assignment operator
@@ -222,17 +222,11 @@ SafeVector<T>::SafeVector(const std::size_t size)
 
     // ** First of all, try to allocate space
     std::size_t newCapacity = computeCapacity(size);
-    data_ = SmartPtr(new T[newCapacity]);                       // Possible exception
+    data_ = SmartPtr(new T[newCapacity]());                       // Possible exception
 
     // ** Update next fields
     size_ = size;
     capacity_ = newCapacity;
-
-    // ** Initialize elements
-    for(std::size_t i = 0; i < size_; ++i)
-    {
-        data_[i] = T();
-    }
 }
 
 /**
@@ -326,10 +320,11 @@ SafeVector<T>::SafeVector(SafeVector<T>&& src)
  * @return
  */
 template<typename T>
-SafeVector<T>& SafeVector<T>::operator= (SafeVector<T> src)
+SafeVector<T>& SafeVector<T>::operator= (const SafeVector<T>& src)
 {
     check_type();
-    swap(*this, src);
+    SafeVector<T> tmp(src);
+    swap(*this, tmp);
     return *this;
 }
 
@@ -390,10 +385,13 @@ SafeVector<T>::~SafeVector()
 template<typename T>
 void SafeVector<T>::reset()
 {
+    std::unique_ptr<T[]> newData(new T[capacity_]);
     for(std::size_t i = 0; i < size_; ++i)
     {
-        data_[i] = T();
+        newData[i] = T();           // Possible exception
     }
+
+    std::swap(data_, newData);
 }
 
 /**
@@ -415,10 +413,7 @@ void SafeVector<T>::push_back(const T& src)
         std::size_t newCapacity = computeCapacity(capacity_);
         std::unique_ptr<T[]> newData(new T[newCapacity]);           // Possible exception
 
-        // Update other variables
-        capacity_ = newCapacity;
-
-        // ** Move data
+        // ** Copy data
         for (std::size_t i = 0; i < size_; ++i)
         {
             newData[i] = data_[i];
@@ -426,10 +421,13 @@ void SafeVector<T>::push_back(const T& src)
 
         // ** Add new element
         newData[size_] = src;
-        size_++;
 
         // ** Reassign data
-        std::swap(this->data_, newData);
+        std::swap(data_, newData);
+
+        // ** Update other variables
+        capacity_ = newCapacity;
+        size_++;
     }
 }
 
@@ -448,11 +446,17 @@ void SafeVector<T>::insert(const std::size_t idx, const T& src)
         // ** Check boundaries
         check_bounds(idx);
 
-        // ** Expand array to make room for src
-        expand(idx);
+        // ** Create tmp array for exception safety
+        SafeVector<T> tmp(*this);
 
-        // ** Put the element
-        data_[idx] = src;
+        // ** Expand array to make room for src
+        tmp.expand(idx);
+
+        // ** Insert the element
+        tmp[idx] = src;
+
+        // ** Swap (own function)
+        swap(*this, tmp);
     }
 }
 
@@ -592,41 +596,34 @@ void SafeVector<T>::check_type() const
 template<typename T>
 void SafeVector<T>::expand(const std::size_t idx)
 {
-    // ** Allocate more memory if needed
-    std::unique_ptr<T[]> newData;
-    bool allocated (false);
+    // ** Create tmp array for exception safety
+    std::size_t newCapacity = capacity_;
 
     if (size_ >= capacity_)
     {
-        // ** Try to allocate new data
-        std::size_t newCapacity = computeCapacity(capacity_);
-        newData = std::unique_ptr<T[]>(new T[newCapacity]);     // Possible exception
-
-        // Update other variables
-        capacity_ = newCapacity;
-        allocated = true;
+        newCapacity = computeCapacity(capacity_);
     }    
+
+    std::unique_ptr<T[]> newData(new T[newCapacity]);     // Possible exception
+
     // ** Move old to new data
     for (std::size_t i = size_-1 ; i < size_; --i) // When i=0 and we do --i, it will become the max possible value of size_t!
     {
         if(i < idx)
         {
-            if(allocated)
-                newData[i] = std::move(data_[i]);
+            newData[i] = data_[i];
         }
         else
         {
-            if(allocated)
-                newData[i+1] = std::move(data_[i]);
-            else
-                data_[i+1] = std::move(data_[i]);
+            newData[i+1] = data_[i];
         }
     }
 
     // ** Reassign memory
-    if(allocated)
-        std::swap(data_, newData);
+    std::swap(data_, newData);
 
+    // ** Update other variables
+    capacity_ = newCapacity;
     size_++;
 }
 
@@ -637,14 +634,20 @@ void SafeVector<T>::expand(const std::size_t idx)
 template<typename T>
 void SafeVector<T>::shrink(const std::size_t idx)
 {
+    // ** Create tmp array for exception safety
+    std::unique_ptr<T[]> newData(new T[capacity_]);
+
     // ** Move data
     for (std::size_t i = 0; i < size_-1; ++i)
     {
         if(i < idx)
-            data_[i] = std::move(data_[i]);
+            newData[i] = data_[i];
         else
-            data_[i] = std::move(data_[i+1]);
+            newData[i] = data_[i+1];
     }
+
+    // ** Swap
+    std::swap(data_, newData);
     size_--;
 }
 

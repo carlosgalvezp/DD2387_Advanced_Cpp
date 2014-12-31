@@ -26,8 +26,6 @@ public:
 // =============================================================================
     class const_reference
     {
-        friend class const_iterator;
-        friend class iterator;
         public:
             typedef Vector<bool>* data_type;
 
@@ -84,9 +82,6 @@ public:
     class reference: public const_reference
     {
     public:
-        friend class const_iterator;
-        friend class iterator;
-
         typedef Vector<bool>* data_type;
 
         reference(){}
@@ -159,19 +154,21 @@ public:
         bool operator<=(const_iterator src)   const {  return idx_ <= src.idx_;}
         bool operator>=(const_iterator src)   const {  return idx_ >= src.idx_;}
 
-        reference operator*()                        const
+        reference operator*()                 const
         {
             return reference(ptr_, idx_);
         }
 
-        const_iterator operator-(const std::size_t size)  const
+        void operator->(){} // Needed, but no sense!
+
+        const_iterator operator-(const difference_type size)  const
         {
             Vector<bool>::const_iterator tmp(*this);
             tmp.idx_ -= size;
             return tmp;
         }
 
-        const_iterator operator+(const std::size_t size)
+        const_iterator operator+(const difference_type size) const
         {
             Vector<bool>::const_iterator tmp(*this);
             tmp.idx_ += size;
@@ -184,13 +181,13 @@ public:
             return idx_ - src.idx_;
         }
 
-        const_iterator operator++()
+        const_iterator& operator++()
         {
             idx_++;
             return *this;
         }
 
-        const_iterator operator--()
+        const_iterator& operator--()
         {
             idx_--;
             return *this;
@@ -203,13 +200,21 @@ public:
             return tmp;
         }
 
-        const_iterator operator-=(const std::size_t size)
+
+        const_iterator operator--(int)
+        {
+            Vector<bool>::iterator tmp(*this);
+            --(*this);
+            return tmp;
+        }
+
+        const_iterator& operator-=(const std::size_t size)
         {
             idx_ -= size;
             return *this;
         }
 
-        const_iterator operator+=(const std::size_t size)
+        const_iterator& operator+=(const std::size_t size)
         {
             idx_ += size;
             return *this;
@@ -795,6 +800,12 @@ Vector<bool> intToVector(storage_type x)
         v[i] = true;
     }
     return v;
+}
+
+Vector<bool>::const_iterator operator+(const Vector<bool>::const_iterator::difference_type size,
+                                       const Vector<bool>::const_iterator& src)
+{
+    return src + size;
 }
 
 #endif // VECTOR_BOOL_H

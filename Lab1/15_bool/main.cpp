@@ -5,7 +5,7 @@
 
 void f(int x);
 
-void testReference();
+void testConstReference();
 void testKTH();
 void testMove();
 void testSwap();
@@ -14,10 +14,10 @@ void testIntConversion();
 int main()
 {
 //    testReference();
-    testKTH();
+//    testKTH();
 //    testMove();
 //    testSwap();
-//    testIntConversion();
+    testIntConversion();
     return 0;
 }
 
@@ -70,7 +70,7 @@ void testMove()
 
 }
 
-void testReference()
+void testConstReference()
 {
     Vector<bool> v(31);
     Vector<bool>::reference r(&v, 1);
@@ -90,8 +90,8 @@ void testReference()
 void testKTH()
 {
     Vector<bool> v(31); // Skapa en 31 stor vektor
-    v[3] = true;
     v[0] = true;
+    v[3] = true;
     v[5] = v[7] = true;
     v.print();
 
@@ -125,7 +125,7 @@ void testIntConversion()
     std::cout << vectorToInt(v)<<std::endl;
 
     std::cout << "Int to vector" <<std::endl;
-    int n = 1133;
+    int n = 10;
     Vector<bool> v2 = intToVector(n);
     std::cout << "N = "<<n<<std::endl;
     v2.print();
