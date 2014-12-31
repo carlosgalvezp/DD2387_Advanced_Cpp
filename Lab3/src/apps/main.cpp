@@ -18,6 +18,7 @@ void run(const lab3::GameEngine &game_engine, int option);
 int main()
 {
     system("clear"); // Clear screen
+    std::cout << "======= AWESOME ROL GAME ======="<<std::endl;
 
     // ** Create Game Engine
     lab3::GameEngine game_engine;
