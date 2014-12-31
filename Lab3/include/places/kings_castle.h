@@ -7,7 +7,7 @@ namespace lab3
 {
 namespace places
 {
-class Kings_Castle : Place
+class Kings_Castle : public Place
 {
 public:
     Kings_Castle();

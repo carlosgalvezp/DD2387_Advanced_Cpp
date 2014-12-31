@@ -7,10 +7,16 @@ class Object
 {
 public:
     Object();
+    virtual ~Object();
 
-    double weight()         const;
-    double volume()         const;
-    double price()          const;
+    int weight()         const;
+    int volume()         const;
+    int price()          const;
+
+private:
+    int weight_;
+    int volume_;
+    int price_;
 };
 
 }   //namespace lab3

@@ -8,7 +8,7 @@
 
 namespace lab3
 {
-namespace object
+namespace objects
 {
 /**
  * @brief The Container class
@@ -19,14 +19,16 @@ class Container : Object
 public:
     Container();
 
-    double hold_weight()    const;
-    double hold_volume()    const;
+    int hold_weight()    const;
+    int hold_volume()    const;
 
     bool add(const Object& object);
     bool remove(const Object& object);
 
 private:
     std::vector<Object *> objects_;
+    int hold_weight_;
+    int hold_volume_;
 };
 
 }   //namespace object

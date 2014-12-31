@@ -2,11 +2,11 @@
 
 namespace lab3
 {
-namespace object
+namespace objects
 {
 Container::Container()
 {
 }
 
-}   // namespace object
-}   // namespace lab3
+}
+}

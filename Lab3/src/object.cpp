@@ -6,4 +6,5 @@ Object::Object()
 {
 }
 
+Object::~Object(){}
 } // namespace lab3

@@ -9,7 +9,7 @@ namespace places
 {
 
 
-class Enchanted_Forest : Place
+class Enchanted_Forest : public Place
 {
 public:
     Enchanted_Forest();

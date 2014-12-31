@@ -1,10 +1,10 @@
 #include "character.h"
 
-namespace lab3
-{
+using namespace lab3;
+
 Character::Character()
 {
 }
 
-} // namespace lab3
-
+Character::~Character()
+{}

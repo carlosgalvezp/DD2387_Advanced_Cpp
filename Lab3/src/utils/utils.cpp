@@ -7,6 +7,8 @@ namespace utils
 
 void displaySelectionMenu(const std::vector<UI_Option> &options)
 {
+    std::cout << "Select an option" << std::endl;
+
     for(std::size_t i = 0; i < options.size(); ++i)
     {
         const UI_Option &o = options[i];

@@ -8,11 +8,13 @@ namespace lab3
 namespace characters
 {
 
-class Paladin : Character
+class Paladin : public Character
 {
 public:
     Paladin();
     ~Paladin();
+
+    std::string type() const;
 };
 
 }

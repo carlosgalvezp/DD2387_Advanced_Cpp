@@ -8,7 +8,7 @@ namespace lab3
 namespace places
 {
 
-class Home : Place
+class Home : public Place
 {
 public:
     Home();

@@ -7,7 +7,7 @@ namespace lab3
 {
 namespace places
 {
-class Hospital : Place
+class Hospital : public Place
 {
 public:
     Hospital();

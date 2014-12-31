@@ -12,3 +12,7 @@ Princess::~Princess()
 
 }
 
+std::string Princess::type() const
+{
+    return "Princess";
+}

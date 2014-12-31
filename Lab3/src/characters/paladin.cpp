@@ -11,3 +11,8 @@ Paladin::~Paladin()
 {
 
 }
+
+std::string Paladin::type() const
+{
+    return "Paladin";
+}

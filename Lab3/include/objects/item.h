@@ -8,7 +8,7 @@ namespace lab3
 namespace objects
 {
 
-class Item : Object
+class Item : public Object
 {
 public:
     Item();

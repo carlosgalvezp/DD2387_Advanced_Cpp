@@ -7,7 +7,7 @@ namespace lab3
 {
 namespace places
 {
-class Food_Shop : Shop
+class Food_Shop : public Shop
 {
 public:
     Food_Shop();

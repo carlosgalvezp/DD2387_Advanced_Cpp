@@ -29,6 +29,7 @@ void displaySelectionMenu(const std::vector<UI_Option> &options);
  */
 int readKeyboardInput(const std::vector<UI_Option> &options);
 }
+
 }
 
 

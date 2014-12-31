@@ -7,11 +7,13 @@ namespace lab3
 {
 namespace characters
 {
-class Princess : Character
+class Princess : public Character
 {
 public:
     Princess();
     ~Princess();
+
+    std::string type() const;
 };
 
 }
