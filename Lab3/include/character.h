@@ -27,7 +27,7 @@ public:
     void fight(Character &character);
     bool go(const std::string &direction);
     virtual bool pick_up(lab3::Object &object);
-    void drop(lab3::Object &object);
+    virtual bool drop(lab3::Object &object);
     void talk_to(Character* character);
     void set_place(Place* p);
 

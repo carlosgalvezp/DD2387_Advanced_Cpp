@@ -83,3 +83,5 @@ int Container::current_hold_volume() const {return this->current_hold_volume_;}
 int Container::current_hold_weight() const {return this->current_hold_weight_;}
 int Container::max_hold_volume()     const {return this->max_hold_volume_;}
 int Container::max_hold_weight()     const {return this->max_hold_weight_;}
+
+const std::vector<lab3::Object*> &Container::objects() const{return this->objects_;}

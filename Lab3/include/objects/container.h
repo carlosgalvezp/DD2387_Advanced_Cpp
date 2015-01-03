@@ -28,6 +28,8 @@ public:
     bool add(Object &object);
     bool remove(const Object& object);
 
+    const std::vector<Object*> & objects() const;
+
 private:
     std::vector<Object *> objects_;
     int max_hold_weight_;

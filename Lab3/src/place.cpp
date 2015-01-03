@@ -97,6 +97,8 @@ void Place::display_information(const Character &character)
     std::cout << description() << std::endl;
 }
 
+std::string Place::name() const     {return this->name_;}
+
 std::string Place::description() const
 {
     std::stringstream ss;

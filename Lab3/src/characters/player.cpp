@@ -69,6 +69,40 @@ bool Player::action()
         }
     }
 
+    if(cmd == "drop")
+    {
+        if(this->objects_.size() == 0)
+        {
+            lab3::utils_io::print_newline("You have no objects to drop here");
+            return false;
+        }
+        std::map<std::string, Object*> command_map;
+        std::vector<std::string> command_str;
+        // ** Get objects
+        for(Object* o : this->objects_)
+        {
+            command_map.insert(std::make_pair(o->name(), o));
+            command_str.push_back(o->name());
+        }
+        // ** Get object inside container
+        objects::Container* bag = (objects::Container*)this->objects_[0];
+        for(Object* o : bag->objects())
+        {
+            command_map.insert(std::make_pair(o->name(), o));
+            command_str.push_back(o->name());
+        }
+
+        lab3::utils_io::print_newline("Drop what?");
+        std::string cmd = lab3::input::read_input(command_str);
+
+        // ** Actually go
+        Object *o = command_map.at(cmd);
+        if(o != nullptr)
+        {
+            this->drop(*o);
+        }
+    }
+
 
     if(rescued_princess || cmd == "exit game")
         return true;
@@ -88,6 +122,36 @@ bool Player::pick_up(Object &object)
 
     return false;
 }
+
+bool Player::drop(Object &object)
+{
+    std::stringstream ss;
+    // ** Check if it's any of the objects we already have
+    for(auto it = this->objects_.begin(); it < this->objects_.end(); ++it)
+    {
+        if(**it == object)
+        {
+            this->objects_.erase(it);
+            this->current_place_->drop(object);
+            ss << "You have dropped a "<<object.name() << " in the " <<this->currentPlace()<<".";
+            lab3::utils_io::print_newline(ss.str());
+            return true;
+        }
+    }
+
+    // ** Check if it's inside the container
+    objects::Container* bag = (objects::Container*)(this->objects_[0]);
+    if(bag->remove(object))
+    {
+        this->current_place_->drop(object);
+        ss << "You have dropped a "<<object.name() << " in the " <<this->currentPlace()->name()<<".";
+        lab3::utils_io::print_newline(ss.str());
+        return true;
+
+    }
+    return false;
+}
+
 
 std::string Player::type() const
 {

@@ -31,7 +31,7 @@ public:
 
     bool action();
     bool pick_up(Object &object);
-
+    bool drop(Object &object);
     std::string type() const;
 
 private:

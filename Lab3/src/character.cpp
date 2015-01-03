@@ -50,7 +50,12 @@ bool Character::pick_up(lab3::Object &object)
     return true;
 }
 
-//void drop(lab3::Object &object);
+bool Character::drop(lab3::Object &object)
+{
+    this->current_place_->drop(object);
+    return true;
+}
+
 //void talk_to(Character &character);
 
 

@@ -42,6 +42,7 @@ public:
     void addDirection(const std::string &d, Place* p);
 
     // Accessors
+    std::string name()        const;
     std::string description() const;
     const std::map<std::string, Place*>& directions() const;
     const std::vector<Object*> &objects()             const;
