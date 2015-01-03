@@ -14,7 +14,7 @@ int main()
     game_engine.initGame();
 
     // ** Run
-//    game_engine.run();
+    game_engine.run();
 
     return 0;
 }

@@ -1,16 +1,17 @@
 #ifndef TROLL_H
 #define TROLL_H
 
-#include <character.h>
+#include <characters/animal.h>
 
 namespace lab3
 {
 namespace characters
 {
-class Troll : Character
+class Troll : Animal
 {
 public:
     Troll();
+    Troll(const std::string &name);
     ~Troll();
 };
 

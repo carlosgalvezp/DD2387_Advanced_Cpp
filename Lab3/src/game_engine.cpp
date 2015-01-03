@@ -36,6 +36,9 @@ GameEngine::~GameEngine()
 
 void GameEngine::initGame()
 {
+    // ** Set seed for rand
+    srand(time(NULL));
+
     // ** Display main menu and choose option
     int option  = mainMenu();
 
@@ -45,13 +48,7 @@ void GameEngine::initGame()
         newGame();
         break;
 
-    case 1:             // Load game
-        break;
-
-    case 2:             // Save game
-        break;
-
-    case 3:
+    case 1:
         is_finished_ = true;
         break;
     }
@@ -59,19 +56,19 @@ void GameEngine::initGame()
 void GameEngine::newGame()
 {
     // ** Create places
-    this->places_.push_back(new places::Home());
-    this->places_.push_back(new places::Enchanted_Forest());
-    this->places_.push_back(new places::Kings_Castle());
+    this->places_.push_back(new places::Home("Home"));
+    this->places_.push_back(new places::Enchanted_Forest("Enchanted Forest"));
+    this->places_.push_back(new places::Kings_Castle("Kings Castle"));
 
     // ** Create characters
-    this->characters_.push_back(new characters::Paladin);
-    this->characters_.push_back(new characters::Princess);
+    this->characters_.push_back(new characters::Player("Adventurous Player"));
+    this->characters_.push_back(new characters::Princess("Trapped Princess"));
 
     // ** Create objects
-    this->objects_.push_back(new objects::Key);
+    this->objects_.push_back(new objects::Item("key"));
 
     // ** Put characters and objects in the places
-    Place* home = this->places_[0];
+    Place* home   = this->places_[0];
     Place* forest = this->places_[1];
     Place* castle = this->places_[2];
 
@@ -82,11 +79,10 @@ void GameEngine::newGame()
     castle->drop(*key);
 
     // ** Connect places
-    Direction *d1 = new Direction(Movement::NORTH, forest);
-    Direction *d2 = new Direction(Movement::EAST, castle);
-
-    home->addDirection(d1);
-    forest->addDirection(d2);
+    home->addDirection(DIRECTION_NORTH, forest);
+    forest->addDirection(DIRECTION_EAST, castle);
+    forest->addDirection(DIRECTION_SOUTH, home);
+    castle->addDirection(DIRECTION_WEST, forest);
 }
 
 int GameEngine::mainMenu()
@@ -94,8 +90,6 @@ int GameEngine::mainMenu()
     // ** Create options
     std::vector<UI_Option> options;
     options.push_back(UI_Option("New game", 'n'));
-//    options.push_back(UI_Option("Load game",'l'));
-//    options.push_back(UI_Option("Save game",'s'));
     options.push_back(UI_Option("Quit",     'q'));
 
     // ** Display and choose option
@@ -103,8 +97,9 @@ int GameEngine::mainMenu()
     do
     {
         // ** Clear screen
-        system("clear");
+        lab3::utils_io::clearScreen();
 
+        // ** Display menu
         lab3::utils::displaySelectionMenu(options);
         option = lab3::utils::readKeyboardInput(options);
     }
@@ -117,14 +112,41 @@ int GameEngine::mainMenu()
 
 void GameEngine::run()
 {
+    lab3::utils_io::clearScreen();
+
     while(!this->is_finished_)
     {
-        // ** Execute own actions
+        // ** Sort by initiative
+        std::sort(characters_.begin(), characters_.end(),
+                  [](Character* char1, Character* char2)
+                  {return char1->getInitiative() > char2->getInitiative();});
 
-        // ** Execute other actors' actions
+        // ** Run actions
+        for(Character *c : characters_)
+        {
+            bool finished = c->action();
+            if (finished && c->type() == TYPE_PLAYER)
+            {
+                is_finished_ = true;
+                break;
+            }
+            input::wait_for_enter();
+        }
+
+        // ** Remove dead characters
+        std::vector<Character*> tmp;
+        for(Character* c : characters_)
+        {
+            if (!c->isAlive())
+            {
+                delete c;
+                continue;
+            }
+            tmp.push_back(c);
+        }
+        characters_ = tmp;
     }
-
-    std::cout << "Thanks for playing" << std::endl;
+    lab3::utils_io::print_newline("Thanks for playing!");
 }
 
 }

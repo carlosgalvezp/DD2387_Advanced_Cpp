@@ -12,6 +12,7 @@ class Home : public Place
 {
 public:
     Home();
+    Home(const std::string &name);
     ~Home();
 };
 }

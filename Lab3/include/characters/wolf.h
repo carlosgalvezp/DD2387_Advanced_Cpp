@@ -1,16 +1,17 @@
 #ifndef WOLF_H
 #define WOLF_H
 
-#include <character.h>
+#include <characters/animal.h>
 
 namespace lab3
 {
 namespace characters
 {
-class Wolf : Character
+class Wolf : Animal
 {
 public:
     Wolf();
+    Wolf(const std::string &name);
     ~Wolf();
 };
 }

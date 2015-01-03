@@ -12,6 +12,7 @@ class Animal : public Character
 {
 public:
     Animal();
+    Animal(const std::string &name, const std::string &type);
     ~Animal();
 };
 

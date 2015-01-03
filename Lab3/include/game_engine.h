@@ -4,7 +4,9 @@
 // STL
 #include <vector>
 #include <iostream>
-
+#include <algorithm>
+#include <cstdlib>
+#include <ctime>
 // Own
 #include <object.h>
 #include <objects/armor.h>
@@ -17,7 +19,7 @@
 #include <objects/sword.h>
 
 #include <character.h>
-#include <characters/paladin.h>
+#include <characters/player.h>
 #include <characters/princess.h>
 #include <characters/troll.h>
 #include <characters/wise_man.h>

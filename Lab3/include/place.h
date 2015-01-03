@@ -5,14 +5,19 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <map>
+#include <utility>
+#include <iostream>
+#include <string>
+#include <sstream>
 
 // Own classes
 #include <object.h>
 #include <character.h>
-#include <places/direction.h>
+#include <utils/utils_io.h>
+
 namespace lab3
 {
-struct Direction;
 class Character;
 /**
  * @brief The Place class
@@ -22,30 +27,32 @@ class Character;
 class Place
 {
 public:
+
     Place();
     Place(const std::string &name);
     virtual ~Place();
 
-    Place& neighbour(int direction);
+    Place& neighbour(const std::string &direction);
 
     bool enter(Character &character);
     bool leave(Character &character);
     bool pick_up(Object &object);
     void drop(Object &object);
 
-    void addDirection(Direction *direction);
+    void addDirection(const std::string &d, Place* p);
 
     // Accessors
     std::string description() const;
-    const std::vector<Direction*>& directions() const;
+    const std::map<std::string, Place*>& directions() const;
 
-private:
+protected:
     std::string name_;
-    std::string description_;
 
     std::vector<Object*> objects_;
     std::vector<Character*> characters_;
-    std::vector<Direction*> directions_;
+    std::map<std::string, Place*> directions_;
+
+    void display_information(const Character &character);
 };
 
 } //namespace lab3

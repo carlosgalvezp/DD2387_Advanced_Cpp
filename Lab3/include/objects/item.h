@@ -12,6 +12,7 @@ class Item : public Object
 {
 public:
     Item();
+    Item(const std::string &name);
     ~Item();
 };
 

@@ -11,6 +11,7 @@ class Kings_Castle : public Place
 {
 public:
     Kings_Castle();
+    Kings_Castle(const std::string &name);
     ~Kings_Castle();
 };
 }

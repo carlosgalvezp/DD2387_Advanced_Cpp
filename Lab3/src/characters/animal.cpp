@@ -1,20 +1,17 @@
 #include <characters/animal.h>
 
-namespace lab3
-{
-namespace characters
-{
+using namespace lab3::characters;
 
 Animal::Animal()
 {
 
 }
+Animal::Animal(const std::string &name, const std::string &type)
+    : Character(name,type)
+{}
 
 Animal::~Animal()
 {
 
-}
-
-}
 }
 
