@@ -11,7 +11,7 @@ class Troll : Animal
 {
 public:
     Troll();
-    Troll(const std::string &name);
+    Troll(const std::string &name, Place *place);
     ~Troll();
 };
 

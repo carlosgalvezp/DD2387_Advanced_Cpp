@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "object.h"
-
+#include <sstream>
 namespace lab3
 {
 namespace objects
@@ -18,17 +18,22 @@ class Container : Object
 {
 public:
     Container();
+    Container(std::string name, int price, int volume, int weight, int max_weight, int max_volume);
 
-    int hold_weight()    const;
-    int hold_volume()    const;
+    int max_hold_weight()         const;
+    int max_hold_volume()         const;
+    int current_hold_volume()     const;
+    int current_hold_weight()     const;
 
-    bool add(const Object& object);
+    bool add(Object &object);
     bool remove(const Object& object);
 
 private:
     std::vector<Object *> objects_;
-    int hold_weight_;
-    int hold_volume_;
+    int max_hold_weight_;
+    int max_hold_volume_;
+    int current_hold_weight_;
+    int current_hold_volume_;
 };
 
 }   //namespace object

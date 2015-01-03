@@ -11,7 +11,7 @@ class Wolf : Animal
 {
 public:
     Wolf();
-    Wolf(const std::string &name);
+    Wolf(const std::string &name, Place *place);
     ~Wolf();
 };
 }

@@ -12,7 +12,7 @@ class Human : public Character
 {
 public:
     Human();
-    Human(const std::string &name, const std::string &type);
+    Human(const std::string &name, const std::string &type, Place *p);
     ~Human();
 
     virtual bool action() = 0;

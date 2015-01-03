@@ -60,17 +60,16 @@ void GameEngine::newGame()
     this->places_.push_back(new places::Enchanted_Forest("Enchanted Forest"));
     this->places_.push_back(new places::Kings_Castle("Kings Castle"));
 
-    // ** Create characters
-    this->characters_.push_back(new characters::Player("Adventurous Player"));
-    this->characters_.push_back(new characters::Princess("Trapped Princess"));
-
-    // ** Create objects
-    this->objects_.push_back(new objects::Item("key"));
-
-    // ** Put characters and objects in the places
     Place* home   = this->places_[0];
     Place* forest = this->places_[1];
     Place* castle = this->places_[2];
+
+    // ** Create characters
+    this->characters_.push_back(new characters::Player("Adventurous Player",home));
+    this->characters_.push_back(new characters::Princess("Trapped Princess",castle));
+
+    // ** Create objects
+    this->objects_.push_back(new objects::Item("key",1000,1,1));
 
     home->enter(*this->characters_[0]);
     castle->enter(*this->characters_[1]);

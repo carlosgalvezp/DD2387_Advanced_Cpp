@@ -12,7 +12,7 @@ class Princess : public Human
 {
 public:
     Princess();
-    Princess(const std::string& name);
+    Princess(const std::string& name, Place *place);
     ~Princess();
 
     bool action();

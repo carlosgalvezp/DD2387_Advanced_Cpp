@@ -85,6 +85,11 @@ const std::map<std::string, Place*>& Place::directions() const
     return this->directions_;
 }
 
+const std::vector<Object *>& Place::objects() const
+{
+    return this->objects_;
+}
+
 void Place::display_information(const Character &character)
 {
     std::cout << "\rThe character " << character.name()
@@ -129,3 +134,4 @@ std::string Place::description() const
     }
     return ss.str();
 }
+

@@ -5,8 +5,8 @@ using namespace lab3::characters;
 Princess::Princess()
 {}
 
-Princess::Princess(const std::string &name)
-    : Human(name, TYPE_PRINCESS)
+Princess::Princess(const std::string &name, Place *place)
+    : Human(name, TYPE_PRINCESS, place)
 {}
 
 Princess::~Princess()

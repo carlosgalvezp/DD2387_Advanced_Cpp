@@ -12,7 +12,7 @@ class Item : public Object
 {
 public:
     Item();
-    Item(const std::string &name);
+    Item(const std::string &name, int price, int weight, int volume);
     ~Item();
 };
 

@@ -5,13 +5,20 @@ using namespace lab3::characters;
 Player::Player()
 {}
 
-Player::Player(const std::string &name)
-    : Human(name, TYPE_PLAYER), rescued_princess(false)
-{}
+Player::Player(const std::string &name, Place *place)
+    : Human(name, TYPE_PLAYER, place), rescued_princess(false)
+{
+    // ** The player always starts with a small backpack
+    this->objects_.push_back((Object*)new objects::Container("small backpack",5,DEFAULT_BACKPACK_VOLUME,
+                                                                                DEFAULT_BACKPACK_WEIGHT,
+                                                                                DEFAULT_BACKPACK_MAX_WEIGHT,
+                                                                                DEFAULT_BACKPACK_VOLUME));
+}
 
 Player::~Player()
 {
-
+    // Delete the backpack!
+    delete objects_[0];
 }
 
 bool Player::action()
@@ -36,9 +43,49 @@ bool Player::action()
             lab3::utils_io::print_newline("You cannot go "+go_cmd);
     }
 
+    if(cmd == "pick up")
+    {
+        if(this->currentPlace()->objects().size() == 0)
+        {
+            lab3::utils_io::print_newline("There are no objects to pick up here");
+            return false;
+        }
+        std::map<std::string, Object*> command_map;
+        std::vector<std::string> command_str;
+        for(Object* o : this->currentPlace()->objects())
+        {
+            command_map.insert(std::make_pair(o->name(), o));
+            command_str.push_back(o->name());
+        }
+        lab3::utils_io::print_newline("Pick up what?");
+        std::string cmd = lab3::input::read_input(command_str);
+
+        // ** Actually go
+        Object *o = command_map.at(cmd);
+        if(o != nullptr)
+        {
+            if(!this->pick_up(*o))
+                lab3::utils_io::print_newline("You cannot pick up "+cmd);
+        }
+    }
+
 
     if(rescued_princess || cmd == "exit game")
         return true;
+    return false;
+}
+
+bool Player::pick_up(Object &object)
+{
+    // ** Get the backpack (the player always has it, and it's the first element)
+    objects::Container* backpack = (objects::Container*)(this->objects_[0]);
+
+    if(backpack != nullptr)
+    {
+        // ** Check if we can put this object in the bag
+        return backpack->add(object);
+    }
+
     return false;
 }
 

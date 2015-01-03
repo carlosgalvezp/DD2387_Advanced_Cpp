@@ -44,6 +44,7 @@ public:
     // Accessors
     std::string description() const;
     const std::map<std::string, Place*>& directions() const;
+    const std::vector<Object*> &objects()             const;
 
 protected:
     std::string name_;

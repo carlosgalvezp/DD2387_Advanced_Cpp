@@ -5,9 +5,14 @@ using namespace lab3;
 Character::Character()
 {}
 
-Character::Character(const std::string &name, const std::string &type)
-    : name_(name), type_(type), life_points_(MAX_LIFE)
-{}
+Character::Character(const std::string &name, const std::string &type, Place *place)
+    : name_(name),
+      type_(type),
+      current_place_(place),
+      life_points_(MAX_LIFE),
+      initiative_(DEFAULT_INITIATIVE)
+{
+}
 
 Character::~Character()
 {}
@@ -39,7 +44,12 @@ bool Character::go(const std::string& direction)
 
 //}
 
-//void pick_up(lab3::Object &object);
+bool Character::pick_up(lab3::Object &object)
+{
+    std::cout << "======== Character::pick_up [TO DO] ========"<<std::endl;
+    return true;
+}
+
 //void drop(lab3::Object &object);
 //void talk_to(Character &character);
 

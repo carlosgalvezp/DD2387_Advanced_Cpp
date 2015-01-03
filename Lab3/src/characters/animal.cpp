@@ -6,8 +6,8 @@ Animal::Animal()
 {
 
 }
-Animal::Animal(const std::string &name, const std::string &type)
-    : Character(name,type)
+Animal::Animal(const std::string &name, const std::string &type, Place* place)
+    : Character(name,type, place)
 {}
 
 Animal::~Animal()

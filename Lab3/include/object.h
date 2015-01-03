@@ -2,6 +2,7 @@
 #define OBJECT_H
 
 #include <string>
+#include <utils/utils_io.h>
 
 namespace lab3
 {
@@ -9,7 +10,7 @@ class Object
 {
 public:
     Object();
-    Object(const std::string &name);
+    Object(const std::string &name, int price, int volume, int weight);
     virtual ~Object();
 
     int weight()         const;
@@ -18,12 +19,13 @@ public:
 
     std::string name()   const;
 
+    bool operator==(const Object& o) const;
 private:
-    int weight_;
-    int volume_;
-    int price_;
-
     std::string name_;
+
+    int price_;
+    int volume_;
+    int weight_;
 };
 
 }   //namespace lab3

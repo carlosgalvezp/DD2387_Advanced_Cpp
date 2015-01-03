@@ -5,8 +5,8 @@ using namespace lab3::characters;
 Wolf::Wolf()
 {}
 
-Wolf::Wolf(const std::string &name)
-    : Animal(name, TYPE_WOLF)
+Wolf::Wolf(const std::string &name, Place *place)
+    : Animal(name, TYPE_WOLF, place)
 {}
 
 Wolf::~Wolf()

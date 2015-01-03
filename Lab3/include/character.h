@@ -6,8 +6,8 @@
 #include <place.h>
 #include <types.h>
 
-#define MAX_LIFE        50
-
+#define MAX_LIFE                50
+#define DEFAULT_INITIATIVE      10
 
 namespace lab3
 {
@@ -20,13 +20,13 @@ class Character
 {
 public:
     Character();
-    Character(const std::string &name, const std::string &type);
+    Character(const std::string &name, const std::string &type, Place *place);
     virtual ~Character();
 
     virtual bool action() = 0;
     void fight(Character &character);
     bool go(const std::string &direction);
-    void pick_up(lab3::Object &object);
+    virtual bool pick_up(lab3::Object &object);
     void drop(lab3::Object &object);
     void talk_to(Character* character);
     void set_place(Place* p);
@@ -50,6 +50,7 @@ public:
 protected:
     std::string name_;
     std::string type_;
+    Place* current_place_;
 
     // ** Attributes
     int life_points_;
@@ -58,14 +59,13 @@ protected:
     int initiative_;
 
     std::vector<Object*> objects_;
-    Place* current_place_;
 
     const std::vector<std::string> basic_commands_ =
     {
         "go",
         "fight",
         "talk to",
-        "pick_up",
+        "pick up",
         "drop",
         "exit game",
     };
