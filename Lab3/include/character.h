@@ -28,7 +28,7 @@ public:
     bool go(const std::string &direction);
     virtual bool pick_up(lab3::Object &object);
     virtual bool drop(lab3::Object &object);
-    void talk_to(Character* character);
+    virtual void talk_to(Character* character);
     void set_place(Place* p);
 
     // Accessors
@@ -38,14 +38,23 @@ public:
     int getInitiative()             const;
     bool isAlive()                  const;
 
-    Place *currentPlace();
+    const Place* currentPlace()      const;
+    Place*       currentPlace()      ;
+
+
+    const    std::vector<Object*>& objects()    const;
+             std::vector<Object*>& objects();
 
     const std::vector<std::string> & getBasicCommands()     const;
+    const std::vector<std::string> & getCommands()          const;
+
+    const std::vector<std::string> & getTalkMessages()      const;
 
     virtual std::string type()      const = 0;
     std::string name()              const;
 
     bool operator==(const Character &ch)    const;
+    bool operator!=(const Character &ch)    const;
 
 protected:
     std::string name_;
@@ -60,6 +69,10 @@ protected:
 
     std::vector<Object*> objects_;
 
+    bool is_fighting_;
+
+    std::vector<std::string> talk_msgs_;
+
     const std::vector<std::string> basic_commands_ =
     {
         "go",
@@ -69,6 +82,8 @@ protected:
         "drop",
         "exit game",
     };
+
+    std::vector<std::string> commands_;
 };
 
 }   // namespace lab3

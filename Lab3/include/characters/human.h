@@ -17,6 +17,15 @@ public:
 
     virtual bool action() = 0;
     virtual std::string type() const = 0;
+
+    int getMoney()      const;
+
+    bool buy(Object* o);
+    bool sell(Object* o);
+    bool use(Object* o);
+
+protected:
+    int money_;
 };
 
 }

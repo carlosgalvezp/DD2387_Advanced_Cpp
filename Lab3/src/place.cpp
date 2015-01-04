@@ -90,6 +90,11 @@ const std::vector<Object *>& Place::objects() const
     return this->objects_;
 }
 
+const std::vector<Character*>& Place::characters() const
+{
+    return this->characters_;
+}
+
 void Place::display_information(const Character &character)
 {
     std::cout << "\rThe character " << character.name()

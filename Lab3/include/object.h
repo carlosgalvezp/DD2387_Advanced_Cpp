@@ -2,6 +2,7 @@
 #define OBJECT_H
 
 #include <string>
+#include <sstream>
 #include <utils/utils_io.h>
 
 namespace lab3
@@ -18,8 +19,8 @@ public:
     int price()          const;
 
     std::string name()   const;
-
-    bool operator==(const Object& o) const;
+    virtual std::string description()   const;
+    bool operator==(const Object& o)    const;
 private:
     std::string name_;
 

@@ -46,7 +46,7 @@ public:
     std::string description() const;
     const std::map<std::string, Place*>& directions() const;
     const std::vector<Object*> &objects()             const;
-
+    const std::vector<Character*> &characters()       const;
 protected:
     std::string name_;
 
@@ -55,6 +55,11 @@ protected:
     std::map<std::string, Place*> directions_;
 
     void display_information(const Character &character);
+
+    const std::vector<std::string> talk_msgs =
+    {
+       "Hi "
+    };
 };
 
 } //namespace lab3

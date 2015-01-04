@@ -30,6 +30,8 @@ public:
 
     const std::vector<Object*> & objects() const;
 
+    std::string description()     const;
+
 private:
     std::vector<Object *> objects_;
     int max_hold_weight_;

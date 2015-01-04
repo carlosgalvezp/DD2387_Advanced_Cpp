@@ -10,7 +10,8 @@ Character::Character(const std::string &name, const std::string &type, Place *pl
       type_(type),
       current_place_(place),
       life_points_(MAX_LIFE),
-      initiative_(DEFAULT_INITIATIVE)
+      initiative_(DEFAULT_INITIATIVE),
+      is_fighting_(false)
 {
 }
 
@@ -56,7 +57,12 @@ bool Character::drop(lab3::Object &object)
     return true;
 }
 
-//void talk_to(Character &character);
+void Character::talk_to(Character *character)
+{
+    int n_msg = 0; // Make this dynamic! XXXXXX
+    std::string msg = "[" + this->name()+"] " + this->getTalkMessages()[n_msg];
+    lab3::utils_io::print_newline(msg);
+}
 
 
 void Character::set_place(Place *p)
@@ -73,12 +79,23 @@ int Character::getInitiative()    const{    return this->initiative_;  }
 bool Character::isAlive()         const{    return this->getLifePoints() > 0;}
 
 const std::vector<std::string>& Character::getBasicCommands() const { return this->basic_commands_;}
+const std::vector<std::string>& Character::getCommands()      const { return this->commands_;}
+const std::vector<std::string>& Character::getTalkMessages()  const { return this->talk_msgs_;}
 
 std::string Character::name()     const{    return this->name_;        }
 
-Place* Character::currentPlace() {    return this->current_place_;    }
+const Place* Character::currentPlace()      const           {    return this->current_place_;    }
+      Place* Character::currentPlace()                      {    return this->current_place_;    }
+
+const std::vector<Object*>& Character::objects()  const {    return this->objects_;          }
+      std::vector<Object*>& Character::objects()        {    return this->objects_;          }
 
 bool Character::operator ==(const Character &obj) const
 {
     return this->name() == obj.name();
+}
+
+bool Character::operator !=(const Character &obj) const
+{
+    return !this->operator ==(obj);
 }

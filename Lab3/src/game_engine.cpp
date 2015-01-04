@@ -1,9 +1,6 @@
 #include "game_engine.h"
 
-using namespace lab3::utils;
-
-namespace lab3
-{
+using namespace lab3;
 
 GameEngine::GameEngine()
     : is_finished_(false)
@@ -87,9 +84,9 @@ void GameEngine::newGame()
 int GameEngine::mainMenu()
 {
     // ** Create options
-    std::vector<UI_Option> options;
-    options.push_back(UI_Option("New game", 'n'));
-    options.push_back(UI_Option("Quit",     'q'));
+    std::vector<utils::UI_Option> options;
+    options.push_back(utils::UI_Option("New game", 'n'));
+    options.push_back(utils::UI_Option("Quit",     'q'));
 
     // ** Display and choose option
     int option = -1;
@@ -112,9 +109,11 @@ int GameEngine::mainMenu()
 void GameEngine::run()
 {
     lab3::utils_io::clearScreen();
-
+    int round(1);
     while(!this->is_finished_)
     {
+        lab3::utils_io::clearScreen();
+        std::cout << "Round "<<round++<<std::endl;
         // ** Sort by initiative
         std::sort(characters_.begin(), characters_.end(),
                   [](Character* char1, Character* char2)
@@ -129,7 +128,7 @@ void GameEngine::run()
                 is_finished_ = true;
                 break;
             }
-            input::wait_for_enter();
+            lab3::input::wait_for_enter();
         }
 
         // ** Remove dead characters
@@ -146,6 +145,4 @@ void GameEngine::run()
         characters_ = tmp;
     }
     lab3::utils_io::print_newline("Thanks for playing!");
-}
-
 }

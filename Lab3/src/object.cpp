@@ -23,3 +23,12 @@ bool Object::operator ==(const Object& o)   const
            o.volume() == this->volume() &&
            o.weight() == this->weight();
 }
+
+std::string Object::description()           const
+{
+    std::stringstream ss;
+    ss << this->name() << ". Price: "  << this->price()
+                       <<  " Volume: " << this->volume()
+                       <<  " Weight: " << this->weight();
+    return ss.str();
+}

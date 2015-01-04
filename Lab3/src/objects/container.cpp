@@ -85,3 +85,22 @@ int Container::max_hold_volume()     const {return this->max_hold_volume_;}
 int Container::max_hold_weight()     const {return this->max_hold_weight_;}
 
 const std::vector<lab3::Object*> &Container::objects() const{return this->objects_;}
+
+std::string Container::description()    const
+{
+    std::stringstream ss;
+    ss << this->name()
+       << " [Container] Hold Volume: "<< this->current_hold_volume()<<"/"<<this->max_hold_volume()
+                    <<" Hold Weight: "<< this->current_hold_weight()<<"/"<<this->max_hold_weight()
+                                      << std::endl;
+
+    // ** Display container's objects
+    for(Object *item : this->objects())
+    {
+        ss        << "\t * "      <<item->name()
+                  << ". Price: " << item->price()
+                  << " Volume: " << item->volume()
+                  << " Weight: " << item->weight() << std::endl;
+    }
+    return ss.str();
+}

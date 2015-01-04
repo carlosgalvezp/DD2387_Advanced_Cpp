@@ -10,7 +10,8 @@ Human::Human(const std::string &name, const std::string &type, Place *place)
 {}
 
 Human::~Human()
-{
+{}
 
-}
+int Human::getMoney()   const   {return this->money_; }
+
 

@@ -6,13 +6,19 @@ Player::Player()
 {}
 
 Player::Player(const std::string &name, Place *place)
-    : Human(name, TYPE_PLAYER, place), rescued_princess(false)
+    : Human(name, TYPE_PLAYER, place), finished_game_(false)
 {
     // ** The player always starts with a small backpack
     this->objects_.push_back((Object*)new objects::Container("small backpack",5,DEFAULT_BACKPACK_VOLUME,
                                                                                 DEFAULT_BACKPACK_WEIGHT,
                                                                                 DEFAULT_BACKPACK_MAX_WEIGHT,
                                                                                 DEFAULT_BACKPACK_VOLUME));
+    // ** Initialize talk messages
+    talk_msgs_ = {"Hi, I am "+name};
+
+    // ** Include additional commands
+    this->commands_ = this->basic_commands_;
+    this->commands_.insert(this->commands_.end()-1,"status");
 }
 
 Player::~Player()
@@ -24,89 +30,7 @@ Player::~Player()
 bool Player::action()
 {
     lab3::utils_io::print_newline("Player action [TO DO]");
-    std::string cmd = lab3::input::read_input(this->getBasicCommands());
-
-    // ** Go -> get directions from place
-    if(cmd == "go")
-    {
-        const std::map<std::string, Place*> &directions = this->current_place_->directions();
-        std::vector<std::string> go_commands;
-        for(std::pair<std::string, Place*> p : directions)
-        {
-            go_commands.push_back(p.first);
-        }
-        lab3::utils_io::print_newline("Go where?");
-        std::string go_cmd = lab3::input::read_input(go_commands);
-
-        // ** Actually go
-        if(!this->go(go_cmd))
-            lab3::utils_io::print_newline("You cannot go "+go_cmd);
-    }
-
-    if(cmd == "pick up")
-    {
-        if(this->currentPlace()->objects().size() == 0)
-        {
-            lab3::utils_io::print_newline("There are no objects to pick up here");
-            return false;
-        }
-        std::map<std::string, Object*> command_map;
-        std::vector<std::string> command_str;
-        for(Object* o : this->currentPlace()->objects())
-        {
-            command_map.insert(std::make_pair(o->name(), o));
-            command_str.push_back(o->name());
-        }
-        lab3::utils_io::print_newline("Pick up what?");
-        std::string cmd = lab3::input::read_input(command_str);
-
-        // ** Actually go
-        Object *o = command_map.at(cmd);
-        if(o != nullptr)
-        {
-            if(!this->pick_up(*o))
-                lab3::utils_io::print_newline("You cannot pick up "+cmd);
-        }
-    }
-
-    if(cmd == "drop")
-    {
-        if(this->objects_.size() == 0)
-        {
-            lab3::utils_io::print_newline("You have no objects to drop here");
-            return false;
-        }
-        std::map<std::string, Object*> command_map;
-        std::vector<std::string> command_str;
-        // ** Get objects
-        for(Object* o : this->objects_)
-        {
-            command_map.insert(std::make_pair(o->name(), o));
-            command_str.push_back(o->name());
-        }
-        // ** Get object inside container
-        objects::Container* bag = (objects::Container*)this->objects_[0];
-        for(Object* o : bag->objects())
-        {
-            command_map.insert(std::make_pair(o->name(), o));
-            command_str.push_back(o->name());
-        }
-
-        lab3::utils_io::print_newline("Drop what?");
-        std::string cmd = lab3::input::read_input(command_str);
-
-        // ** Actually go
-        Object *o = command_map.at(cmd);
-        if(o != nullptr)
-        {
-            this->drop(*o);
-        }
-    }
-
-
-    if(rescued_princess || cmd == "exit game")
-        return true;
-    return false;
+    return lab3::input::read_player_input(this);
 }
 
 bool Player::pick_up(Object &object)
@@ -152,8 +76,48 @@ bool Player::drop(Object &object)
     return false;
 }
 
+void Player::talk_to(Character *character)
+{
+    // ** I talk first
+    int n_msg = 0; // Make this dynamic! XXXXXX
+    std::string msg = "[Player] " + this->getTalkMessages()[n_msg];
+    lab3::utils_io::print_newline(msg);
+
+    // Let the other talk
+    character->talk_to(this);
+}
 
 std::string Player::type() const
 {
     return "Player";
+}
+
+bool Player::finishedGame() const   {   return this->finished_game_;    }
+
+
+void Player::status()       const
+{
+    lab3::utils_io::clearScreen();
+    lab3::utils_io::print_newline("===== PLAYER STATUS =====");
+    lab3::utils_io::print_newline("=========================");
+
+    // ** Attributes
+    lab3::utils_io::print_newline("----- Attributes -----");
+    std::cout << "-Life: "          <<this->getLifePoints()     <<std::endl;
+    std::cout << "-Money: "         <<this->getMoney()          <<std::endl;
+    std::cout << "-Strength: "      <<this->getStrength()       <<std::endl;
+    std::cout << "-Defense: "       <<this->getDefense()        <<std::endl;
+    std::cout << "-Initiative: "    <<this->getInitiative()     <<std::endl;
+
+    // ** Current place
+    lab3::utils_io::print_newline("----- Location -----");
+    lab3::utils_io::print_newline(this->currentPlace()->name());
+
+    // ** Equipment and inventory
+    lab3::utils_io::print_newline("----- Objects -----");
+    for(Object *o : this->objects())
+    {
+        std::cout << "-"<<o->description()<<std::endl;
+    }
+
 }

@@ -32,10 +32,14 @@ public:
     bool action();
     bool pick_up(Object &object);
     bool drop(Object &object);
-    std::string type() const;
+    void talk_to(Character* character);
+
+    void status()                   const;
+    std::string type()              const;
+    bool finishedGame()             const;
 
 private:
-    bool rescued_princess;
+    bool finished_game_;
 };
 
 }

@@ -7,7 +7,13 @@ Princess::Princess()
 
 Princess::Princess(const std::string &name, Place *place)
     : Human(name, TYPE_PRINCESS, place)
-{}
+{
+    this->talk_msgs_ =
+    {
+        "Please help me, I am trapped here!",
+        "You need to defeat the final monster in order to free me!"
+    };
+}
 
 Princess::~Princess()
 {
