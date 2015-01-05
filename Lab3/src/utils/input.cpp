@@ -1,5 +1,18 @@
 #include <utils/input.h>
 
+typedef bool(*CmdFunction)(lab3::characters::Player*);
+std::map<std::string, CmdFunction> cmd_map =
+{
+    {"drop"  ,    &lab3::input::cmd_drop},
+    {"fight",     &lab3::input::cmd_fight},
+    {"go",        &lab3::input::cmd_go},
+    {"pick up",   &lab3::input::cmd_pick_up},
+    {"talk to",   &lab3::input::cmd_talk},
+    {"status",    &lab3::input::cmd_status},
+    {"exit game", &lab3::input::cmd_exit_game},
+    {"buy",       &lab3::input::cmd_buy}
+};
+
 std::string lab3::input::read_input(const std::vector<std::string> &available_commands)
 {
     std::stringstream ss;
@@ -57,39 +70,12 @@ std::string lab3::input::read_input(const std::vector<std::string> &available_co
 
 bool lab3::input::read_player_input(lab3::characters::Player *player)
 {
+    // ** Update commands depending on the current place
     std::string cmd = lab3::input::read_input(player->getCommands());
+    if(cmd_map.find(cmd) != cmd_map.end())
+        (*cmd_map.at(cmd))(player); // Using a map of function pointers with key = cmd
 
-    // ** Go -> get directions from place
-    if(cmd == "go")
-    {
-        lab3::input::cmd_go(player);
-    }
-
-    else if(cmd == "pick up")
-    {
-        lab3::input::cmd_pick_up(player);
-    }
-
-    else if(cmd == "drop")
-    {
-        lab3::input::cmd_drop(player);
-    }
-
-    else if(cmd == "talk to")
-    {
-        lab3::input::cmd_talk(player);
-    }
-
-//    else if(cmd == "fight")
-//    {
-//        lab3::input::cmd_fight(player);
-//    }
-    else if(cmd == "status")
-    {
-        player->status();
-    }
-
-    else if(player->finishedGame() || cmd == "exit game")
+    if(player->finishedGame() || cmd == "exit game")
         return true;
 
     return false;
@@ -97,19 +83,20 @@ bool lab3::input::read_player_input(lab3::characters::Player *player)
 
 std::string lab3::input::tab_completion(const std::string &tmp_str, const std::vector<std::string> &available_commands)
 {
-    int n_found = 0;
+    bool found (false);
     std::string s_found = " ";
     std::stringstream ss;
     for(std::string s : available_commands)
     {
         if(s.substr(0,tmp_str.size()) == tmp_str) // Found
         {
-            ++n_found;
             s_found = s;
             ss << "\r" << s << std::endl;
+            found = true;
+            break;
         }
     }
-    if(n_found != 1)
+    if(!found)
     {
         std::cout << ss.str();
         s_found = " ";
@@ -123,14 +110,11 @@ void lab3::input::display_commands(const std::vector<std::string> &commands)
     lab3::utils_io::print_newline("--- Available commands ---");
     for(std::string s : commands)
         lab3::utils_io::print_newline(s);
+    lab3::utils_io::print_newline(">> Type to select the command, use tab-completion. Case-sensitive");
 
 }
 
-void lab3::input::wait_for_enter()
-{
-    lab3::utils_io::print_newline("Press Enter to continue...");
-    getchar();
-}
+
 
 
 // =============================================================================
@@ -253,6 +237,84 @@ bool lab3::input::cmd_talk(lab3::characters::Player *player)
     else
     {
         lab3::utils_io::print_newline("There are no other characters to talk to");
+    }
+    return false;
+}
+
+bool lab3::input::cmd_fight(lab3::characters::Player *player)
+{
+    // ** Get other characters
+    if(player->currentPlace()->characters().size() > 1) // There are other characters appart from myself
+    {
+        std::map<std::string, lab3::Character*> command_map;
+        std::vector<std::string> command_str;
+        // ** Get characters
+        for(lab3::Character* o : player->currentPlace()->characters())
+        {
+            if(*o != *player)
+            {
+                command_map.insert(std::make_pair(o->name(), o));
+                command_str.push_back(o->name());
+            }
+        }
+
+        lab3::utils_io::print_newline("Fight with whom?");
+        std::string cmd = lab3::input::read_input(command_str);
+
+        // ** Actually talk
+        lab3::Character *c = command_map.at(cmd);
+        if(c != nullptr)
+        {
+            player->fight(*c);
+            return true;
+        }
+    }
+    else
+    {
+        lab3::utils_io::print_newline("There are no other characters to talk to");
+    }
+    return false;
+}
+
+bool lab3::input::cmd_status(lab3::characters::Player *player)
+{
+    player->status();
+    return true;
+}
+
+bool lab3::input::cmd_exit_game(lab3::characters::Player *player)
+{
+    lab3::utils_io::print_newline("Exiting game...");
+    return true;
+}
+
+bool lab3::input::cmd_buy(lab3::characters::Player *player)
+{
+    // ** Get objects in the store
+    if(player->currentPlace()->objects().size() == 0)
+    {
+        lab3::utils_io::print_newline("There is nothing to buy here");
+        return false;
+    }
+    std::map<std::string, lab3::Object*> command_map;
+    std::vector<std::string> command_str;
+    // ** Get objects
+    for(lab3::Object* o : player->objects())
+    {
+        command_map.insert(std::make_pair(o->name(), o));
+        command_str.push_back(o->name());
+    }
+
+
+    lab3::utils_io::print_newline("Buy what?");
+    std::string cmd = lab3::input::read_input(command_str);
+
+    // ** Actually go
+    lab3::Object *o = command_map.at(cmd);
+    if(o != nullptr)
+    {
+        player->buy(*o);
+        return true;
     }
     return false;
 }

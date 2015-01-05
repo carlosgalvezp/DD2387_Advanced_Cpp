@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <cstdlib>
 #include <ctime>
+#include <algorithm>
 // Own
 #include <object.h>
 #include <objects/armor.h>

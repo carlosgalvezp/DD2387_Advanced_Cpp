@@ -54,7 +54,7 @@ void Place::drop(Object &object)
 
 bool Place::pick_up(Object &object)
 {
-    // ** Find character
+    // ** Find object
     auto it = std::find(this->objects_.begin(), this->objects_.end(), &object);
     if(it != this->objects_.end())
     {
@@ -142,3 +142,20 @@ std::string Place::description() const
     return ss.str();
 }
 
+void lab3::places::connectPlaces(Place &p1, Place &p2, const std::string &d12)
+{
+    auto oppositeDir = [&]() ->std::string
+    {
+        if(d12 == DIRECTION_EAST)
+            return DIRECTION_WEST;
+        else if(d12 == DIRECTION_NORTH)
+            return DIRECTION_SOUTH;
+        else if(d12 == DIRECTION_SOUTH)
+            return DIRECTION_NORTH;
+        else
+            return DIRECTION_EAST;
+    };
+
+    p1.addDirection(d12, &p2);
+    p2.addDirection(oppositeDir(), &p1);
+}

@@ -5,7 +5,9 @@
 #define TYPE_PRINCESS   "Princess"
 #define TYPE_TROLL      "Troll"
 #define TYPE_WOLF       "Wolf"
-#define TYPE_WISE_MAN   "Wise man"
+#define TYPE_HUMAN      "Human"
+#define TYPE_WIZARD     "Wizard"
+#define TYPE_VAMPIRE    "Vampire"
 
 #define DIRECTION_NORTH "north"
 #define DIRECTION_SOUTH "south"

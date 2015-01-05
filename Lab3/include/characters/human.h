@@ -2,6 +2,11 @@
 #define HUMAN_H
 
 #include <character.h>
+#include <places/shop.h>
+#define PARAM_HUMAN_STRENGTH    20
+#define PARAM_HUMAN_DEFENSE     10
+
+#define DEFAULT_MONEY           50
 
 namespace lab3
 {
@@ -18,11 +23,11 @@ public:
     virtual bool action() = 0;
     virtual std::string type() const = 0;
 
-    int getMoney()      const;
+    int money()      const;
 
-    bool buy(Object* o);
-    bool sell(Object* o);
-    bool use(Object* o);
+    bool buy(Object &o);
+    bool sell(Object &o);
+    bool use(Object &o);
 
 protected:
     int money_;

@@ -6,7 +6,7 @@ Wise_Man::Wise_Man()
 {}
 
 Wise_Man::Wise_Man(const std::string &name, Place *place)
-    : Human(name, TYPE_WISE_MAN, place)
+    : Human(name, TYPE_HUMAN, place)
 {
     this->talk_msgs_ =
     {

@@ -17,8 +17,11 @@ Player::Player(const std::string &name, Place *place)
     talk_msgs_ = {"Hi, I am "+name};
 
     // ** Include additional commands
-    this->commands_ = this->basic_commands_;
+    // Action commands
     this->commands_.insert(this->commands_.end()-1,"status");
+
+    // Fight commands
+    this->fight_commands_.insert(this->fight_commands_.end()-1, "use potion");
 }
 
 Player::~Player()
@@ -87,6 +90,11 @@ void Player::talk_to(Character *character)
     character->talk_to(this);
 }
 
+bool Player::fight(Character &character)
+{
+    return Character::fight(character);
+}
+
 std::string Player::type() const
 {
     return "Player";
@@ -104,7 +112,7 @@ void Player::status()       const
     // ** Attributes
     lab3::utils_io::print_newline("----- Attributes -----");
     std::cout << "-Life: "          <<this->getLifePoints()     <<std::endl;
-    std::cout << "-Money: "         <<this->getMoney()          <<std::endl;
+    std::cout << "-Money: "         <<this->money()             <<std::endl;
     std::cout << "-Strength: "      <<this->getStrength()       <<std::endl;
     std::cout << "-Defense: "       <<this->getDefense()        <<std::endl;
     std::cout << "-Initiative: "    <<this->getInitiative()     <<std::endl;
@@ -119,5 +127,17 @@ void Player::status()       const
     {
         std::cout << "-"<<o->description()<<std::endl;
     }
+}
 
+std::vector<std::string> Player::getCommands()
+{
+    std::vector<std::string> cmds = this->commands_;
+
+    // ** Commands when the player is at a store
+    if(dynamic_cast<places::Shop*>(this->currentPlace()) != nullptr)
+    {
+        cmds.insert(cmds.end()-1, "buy");
+        cmds.insert(cmds.end()-1, "sell");
+    }
+    return cmds;
 }

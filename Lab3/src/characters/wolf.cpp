@@ -1,6 +1,9 @@
 #include <characters/wolf.h>
 
-using namespace lab3::characters;
+namespace lab3
+{
+namespace characters
+{
 
 Wolf::Wolf()
 {}
@@ -10,7 +13,15 @@ Wolf::Wolf(const std::string &name, Place *place)
 {}
 
 Wolf::~Wolf()
+{}
+
+
+std::string Wolf::type() const
 {
+    return "Wolf";
+}
 
 }
+}
+
 

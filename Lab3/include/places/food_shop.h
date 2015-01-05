@@ -11,6 +11,7 @@ class Food_Shop : public Shop
 {
 public:
     Food_Shop();
+    Food_Shop(const std::string &name);
     ~Food_Shop();
 };
 }

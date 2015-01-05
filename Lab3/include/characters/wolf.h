@@ -7,11 +7,13 @@ namespace lab3
 {
 namespace characters
 {
-class Wolf : Animal
+class Wolf : public Animal
 {
 public:
     Wolf();
     Wolf(const std::string &name, Place *place);
+
+    std::string type() const;
     ~Wolf();
 };
 }

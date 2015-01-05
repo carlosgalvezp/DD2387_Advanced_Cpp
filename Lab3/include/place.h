@@ -60,7 +60,13 @@ protected:
     {
        "Hi "
     };
+
 };
+
+namespace places
+{
+    void connectPlaces(Place &p1, Place &p2, const std::string &d12);
+}
 
 } //namespace lab3
 

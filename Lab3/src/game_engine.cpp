@@ -52,41 +52,43 @@ void GameEngine::initGame()
 }
 void GameEngine::newGame()
 {
+    std::cout << "CREATING NEW GAME "<<std::endl;
     // ** Create places
-    this->places_.push_back(new places::Home("Home"));
-    this->places_.push_back(new places::Enchanted_Forest("Enchanted Forest"));
-    this->places_.push_back(new places::Kings_Castle("Kings Castle"));
+    Place* home = new places::Home("Home");
+    Place* forest = new places::Enchanted_Forest("Enchanted Forest");
+    Place* castle = new places::Kings_Castle("Kings Castle");
+    Place* food_shop = new places::Food_Shop("Food Shop");
+    Place* armory    = new places::Armory("Armory");
 
-    Place* home   = this->places_[0];
-    Place* forest = this->places_[1];
-    Place* castle = this->places_[2];
+    this->places_.push_back(home);
+    this->places_.push_back(forest);
+    this->places_.push_back(castle);
+    this->places_.push_back(food_shop);
+    this->places_.push_back(armory);
+
 
     // ** Create characters
     this->characters_.push_back(new characters::Player("Adventurous Player",home));
     this->characters_.push_back(new characters::Princess("Trapped Princess",castle));
+    this->characters_.push_back(new characters::Wolf("Wolf1",forest));
 
     // ** Create objects
     this->objects_.push_back(new objects::Item("key",1000,1,1));
-
-    home->enter(*this->characters_[0]);
-    castle->enter(*this->characters_[1]);
 
     Object* key = this->objects_[0];
     castle->drop(*key);
 
     // ** Connect places
-    home->addDirection(DIRECTION_NORTH, forest);
-    forest->addDirection(DIRECTION_EAST, castle);
-    forest->addDirection(DIRECTION_SOUTH, home);
-    castle->addDirection(DIRECTION_WEST, forest);
+    lab3::places::connectPlaces(*home, *forest, DIRECTION_NORTH);
+    lab3::places::connectPlaces(*home, *food_shop, DIRECTION_EAST);
+    lab3::places::connectPlaces(*home, *armory, DIRECTION_WEST);
+    lab3::places::connectPlaces(*forest, *castle, DIRECTION_EAST);
 }
 
 int GameEngine::mainMenu()
 {
     // ** Create options
-    std::vector<utils::UI_Option> options;
-    options.push_back(utils::UI_Option("New game", 'n'));
-    options.push_back(utils::UI_Option("Quit",     'q'));
+    std::vector<std::string> menu_options = {"new game", "quit"};
 
     // ** Display and choose option
     int option = -1;
@@ -96,8 +98,12 @@ int GameEngine::mainMenu()
         lab3::utils_io::clearScreen();
 
         // ** Display menu
-        lab3::utils::displaySelectionMenu(options);
-        option = lab3::utils::readKeyboardInput(options);
+        std::string s = lab3::input::read_input(menu_options);
+        auto it = std::find(menu_options.begin(), menu_options.end(), s);
+        if(it != menu_options.end())
+        {
+            option = it - menu_options.begin();
+        }
     }
     while (option < 0);
 
@@ -122,13 +128,16 @@ void GameEngine::run()
         // ** Run actions
         for(Character *c : characters_)
         {
-            bool finished = c->action();
-            if (finished && c->type() == TYPE_PLAYER)
+            if(c!= nullptr && c->isAlive())
             {
-                is_finished_ = true;
-                break;
+                bool finished = c->action();
+                if (finished && c->type() == TYPE_PLAYER)
+                {
+                    is_finished_ = true;
+                    break;
+                }
+                lab3::utils_io::wait_for_enter();
             }
-            lab3::input::wait_for_enter();
         }
 
         // ** Remove dead characters
@@ -137,7 +146,10 @@ void GameEngine::run()
         {
             if (!c->isAlive())
             {
+                // Remove from place
+                c->currentPlace()->leave(*c);
                 delete c;
+                c = nullptr;
                 continue;
             }
             tmp.push_back(c);

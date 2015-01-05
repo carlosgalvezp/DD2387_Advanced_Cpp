@@ -33,10 +33,13 @@ public:
     bool pick_up(Object &object);
     bool drop(Object &object);
     void talk_to(Character* character);
+    bool fight(Character &character);
 
     void status()                   const;
     std::string type()              const;
     bool finishedGame()             const;
+
+    std::vector<std::string> getCommands();
 
 private:
     bool finished_game_;

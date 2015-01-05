@@ -4,6 +4,7 @@ namespace lab3
 {
 namespace utils_io
 {
+
 void print_newline(const std::string &s)
 {
     std::cout << "\r" << s << std::endl;
@@ -12,6 +13,12 @@ void print_newline(const std::string &s)
 void clearScreen()
 {
     system("clear");
+}
+
+void wait_for_enter()
+{
+    lab3::utils_io::print_newline("Press Enter to continue...");
+    getchar();
 }
 
 }

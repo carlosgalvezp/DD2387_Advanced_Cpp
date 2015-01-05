@@ -11,6 +11,7 @@ class Shop : public Place
 {
 public:
     Shop();
+    Shop(const std::string &name);
     ~Shop();
 };
 }

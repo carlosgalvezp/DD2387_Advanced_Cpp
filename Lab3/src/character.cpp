@@ -2,6 +2,17 @@
 
 using namespace lab3;
 
+const std::map<std::string, std::vector<int>> attributes =
+{ // Type         Life       Strength    Defense     Initiative
+    {TYPE_PLAYER,   {50,        20,         15,         10}},
+    {TYPE_PRINCESS, {50,        20,         15,         10}},
+    {TYPE_WIZARD,   {50,        20,         15,         10}},
+    {TYPE_HUMAN,    {50,        20,         15,         10}},
+    {TYPE_TROLL,    {50,        20,         15,         10}},
+    {TYPE_WOLF,     {50,        20,         15,         10}},
+    {TYPE_VAMPIRE,  {50,        20,         15,         10}}
+};
+
 Character::Character()
 {}
 
@@ -13,6 +24,13 @@ Character::Character(const std::string &name, const std::string &type, Place *pl
       initiative_(DEFAULT_INITIATIVE),
       is_fighting_(false)
 {
+    // ** Set attributes
+    this->life_points_ = attributes.at(type)[0];
+    this->strength_    = attributes.at(type)[1];
+    this->defense_     = attributes.at(type)[2];
+    this->initiative_  = attributes.at(type)[3];
+
+    place->enter(*this);
 }
 
 Character::~Character()
@@ -40,20 +58,64 @@ bool Character::go(const std::string& direction)
     return true;
 }
 
-//void Character::fight(Character &character)
-//{
+bool Character::fight(Character &character)
+{
+    if(!this->isFighting())
+        this->is_fighting_ = true;
+    if(!character.isFighting())
+        character.is_fighting_ = true;
 
-//}
+    // XXXX Include randomnesss
+    lab3::utils_io::print_newline("-------- Fight between "+this->name() +" and "+character.name());
+    std::stringstream ss;
+    ss<< "["<<this->name()<<"] Life: "<<this->getLifePoints()<<"; Strength: "<<this->getStrength()<<"; Defense: "<< this->getDefense()<<std::endl;
+    ss<< "["<<character.name()<<"] Life: "<<character.getLifePoints()<<"; Strength: "<<character.getStrength()<<"; Defense: "<< character.getDefense()<<std::endl;
+
+    lab3::utils_io::print_newline(ss.str());
+
+
+    int damage = computeDamage(*this, character);
+    character.set_damage(damage);
+
+    std::cout << this->name() <<" attacks "<<character.name()<<", who is injured and loses "<<damage<<" life points"<<std::endl;
+    lab3::utils_io::wait_for_enter();
+
+    if(!character.isAlive())
+    {
+        lab3::utils_io::print_newline(character.name() + " has died");
+        return true;
+    }
+    else if(!character.isFighting())
+    {
+        lab3::utils_io::print_newline(character.name() + " has scaped the fight");
+        return true;
+    }
+    else
+    {
+        return character.fight(*this);      // The other character fights back
+    }
+    return false;
+}
 
 bool Character::pick_up(lab3::Object &object)
 {
-    std::cout << "======== Character::pick_up [TO DO] ========"<<std::endl;
+    // ** Find it in the objects vector
+    this->current_place_->pick_up(object);
+    this->objects_.push_back(&object);
+
     return true;
 }
 
 bool Character::drop(lab3::Object &object)
 {
+    // ** Find it in the objects vector
+    auto it = std::find(objects_.begin(), objects_.end(), &object);
+    if(it != objects_.end())
+    {
+        objects_.erase(it);
+    }
     this->current_place_->drop(object);
+
     return true;
 }
 
@@ -65,9 +127,12 @@ void Character::talk_to(Character *character)
 }
 
 
-void Character::set_place(Place *p)
+// ** Setters
+void Character::set_place(Place *p)         {    this->current_place_ = p;}
+void Character::set_fighting(bool fighting) {    this->is_fighting_ = fighting;}
+void Character::set_damage(int damage)
 {
-    this->current_place_ = p;
+    this->life_points_ -= damage;
 }
 
 // ** Accessors
@@ -77,9 +142,10 @@ int Character::getDefense()       const{    return this->defense_;     }
 int Character::getInitiative()    const{    return this->initiative_;  }
 
 bool Character::isAlive()         const{    return this->getLifePoints() > 0;}
+bool Character::isFighting()      const{    return this->is_fighting_;}
 
 const std::vector<std::string>& Character::getBasicCommands() const { return this->basic_commands_;}
-const std::vector<std::string>& Character::getCommands()      const { return this->commands_;}
+std::vector<std::string> Character::getCommands()      const { return this->commands_;}
 const std::vector<std::string>& Character::getTalkMessages()  const { return this->talk_msgs_;}
 
 std::string Character::name()     const{    return this->name_;        }
@@ -98,4 +164,9 @@ bool Character::operator ==(const Character &obj) const
 bool Character::operator !=(const Character &obj) const
 {
     return !this->operator ==(obj);
+}
+
+int lab3::computeDamage(const Character &attacker, const Character &defender)
+{
+    return std::max(0, attacker.getStrength() - defender.getDefense());
 }
