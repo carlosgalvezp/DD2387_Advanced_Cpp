@@ -5,6 +5,7 @@
 
 # Folders
 build
+cmake_build
 
 #	Other garbage
 *~
