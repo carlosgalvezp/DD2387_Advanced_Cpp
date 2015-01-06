@@ -2,7 +2,7 @@ CC      = g++
 CFLAGS  = -Wall -g -std=c++0x
 LDFLAGS = 
 
-BUILDDIR = build
+BUILDDIR  = build
 SOURCEDIR = src
 HEADERDIR = include 
 
