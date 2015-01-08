@@ -11,7 +11,8 @@ Place::Place(const std::string &name)
 {}
 
 Place::~Place()
-{}
+{
+}
 
 void Place::generateObjects()
 {

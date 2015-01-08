@@ -18,7 +18,7 @@ class Container : Object
 {
 public:
     Container();
-    Container(std::string name, int price, int volume, int weight, int max_weight, int max_volume);
+    Container(const std::string &name, int price, int volume, int weight, int max_weight, int max_volume);
 
     int max_hold_weight()         const;
     int max_hold_volume()         const;

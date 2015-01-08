@@ -119,7 +119,7 @@ void Player::status()       const
 
     // ** Current place
     lab3::utils_io::print_newline("----- Location -----");
-    lab3::utils_io::print_newline(this->currentPlace()->name());
+    lab3::utils_io::print_newline(this->currentPlace()->description());
 
     // ** Equipment and inventory
     lab3::utils_io::print_newline("----- Objects -----");

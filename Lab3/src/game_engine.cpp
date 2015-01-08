@@ -52,13 +52,12 @@ void GameEngine::initGame()
 }
 void GameEngine::newGame()
 {
-    std::cout << "CREATING NEW GAME "<<std::endl;
     // ** Create places
     Place* home         = new places::House("Home", true);
     Place* old_house    = new places::House("Old House", false);
     Place* hospital     = new places::Hospital("Hospital");
-    Place* food_shop    = new places::Food_Shop("Food Shop");
-    Place* armory       = new places::Armory("Armory");
+    Place* food_shop    = new places::Food_Shop("Food Shop", true);
+    Place* armory       = new places::Armory("Armory",true);
     Place* forest       = new places::Forest("Enchanted Forest");
     Place* castle       = new places::Castle("Kings Castle", false);
     Place* cave         = new places::Cave("Dark Cave");
@@ -76,8 +75,9 @@ void GameEngine::newGame()
     // ** Create main characters
     this->characters_.push_back(new characters::Player("Brave Player",home));
     this->characters_.push_back(new characters::Princess("Trapped Princess",castle));
-    this->characters_.push_back(new characters::Wise_Man("Wise Man",castle));
+    this->characters_.push_back(new characters::Wise_Man("Wise Man",old_house));
     this->characters_.push_back(new characters::FinalMonster("Powerful Final Monster", castle));
+
 
     // ** Create random animals in forest and cave
     std::vector<Place*> animal_places = {forest, cave};
@@ -91,7 +91,11 @@ void GameEngine::newGame()
     lab3::places::connectPlaces(*home, *forest, DIRECTION_NORTH);
     lab3::places::connectPlaces(*home, *food_shop, DIRECTION_EAST);
     lab3::places::connectPlaces(*home, *armory, DIRECTION_WEST);
+    lab3::places::connectPlaces(*home, *hospital, DIRECTION_SOUTH);
     lab3::places::connectPlaces(*forest, *castle, DIRECTION_EAST);
+
+    std::cout << "END INIT" << std::endl;
+    lab3::utils_io::wait_for_enter();
 }
 
 int GameEngine::mainMenu()
@@ -177,11 +181,15 @@ void GameEngine::createAnimals(std::vector<Character *> &characters,
 void GameEngine::createObjects(std::vector<Object*> &objects,
                                std::vector<Place *> &objectPlaces)
 {
-    std::for_each(objectPlaces.begin(), objectPlaces.end(),[&](Place* p)
+    for(Place *p : objectPlaces)
     {
+        std::cout << "Starting place "<<p->name()<<std::endl;
         p->generateObjects();
-        const std::vector<Object*> &objects = p->objects();
-        for(Object *o : objects)
-            this->objects_.push_back(o);
-    });
+        const std::vector<Object*> &objs = p->objects();
+        std::cout << "Objects: "<<objs.size()<<std::endl;
+
+        for(Object *o : objs)
+            objects.push_back(o);
+    }
+    std::cout << "END OBJECTS"<< std::endl;
 }

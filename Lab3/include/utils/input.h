@@ -16,6 +16,8 @@
 #include <vector>
 #include <utility>
 
+#define CMD_BACK_TO_MAIN "back to main menu"
+
 namespace lab3
 {
 namespace characters    // Forward declaration
@@ -30,8 +32,12 @@ namespace input
 {
 
 std::string read_input(const std::vector<std::string> &available_commands);
+std::string read_input(const std::vector<std::string> &available_commands,
+                       const std::vector<std::string> &descriptions);
+
 bool read_player_input(lab3::characters::Player* player);
 void display_commands(const std::vector<std::string> &commands);
+void display_commands(const std::vector<std::string> &commands, const std::vector<std::string>& description);
 std::string tab_completion(const std::string &tmp_str, const std::vector<std::string> &available_commands);
 
 // ** Player commands

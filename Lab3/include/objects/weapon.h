@@ -12,7 +12,13 @@ class Weapon : Object
 {
 public:
     Weapon();
+
+    int attackPoints()  const;
+
     ~Weapon();
+
+protected:
+    int attack_;
 };
 
 }

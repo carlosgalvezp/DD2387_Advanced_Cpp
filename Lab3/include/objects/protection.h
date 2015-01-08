@@ -12,6 +12,11 @@ class Protection : Object
 public:
     Protection();
     ~Protection();
+
+    int defensePoints() const;
+
+protected:
+    int defense_;
 };
 
 }

@@ -12,6 +12,12 @@ class Health_Potion : public Potion
 {
 public:
     Health_Potion();
+    Health_Potion(const std::string &name,
+                  int extra_points,
+                  int price,
+                  int weight,
+                  int volume);
+
     ~Health_Potion();
 };
 

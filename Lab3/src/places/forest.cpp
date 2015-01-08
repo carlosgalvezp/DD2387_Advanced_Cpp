@@ -13,3 +13,8 @@ Forest::Forest(const std::string &name)
 Forest::~Forest()
 {}
 
+//void Forest::generateObjects()
+//{
+//    std::cout << "[Forest::generateObjects]"<<std::endl;
+//}
+

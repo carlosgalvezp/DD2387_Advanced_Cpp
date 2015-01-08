@@ -11,7 +11,7 @@ class Armory : public Shop
 {
 public:
     Armory();
-    Armory(const std::string &name);
+    Armory(const std::string &name, bool is_open);
     ~Armory();
 };
 

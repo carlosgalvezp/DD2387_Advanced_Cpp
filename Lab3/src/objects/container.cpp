@@ -5,8 +5,13 @@ using namespace lab3::objects;
 Container::Container()
 {}
 
-Container::Container(std::string name, int price, int volume, int weight, int max_weight, int max_volume)
-    : Object(name, price, volume, weight),
+Container::Container(const std::string &name,
+                     int price,
+                     int volume,
+                     int weight,
+                     int max_weight,
+                     int max_volume)
+    : Object(name, "It contains objects", price, volume, weight),
       max_hold_weight_(max_weight),
       max_hold_volume_(max_volume),
       current_hold_weight_(0),
