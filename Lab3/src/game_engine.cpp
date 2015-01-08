@@ -56,7 +56,7 @@ void GameEngine::newGame()
     Place* home         = new places::House("Home", true);
     Place* old_house    = new places::House("Old House", false);
     Place* hospital     = new places::Hospital("Hospital");
-    Place* food_shop    = new places::Food_Shop("Food Shop", true);
+    Place* food_shop    = new places::Multi_Shop("Food Shop", true);
     Place* armory       = new places::Armory("Armory",true);
     Place* forest       = new places::Forest("Enchanted Forest");
     Place* castle       = new places::Castle("Kings Castle", false);

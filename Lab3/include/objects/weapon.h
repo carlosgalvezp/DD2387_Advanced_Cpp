@@ -8,10 +8,16 @@ namespace lab3
 namespace objects
 {
 
-class Weapon : Object
+class Weapon : public Object
 {
 public:
     Weapon();
+    Weapon(const std::string &name,
+           int attack_points,
+           int hands_required,
+           int price,
+           int volume,
+           int weight);
 
     int attackPoints()  const;
 
@@ -19,6 +25,7 @@ public:
 
 protected:
     int attack_;
+    int hands_required_;
 };
 
 }

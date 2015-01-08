@@ -2,6 +2,7 @@
 #define ITEM_H
 
 #include <object.h>
+#include <character.h>
 
 namespace lab3
 {
@@ -17,6 +18,8 @@ public:
          int price,
          int weight,
          int volume);
+
+    virtual void use(Character &c);
     ~Item();
 };
 

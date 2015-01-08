@@ -24,8 +24,7 @@ int Object::weight()              const { return this->weight_;}
 std::string Object::description()           const
 {
     std::stringstream ss;
-    ss << this->name()
-       << this->description_
+    ss << this->description_
        << ". Price: "  << this->price()
        <<  " Volume: " << this->volume()
        <<  " Weight: " << this->weight();

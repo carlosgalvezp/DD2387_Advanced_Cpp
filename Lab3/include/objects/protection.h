@@ -7,10 +7,15 @@ namespace lab3
 {
 namespace objects
 {
-class Protection : Object
+class Protection : public Object
 {
 public:
     Protection();
+    Protection(const std::string &name,
+           int defense_points,
+           int price,
+           int volume,
+           int weight);
     ~Protection();
 
     int defensePoints() const;

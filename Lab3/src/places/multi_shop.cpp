@@ -1,4 +1,4 @@
-#include <places/food_shop.h>
+#include <places/multi_shop.h>
 
 using namespace lab3::places;
 
@@ -19,17 +19,25 @@ const std::map<std::string, std::vector<int>> strength_potions_config =
     {"big strength potion",       {1,                 50,             30,         25,         25}}
 };
 
-Food_Shop::Food_Shop()
+const std::map<std::string, std::vector<int>> bags_config =
+{
+    // Name                 Units       Price          Volume       Weight      Max volume  Max weight
+    {"small bagpack",      {1,          10,             5,          5,          5,          66 }},
+    {"medium backpack",    {1,          20,             12,         10,         10,         66}},
+    {"big backpack",       {1,          50,             30,         25,         25,         66}}
+};
+
+Multi_Shop::Multi_Shop()
 {}
 
-Food_Shop::Food_Shop(const std::string &name, bool is_open)
+Multi_Shop::Multi_Shop(const std::string &name, bool is_open)
     : Shop(name, is_open)
 {}
 
-Food_Shop::~Food_Shop()
+Multi_Shop::~Multi_Shop()
 {}
 
-void Food_Shop::generateObjects()
+void Multi_Shop::generateObjects()
 {
     // ** Create health and strength potions
     // Create lambda in order to avoid repeating the loop
@@ -43,10 +51,13 @@ void Food_Shop::generateObjects()
             for(int j = 0; j < it->second[0]; ++j)          // Number of units
             {
                 Object *o;
-                if(potion_type == 0)
+                if(potion_type == 0) // Can't replace this with function ptr since it's a constructor
                     o = new objects::Health_Potion(it->first, it->second[1], it->second[2], it->second[3], it->second[4]);
-                else
+                else if(potion_type == 1)
                     o = new objects::Strength_Potion(it->first, it->second[1], it->second[2], it->second[3], it->second[4]);
+                else if(potion_type == 2)
+                    o = new objects::Container(it->first, it->second[1], it->second[2], it->second[3], it->second[4],it->second[5]);
+
                 objects_.push_back(o);
             }
         }
@@ -54,5 +65,6 @@ void Food_Shop::generateObjects()
 
     f(health_potions_config, 0);
     f(strength_potions_config, 1);
+    f(bags_config,2);
 }
 

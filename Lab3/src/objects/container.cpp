@@ -9,13 +9,13 @@ Container::Container(const std::string &name,
                      int price,
                      int volume,
                      int weight,
-                     int max_weight,
-                     int max_volume)
+                     int max_volume,
+                     int max_weight)
     : Object(name, "It contains objects", price, volume, weight),
       max_hold_weight_(max_weight),
       max_hold_volume_(max_volume),
-      current_hold_weight_(0),
-      current_hold_volume_(0)
+      current_hold_volume_(0),
+      current_hold_weight_(0)
 {}
 
 bool Container::add(Object &object)

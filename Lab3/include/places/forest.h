@@ -3,6 +3,8 @@
 
 #include <places/outdoor.h>
 
+#include <objects/item.h>
+
 namespace lab3
 {
 namespace places
@@ -15,7 +17,7 @@ public:
     Forest();
     Forest(const std::string &name);
 
-//    void generateObjects();
+    void generateObjects();
     ~Forest();
 };
 

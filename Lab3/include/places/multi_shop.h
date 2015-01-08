@@ -4,6 +4,7 @@
 #include <places/shop.h>
 #include <objects/health_potion.h>
 #include <objects/strength_potion.h>
+#include <objects/container.h>
 
 // ** Config
 // Health potions
@@ -14,14 +15,14 @@ namespace lab3
 {
 namespace places
 {
-class Food_Shop : public Shop
+class Multi_Shop : public Shop
 {
 public:
-    Food_Shop();
-    Food_Shop(const std::string &name, bool is_open);
+    Multi_Shop();
+    Multi_Shop(const std::string &name, bool is_open);
 
     void generateObjects();
-    ~Food_Shop();
+    ~Multi_Shop();
 };
 }
 }

@@ -16,3 +16,8 @@ Item::Item(const std::string &name,
 Item::~Item()
 {}
 
+void Item::use(Character &c)
+{
+    std::cout << "[Item::use] TO DO"<<std::endl;
+}
+

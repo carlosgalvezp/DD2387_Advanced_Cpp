@@ -14,11 +14,11 @@ namespace objects
  * @brief The Container class
  * Represents a container: it is an object that itself can contain more objects
  */
-class Container : Object
+class Container : public Object
 {
 public:
     Container();
-    Container(const std::string &name, int price, int volume, int weight, int max_weight, int max_volume);
+    Container(const std::string &name, int price, int volume, int weight, int max_volume,int max_weight);
 
     int max_hold_weight()         const;
     int max_hold_volume()         const;

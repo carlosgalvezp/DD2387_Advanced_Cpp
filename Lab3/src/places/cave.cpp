@@ -13,3 +13,8 @@ Cave::Cave(const std::string &name)
 Cave::~Cave()
 {}
 
+void Cave::generateObjects()
+{
+
+}
+

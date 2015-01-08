@@ -33,7 +33,7 @@
 #include <places/hospital.h>
 #include <places/armory.h>
 #include <places/forest.h>
-#include <places/food_shop.h>
+#include <places/multi_shop.h>
 #include <places/castle.h>
 #include <places/cave.h>
 
