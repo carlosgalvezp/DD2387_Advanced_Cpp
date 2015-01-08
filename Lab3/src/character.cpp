@@ -36,7 +36,8 @@ Character::Character(const std::string &name, const std::string &type, Place *pl
 Character::~Character()
 {}
 
-//void Character::action();
+std::string Character::type() const { return this->type_;}
+
 bool Character::go(const std::string& direction)
 {
     // ** Get available directions

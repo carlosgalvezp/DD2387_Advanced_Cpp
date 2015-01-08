@@ -12,6 +12,7 @@ class Outdoor : public Place
 {
 public:
     Outdoor();
+    Outdoor(const std::string &name);
     ~Outdoor();
 };
 

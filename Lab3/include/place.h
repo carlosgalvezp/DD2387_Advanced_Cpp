@@ -40,6 +40,7 @@ public:
     void drop(Object &object);
 
     void addDirection(const std::string &d, Place* p);
+    virtual void generateObjects();
 
     // Accessors
     std::string name()        const;

@@ -21,7 +21,7 @@ public:
     ~Human();
 
     virtual bool action() = 0;
-    virtual std::string type() const = 0;
+//    virtual std::string type() const = 0;
 
     int money()      const;
 

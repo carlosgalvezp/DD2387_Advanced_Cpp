@@ -1,20 +1,16 @@
 #include <places/indoor.h>
 
-namespace lab3
-{
-namespace places
-{
+using namespace lab3::places;
 
 Indoor::Indoor()
-{
+{}
 
-}
+Indoor::Indoor(const std::string &name, bool is_open)
+    : Place(name), is_open_(is_open)
+{}
+
 
 Indoor::~Indoor()
-{
+{}
 
-}
-
-}
-}
 

@@ -26,15 +26,16 @@
 #include <characters/wise_man.h>
 #include <characters/wizard.h>
 #include <characters/wolf.h>
+#include <characters/finalmonster.h>
 
 #include <place.h>
-#include <places/home.h>
+#include <places/house.h>
 #include <places/hospital.h>
 #include <places/armory.h>
-#include <places/enchanted_forest.h>
+#include <places/forest.h>
 #include <places/food_shop.h>
-#include <places/kings_castle.h>
-#include <places/old_house.h>
+#include <places/castle.h>
+#include <places/cave.h>
 
 #include <utils/utils.h>
 
@@ -58,6 +59,10 @@ private:
 
     int mainMenu();
     void newGame();
+
+    void createAnimals(std::vector<Character*> &characters,
+                             std::vector<Place*> &animalPlaces);
+    void createObjects(std::vector<Object *> &objects, std::vector<Place*> &objectPlaces);
 };
 
 } // namespace lab3

@@ -1,16 +1,17 @@
 #ifndef HOSPITAL_H
 #define HOSPITAL_H
 
-#include <place.h>
+#include <places/indoor.h>
 
 namespace lab3
 {
 namespace places
 {
-class Hospital : public Place
+class Hospital : public Indoor
 {
 public:
     Hospital();
+    Hospital(const std::string &name);
     ~Hospital();
 };
 }

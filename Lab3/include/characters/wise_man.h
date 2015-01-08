@@ -7,13 +7,14 @@ namespace lab3
 {
 namespace characters
 {
-class Wise_Man : Human
+class Wise_Man : public Human
 {
 public:
     Wise_Man();
     Wise_Man(const std::string &name, Place *place);
-
     ~Wise_Man();
+
+    bool action();
 };
 }
 }

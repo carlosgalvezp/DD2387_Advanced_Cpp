@@ -54,29 +54,38 @@ void GameEngine::newGame()
 {
     std::cout << "CREATING NEW GAME "<<std::endl;
     // ** Create places
-    Place* home = new places::Home("Home");
-    Place* forest = new places::Enchanted_Forest("Enchanted Forest");
-    Place* castle = new places::Kings_Castle("Kings Castle");
-    Place* food_shop = new places::Food_Shop("Food Shop");
-    Place* armory    = new places::Armory("Armory");
+    Place* home         = new places::House("Home", true);
+    Place* old_house    = new places::House("Old House", false);
+    Place* hospital     = new places::Hospital("Hospital");
+    Place* food_shop    = new places::Food_Shop("Food Shop");
+    Place* armory       = new places::Armory("Armory");
+    Place* forest       = new places::Forest("Enchanted Forest");
+    Place* castle       = new places::Castle("Kings Castle", false);
+    Place* cave         = new places::Cave("Dark Cave");
 
     this->places_.push_back(home);
+    this->places_.push_back(old_house);
+    this->places_.push_back(hospital);
     this->places_.push_back(forest);
     this->places_.push_back(castle);
     this->places_.push_back(food_shop);
     this->places_.push_back(armory);
+    this->places_.push_back(cave);
 
 
-    // ** Create characters
-    this->characters_.push_back(new characters::Player("Adventurous Player",home));
+    // ** Create main characters
+    this->characters_.push_back(new characters::Player("Brave Player",home));
     this->characters_.push_back(new characters::Princess("Trapped Princess",castle));
-    this->characters_.push_back(new characters::Wolf("Wolf1",forest));
+    this->characters_.push_back(new characters::Wise_Man("Wise Man",castle));
+    this->characters_.push_back(new characters::FinalMonster("Powerful Final Monster", castle));
 
-    // ** Create objects
-    this->objects_.push_back(new objects::Item("key",1000,1,1));
+    // ** Create random animals in forest and cave
+    std::vector<Place*> animal_places = {forest, cave};
+    this->createAnimals(this->characters_, animal_places);
 
-    Object* key = this->objects_[0];
-    castle->drop(*key);
+    // ** Create random objects
+    std::vector<Place*> object_places = {food_shop, armory, forest, cave};
+    this->createObjects(this->objects_, object_places);
 
     // ** Connect places
     lab3::places::connectPlaces(*home, *forest, DIRECTION_NORTH);
@@ -157,4 +166,22 @@ void GameEngine::run()
         characters_ = tmp;
     }
     lab3::utils_io::print_newline("Thanks for playing!");
+}
+
+void GameEngine::createAnimals(std::vector<Character *> &characters,
+                               std::vector<Place *> &animalPlaces)
+{
+
+}
+
+void GameEngine::createObjects(std::vector<Object*> &objects,
+                               std::vector<Place *> &objectPlaces)
+{
+    std::for_each(objectPlaces.begin(), objectPlaces.end(),[&](Place* p)
+    {
+        p->generateObjects();
+        const std::vector<Object*> &objects = p->objects();
+        for(Object *o : objects)
+            this->objects_.push_back(o);
+    });
 }

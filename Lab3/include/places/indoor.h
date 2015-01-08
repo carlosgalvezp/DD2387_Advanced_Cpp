@@ -12,7 +12,11 @@ class Indoor : public Place
 {
 public:
     Indoor();
+    Indoor(const std::string &name, bool is_open);
+    bool isOpen()   const;
     ~Indoor();
+private:
+    bool is_open_;
 };
 
 }

@@ -58,7 +58,7 @@ public:
 
     const std::vector<std::string> & getTalkMessages()      const;
 
-    virtual std::string type()      const = 0;
+    std::string type()              const;
     std::string name()              const;
 
     bool operator==(const Character &ch)    const;

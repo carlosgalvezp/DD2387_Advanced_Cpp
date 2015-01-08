@@ -13,6 +13,11 @@ Place::Place(const std::string &name)
 Place::~Place()
 {}
 
+void Place::generateObjects()
+{
+    std::cout << "[Place::generateObjects]"<<std::endl;
+}
+
 bool Place::enter(Character &character)
 {
     // ** Remove player from previous place

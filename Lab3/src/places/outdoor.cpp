@@ -1,21 +1,13 @@
 #include <places/outdoor.h>
 
-namespace lab3
-{
-namespace places
-{
+using namespace lab3::places;
 
 Outdoor::Outdoor()
-{
+{}
 
-}
+Outdoor::Outdoor(const std::string &name)
+    : Place(name)
+{}
 
 Outdoor::~Outdoor()
-{
-
-}
-
-}
-}
-
-
+{}
