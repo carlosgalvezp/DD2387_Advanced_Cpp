@@ -2,6 +2,7 @@
 #define OUTDOOR_H
 
 #include <place.h>
+#include <characters/animal.h>
 
 namespace lab3
 {
@@ -13,7 +14,11 @@ class Outdoor : public Place
 public:
     Outdoor();
     Outdoor(const std::string &name);
+
+    virtual void generateAnimals();
     ~Outdoor();
+protected:
+    std::vector<characters::Animal> animals_;
 };
 
 }

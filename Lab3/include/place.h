@@ -42,6 +42,8 @@ public:
     void addDirection(const std::string &d, Place* p);
     virtual void generateObjects();
 
+    void killCharacter(Character &character);
+
     // Accessors
     std::string name()        const;
     std::string description() const;

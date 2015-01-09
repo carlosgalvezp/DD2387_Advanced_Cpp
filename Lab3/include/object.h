@@ -23,8 +23,8 @@ public:
     int volume()         const;
     int price()          const;
 
-    std::string name()          const;
-    std::string description()   const;
+    virtual std::string name()          const;
+    virtual std::string description()   const;
     bool operator==(const Object& o)    const;
 private:
     std::string name_;

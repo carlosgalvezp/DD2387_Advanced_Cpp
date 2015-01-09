@@ -37,6 +37,21 @@ Multi_Shop::Multi_Shop(const std::string &name, bool is_open)
 Multi_Shop::~Multi_Shop()
 {}
 
+void Multi_Shop::restock()
+{
+    // ** Call base function
+    Shop::restock();
+
+    // ** Clear all the objects
+    for(Object *o :objects_)
+        delete o;
+    objects_.clear();
+
+    // ** Regenerate them
+    generateObjects();
+}
+
+
 void Multi_Shop::generateObjects()
 {
     // ** Create health and strength potions

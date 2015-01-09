@@ -15,6 +15,12 @@ Potion::Potion(const std::string &name,
       extra_points_(extra_points)
 {}
 
+bool Potion::use(Character &c)
+{
+    std::cout << "[Potion::use]" <<std::endl;
+    return true;
+}
+
 Potion::~Potion()
 {}
 

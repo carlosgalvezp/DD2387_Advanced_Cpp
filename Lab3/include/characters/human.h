@@ -20,7 +20,7 @@ public:
     Human(const std::string &name, const std::string &type, Place *p);
     ~Human();
 
-    virtual std::string action() = 0;
+    virtual std::string action(bool display_info);
 //    virtual std::string type() const = 0;
 
     int getMoney()      const;

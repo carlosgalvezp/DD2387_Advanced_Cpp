@@ -13,7 +13,7 @@ FinalMonster::FinalMonster(const std::string &name, Place *place)
 FinalMonster::~FinalMonster()
 {}
 
-std::string FinalMonster::action()
+std::string FinalMonster::action(bool display_info)
 {
     std::cout << "[FinalMonster::action] TO DO" << std::endl;
     return EVENT_NULL;

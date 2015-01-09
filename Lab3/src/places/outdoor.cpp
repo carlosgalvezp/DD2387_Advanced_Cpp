@@ -10,4 +10,7 @@ Outdoor::Outdoor(const std::string &name)
 {}
 
 Outdoor::~Outdoor()
-{}
+{
+}
+
+void Outdoor::generateAnimals(){}

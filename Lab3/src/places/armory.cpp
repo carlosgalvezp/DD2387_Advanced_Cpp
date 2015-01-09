@@ -32,6 +32,11 @@ Armory::Armory(const std::string &name, bool is_open)
 Armory::~Armory()
 {}
 
+void Armory::restock()
+{
+    // Do nothing; the armory won't restock
+}
+
 void Armory::generateObjects()
 {
     // ** Create health and strength potions

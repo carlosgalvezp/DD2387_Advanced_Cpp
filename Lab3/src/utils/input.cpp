@@ -9,6 +9,7 @@ std::map<std::string, CmdFunction> cmd_map =
     {"pick up",   &lab3::input::cmd_pick_up},
     {"talk to",   &lab3::input::cmd_talk},
     {"status",    &lab3::input::cmd_status},
+    {"use item",  &lab3::input::cmd_use_item},
     {"exit game", &lab3::input::cmd_exit_game},
     {"buy",       &lab3::input::cmd_buy}
 };
@@ -84,7 +85,14 @@ std::string lab3::input::read_player_input(lab3::characters::Player *player)
         std::string cmd = lab3::input::read_input(player->getCommands());
         if(cmd_map.find(cmd) != cmd_map.end())
         {
-            success = (*cmd_map.at(cmd))(player); // Using a map of function pointers with key = cmd
+            try
+            {
+                 success = (*cmd_map.at(cmd))(player); // Using a map of function pointers with key = cmd
+            }
+            catch(std::exception &e)   // Events are thrown as exceptions
+            {
+                return e.what();
+            }
 
             if(!success) lab3::utils_io::wait_for_enter();
         }
@@ -369,7 +377,7 @@ bool lab3::input::cmd_buy(lab3::characters::Player *player)
     std::vector<std::string> command_desc;
 
     // ** Get objects
-    for(lab3::Object* o : player->objects())
+    for(lab3::Object* o : player->currentPlace()->objects())
     {
         command_map.insert(std::make_pair(o->name(), o));
         command_str.push_back(o->name());
@@ -391,6 +399,46 @@ bool lab3::input::cmd_buy(lab3::characters::Player *player)
     if(o != nullptr)
     {
         player->buy(*o);
+        return true;
+    }
+    return false;
+}
+
+bool lab3::input::cmd_use_item(lab3::characters::Player *player)
+{
+    // ** Get objects in the backpack
+    if(player->getBackpack()->objects().size() == 0)
+    {
+        lab3::utils_io::print_newline("The backpack is empty!");
+        return false;
+    }
+    std::map<std::string, lab3::objects::Item*> command_map;
+    std::vector<std::string> command_str;
+    std::vector<std::string> command_desc;
+
+    // ** Get objects
+    for(lab3::Object* o : player->getBackpack()->objects())
+    {
+        command_map.insert(std::make_pair(o->name(), static_cast<lab3::objects::Item*>(o)));
+        command_str.push_back(o->name());
+        command_desc.push_back(o->description());
+    }
+
+    command_str.push_back(CMD_BACK_TO_MAIN);
+    command_desc.push_back("");
+
+    lab3::utils_io::print_newline("Use what?");
+    std::string cmd = lab3::input::read_input(command_str);
+
+    if(cmd == CMD_BACK_TO_MAIN){
+        lab3::utils_io::print_newline("Going back to main menu...");
+        return false;
+    }
+    // ** Actually use it
+    lab3::objects::Item *o = command_map.at(cmd);
+    if(o != nullptr)
+    {
+        player->use(*o);
         return true;
     }
     return false;

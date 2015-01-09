@@ -18,7 +18,7 @@
 #include <character.h>
 #include <characters/player.h>
 #include <characters/princess.h>
-#include <characters/troll.h>
+#include <characters/vampire.h>
 #include <characters/wise_man.h>
 #include <characters/wizard.h>
 #include <characters/wolf.h>
@@ -55,13 +55,16 @@ private:
 
     bool is_finished_;
 
+    Character* player_;
+
     int mainMenu();
     void newGame();
 
     void createAnimals(std::vector<Character*> &characters,
-                             std::vector<Place*> &animalPlaces);
+                             std::vector<places::Outdoor *> &animalPlaces);
     void createObjects(std::vector<Object *> &objects, std::vector<Place*> &objectPlaces);
 
+    void regenerateStuff();
 
     // ** Event callback functions
     void event_EnoughTrain();
@@ -82,11 +85,12 @@ private:
         {EVENT_NULL,                &GameEngine::event_Null}
     };
 
+    const std::string monster_name_ = "Dark Monster";
     const std::string introduction_ =
             "You wake up at home and all you hear is people crying on the streets. "
-            "The news are everywhere: the Dark Monster has invaded the King's Castle, killed"
+            "The news are everywhere: the "+monster_name_+" has invaded the King's Castle, killed"
             "the King and trapped the Princess. You, as a soon-to-be Warrior of the King's Guard,"
-            "can't just stay home and decide to go for an adventure to kill the Dark Monster and rescue"
+            "can't just stay home and decide to go for an adventure to kill the "+monster_name_+" and rescue"
             "the poor Princess...";
 };
 

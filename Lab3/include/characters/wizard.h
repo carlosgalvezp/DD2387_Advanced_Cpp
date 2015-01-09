@@ -7,10 +7,13 @@ namespace lab3
 {
 namespace characters
 {
-class Wizard : Character
+class Wizard : public Character
 {
 public:
     Wizard();
+    Wizard(const std::string &name, Place* place);
+
+    std::string action(bool display_info);
     ~Wizard();
 };
 }

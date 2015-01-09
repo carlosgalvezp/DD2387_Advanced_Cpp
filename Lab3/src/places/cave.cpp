@@ -18,3 +18,8 @@ void Cave::generateObjects()
 
 }
 
+void Cave::generateAnimals()
+{
+    new characters::Vampire("Vampire 1", this);
+    new characters::Vampire("Vampire 2", this);
+}

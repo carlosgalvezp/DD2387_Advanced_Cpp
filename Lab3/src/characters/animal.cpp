@@ -13,16 +13,16 @@ Animal::Animal(const std::string &name, const std::string &type, Place* place)
     {
         "Grrrr"
     };
-
-    this->strength_ = PARAM_ANIMAL_STRENGTH;
-    this->strength_ = PARAM_ANIMAL_DEFENSE;
 }
 
 Animal::~Animal()
 {}
 
-std::string Animal::action()
+std::string Animal::action(bool display_info)
 {
-    lab3::utils_io::print_newline("[Animal::action] TO DO");
+    if(this->isFighting())
+    {
+        fight(*this->fighter_);
+    }
     return EVENT_NULL;
 }

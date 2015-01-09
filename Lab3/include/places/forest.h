@@ -18,6 +18,8 @@ public:
     Forest(const std::string &name);
 
     void generateObjects();
+    void generateAnimals();
+
     ~Forest();
 };
 

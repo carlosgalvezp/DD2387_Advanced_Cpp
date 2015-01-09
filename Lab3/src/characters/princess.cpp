@@ -20,9 +20,12 @@ Princess::~Princess()
 
 }
 
-std::string Princess::action()
+std::string Princess::action(bool display_info)
 {
-    lab3::utils_io::print_newline("Princess action [TO DO]");
+    if(display_info)
+    {
+        lab3::utils_io::print_newline("Princess action [TO DO]");
+    }
     return EVENT_NULL;
 }
 

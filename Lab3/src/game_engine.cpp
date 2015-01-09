@@ -10,23 +10,21 @@ GameEngine::GameEngine()
 GameEngine::~GameEngine()
 {
     // ** Destroy places
-    for(std::size_t i = 0; i < this->places_.size(); ++i)
+    for(Place* p : this->places_)
     {
-        Place* p = this->places_[i];
         delete p;
     }
 
-    // ** Destroy objects
-    for(std::size_t i = 0; i < this->objects_.size(); ++i)
-    {
-        Object* o = this->objects_[i];
-        delete o;
-    }
+//    // ** Destroy objects
+//    for(std::size_t i = 0; i < this->objects_.size(); ++i)
+//    {
+//        Object* o = this->objects_[i];
+//        delete o;
+//    }
 
     // ** Destroy characters
-    for(std::size_t i = 0; i < this->characters_.size(); ++i)
+    for(Character*c : this->characters_)
     {
-        Character* c = this->characters_[i];
         delete c;
     }
 }
@@ -52,6 +50,9 @@ void GameEngine::initGame()
 }
 void GameEngine::newGame()
 {
+    lab3::utils_io::clearScreen();
+    lab3::utils_io::print_newline(this->introduction_);
+    lab3::utils_io::wait_for_enter();
     // ** Create places
     Place* home         = new places::House("Home", true);
     Place* old_house    = new places::House("Old House", false);
@@ -73,14 +74,16 @@ void GameEngine::newGame()
 
 
     // ** Create main characters
-    this->characters_.push_back(new characters::Player("Brave Player",home));
+    player_ = new characters::Player("Brave Player",home);
+    this->characters_.push_back(player_);
     this->characters_.push_back(new characters::Princess("Trapped Princess",castle));
     this->characters_.push_back(new characters::Wise_Man("Wise Man",old_house));
     this->characters_.push_back(new characters::FinalMonster("Powerful Final Monster", castle));
 
 
     // ** Create random animals in forest and cave
-    std::vector<Place*> animal_places = {forest, cave};
+    std::vector<places::Outdoor*> animal_places = {static_cast<places::Outdoor*>(forest),
+                                                   static_cast<places::Outdoor*>(cave)};
     this->createAnimals(this->characters_, animal_places);
 
     // ** Create random objects
@@ -93,6 +96,7 @@ void GameEngine::newGame()
     lab3::places::connectPlaces(*home, *armory, DIRECTION_WEST);
     lab3::places::connectPlaces(*home, *hospital, DIRECTION_SOUTH);
     lab3::places::connectPlaces(*forest, *castle, DIRECTION_EAST);
+    lab3::places::connectPlaces(*forest, *cave, DIRECTION_WEST);
 }
 
 int GameEngine::mainMenu()
@@ -125,26 +129,27 @@ int GameEngine::mainMenu()
 void GameEngine::run()
 {
     lab3::utils_io::clearScreen();
-    lab3::utils_io::print_newline(this->introduction_);
-    lab3::utils_io::wait_for_enter();
 
     int round(1);
     while(!this->is_finished_)
     {
         lab3::utils_io::clearScreen();
+        std::vector<Character*> total_characters(characters_);
+
         std::cout << "Round "<<round++<<std::endl;
         // ** Sort by initiative
-        std::sort(characters_.begin(), characters_.end(),
+        std::sort(total_characters.begin(), total_characters.end(),
                   [](Character* char1, Character* char2)
-                  {return char1->getInitiative() > char2->getInitiative();});
+                  {return 100*char1->isFighting() + char1->getInitiative() >
+                          100*char2->isFighting() + char2->getInitiative();});
 
         // ** Run actions
-        for(Character *c : characters_)
+        for(Character *c : total_characters)
         {
             if(c!= nullptr && c->isAlive())
             {
                 // ** Execute action
-                std::string event = c->action();
+                std::string event = c->action(c->currentPlace() == player_->currentPlace()); // Switch to true to see all messages
 
                 // ** Process event
                 GameEngineFptr fptr = this->event_callbacks_.at(event);
@@ -171,14 +176,22 @@ void GameEngine::run()
             tmp.push_back(c);
         }
         characters_ = tmp;
+
+        // ** Create more dynamic objects (restock potions, animals etc)
+        regenerateStuff();
     }
     lab3::utils_io::print_newline("Thanks for playing!");
 }
 
 void GameEngine::createAnimals(std::vector<Character *> &characters,
-                               std::vector<Place *> &animalPlaces)
+                               std::vector<places::Outdoor *> &animalPlaces)
 {
-
+    for(places::Outdoor* place : animalPlaces)
+    {
+        place->generateAnimals();
+        for(Character* c: place->characters())
+            characters.push_back(c);
+    }
 }
 
 void GameEngine::createObjects(std::vector<Object*> &objects,
@@ -194,10 +207,53 @@ void GameEngine::createObjects(std::vector<Object*> &objects,
     }
 }
 
-// ** Event callback functions
-void GameEngine::event_EnoughTrain(){}
-void GameEngine::event_TriedMonster(){}
-void GameEngine::event_MentionedWizard(){}
+void GameEngine::regenerateStuff()
+{
+    // Stock in the Multi_Shop
+    for(Place* p : places_)
+    {
+        places::Shop *p_shop = dynamic_cast<places::Shop*>(p);
+        if(p_shop != nullptr)
+        {
+            p_shop->restock();
+        }
+    }
+    // Animals
+}
+
+// ======================= Event callback functions ==========================
+void GameEngine::event_EnoughTrain()
+{
+    std::cout << "ENOUGH TRAIN"<< std::endl;
+    lab3::utils_io::wait_for_enter();
+    places::House* old_house= static_cast<places::House*>(this->places_[1]); // The Old house
+    old_house->open();
+}
+
+void GameEngine::event_TriedMonster()
+{
+    // ** The wise man tells you new info
+    Character* wise_man = this->characters_[2]; // The wise man
+    wise_man->set_talk_msgs({"As you have seen, the "+this->monster_name_+" is extremely strong...",
+                            "You will need some help in order to defeat him...",
+                            "The legend says there exists a Wizard living in a lake, inside the forest."
+                             "He will only appears in exceptional cases, and only to the person that requires "
+                             "his help."});
+}
+void GameEngine::event_MentionedWizard()
+{
+    // ** Create the Mana Lake and the Wizard in it
+    Place* lake        = new places::Outdoor("Mana Lake");
+    Place* forest      = this->places_[3];
+
+    this->places_.push_back(lake);
+
+    // ** Create wizard
+    this->characters_.push_back(new characters::Wizard("Misterious Wizard",lake));
+
+    // ** Connect places
+    lab3::places::connectPlaces(*forest, *lake, DIRECTION_WEST);
+}
 
 void GameEngine::event_GameFinished()
 {

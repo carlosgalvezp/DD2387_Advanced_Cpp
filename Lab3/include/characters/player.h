@@ -6,6 +6,9 @@
 #include <utils/input.h>
 #include <objects/container.h>
 
+#include <characters/wolf.h>
+#include <characters/vampire.h>
+
 #include <game_engine.h>
 
 // STL
@@ -15,6 +18,11 @@
 #define DEFAULT_BACKPACK_WEIGHT  1
 #define DEFAULT_BACKPACK_MAX_VOLUME 50
 #define DEFAULT_BACKPACK_MAX_WEIGHT 20
+
+#define MIN_EXPERIENCE 2
+#define MIN_KILL_ANIMAL 1
+
+#define INITIAL_MONEY   50
 
 namespace lab3
 {
@@ -29,7 +37,7 @@ public:
     Player(const std::string &name, Place *place);
     ~Player();
 
-    std::string action();
+    std::string action(bool display_info);
     bool pick_up(Object &object);
     bool drop(Object &object);
     void talk_to(Character* character);
@@ -41,8 +49,15 @@ public:
 
     std::vector<std::string> getCommands();
 
+    objects::Container *getBackpack();
+
+    bool use(Object &o);
+
 private:
     bool finished_game_;
+    int experience_;
+    int kills_wolf_;
+    int kills_vampire_;
 };
 
 }

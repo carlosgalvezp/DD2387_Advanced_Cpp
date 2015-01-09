@@ -22,6 +22,7 @@ public:
     Multi_Shop(const std::string &name, bool is_open);
 
     void generateObjects();
+    void restock();
     ~Multi_Shop();
 };
 }

@@ -18,7 +18,7 @@ public:
                   int weight,
                   int volume);
 
-    bool use(Character &c)  const;
+    bool use(Character &c);
 
     ~Health_Potion();
 };

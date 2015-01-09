@@ -6,33 +6,39 @@ Player::Player()
 {}
 
 Player::Player(const std::string &name, Place *place)
-    : Human(name, TYPE_PLAYER, place), finished_game_(false)
+    : Human(name, TYPE_PLAYER, place),
+      finished_game_(false),
+      experience_(0),
+      kills_wolf_(0),
+      kills_vampire_(0)
 {
     // ** The player always starts with a small backpack
     this->objects_.push_back((Object*)new objects::Container("small backpack",5,DEFAULT_BACKPACK_VOLUME,
                                                                                 DEFAULT_BACKPACK_WEIGHT,
                                                                                 DEFAULT_BACKPACK_MAX_WEIGHT,
                                                                                 DEFAULT_BACKPACK_VOLUME));
+    this->money_ = INITIAL_MONEY;
     // ** Initialize talk messages
     talk_msgs_ = {"Hi, I am "+name};
 
     // ** Include additional commands
     // Action commands
+    this->commands_.insert(this->commands_.end()-1,"use item");
     this->commands_.insert(this->commands_.end()-1,"status");
 
     // Fight commands
-    this->fight_commands_.insert(this->fight_commands_.end()-1, "use potion");
+    this->fight_commands_.insert(this->fight_commands_.end()-1, "use health potion");
+    this->fight_commands_.insert(this->fight_commands_.end()-1, "use strength potion");
 }
 
 Player::~Player()
 {
-    // Delete the backpack!
-    delete objects_[0];
 }
 
-std::string Player::action()
+lab3::objects::Container* Player::getBackpack(){return static_cast<lab3::objects::Container*>(this->objects_[0]);}
+
+std::string Player::action(bool display_info)
 {
-    lab3::utils_io::print_newline("Player action [TO DO]");
     return lab3::input::read_player_input(this);
 }
 
@@ -44,7 +50,11 @@ bool Player::pick_up(Object &object)
     if(backpack != nullptr)
     {
         // ** Check if we can put this object in the bag
-        return backpack->add(object);
+        if(backpack->add(object))
+        {
+            this->current_place_->pick_up(object);
+            return true;
+        }
     }
 
     return false;
@@ -92,7 +102,38 @@ void Player::talk_to(Character *character)
 
 bool Player::fight(Character &character)
 {
-    return Character::fight(character);
+    bool finished = Character::fight(character);
+
+    if(finished && this->isAlive()) // Increase experience and check if we have killed all the monsters
+    {
+        ++this->experience_;
+        if(character.type() == TYPE_WOLF)  // it's a wolf
+            ++this->kills_wolf_;
+        else if(character.type() == TYPE_VAMPIRE) // it's a vampire
+            ++this->kills_vampire_;
+
+        if(this->experience_ >= MIN_EXPERIENCE &&
+           this->kills_vampire_ >= MIN_KILL_ANIMAL &&
+           this->kills_wolf_  >= MIN_KILL_ANIMAL)
+        {
+            throw std::runtime_error(EVENT_ENOUGH_TRAIN);
+        }
+        this->is_fighting_ = false;
+    }
+    return finished;
+}
+
+bool Player::use(Object &o)
+{
+    lab3::objects::Item* item_ptr = static_cast<lab3::objects::Item*>(&o);
+    if(item_ptr->use(*this))
+    {
+        // Remove from backpack
+        this->getBackpack()->remove(o);
+        // Delete object
+        delete item_ptr;
+    }
+    return true;
 }
 
 std::string Player::type() const
@@ -125,7 +166,7 @@ void Player::status()       const
     lab3::utils_io::print_newline("----- Objects -----");
     for(Object *o : this->objects())
     {
-        std::cout << "-"<<o->description()<<std::endl;
+        std::cout << "* "<<o->name()<<" - "<<o->description()<<std::endl;
     }
 }
 
@@ -137,7 +178,6 @@ std::vector<std::string> Player::getCommands()
     if(dynamic_cast<places::Shop*>(this->currentPlace()) != nullptr)
     {
         cmds.insert(cmds.end()-1, "buy");
-        cmds.insert(cmds.end()-1, "sell");
     }
     return cmds;
 }

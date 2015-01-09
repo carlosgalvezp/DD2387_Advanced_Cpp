@@ -1,4 +1,5 @@
 #include <places/forest.h>
+#include <characters/wolf.h>
 
 using namespace lab3::places;
 
@@ -20,3 +21,9 @@ void Forest::generateObjects()
     this->objects_.push_back(o);
 }
 
+void Forest::generateAnimals()
+{
+    new characters::Wolf("Wolf 1", this);
+    new characters::Wolf("Wolf 2", this);
+    new characters::Wolf("Wolf 3", this);
+}

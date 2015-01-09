@@ -20,6 +20,7 @@ public:
 
     void generateObjects();
     void repairEquipment(Character &p)  const;
+    void restock();
     ~Armory();
 };
 

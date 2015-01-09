@@ -9,8 +9,8 @@ const std::map<std::string, std::vector<int>> attributes =
     {TYPE_WIZARD,           {50,        20,         15,         10}},
     {TYPE_HUMAN,            {50,        20,         15,         10}},
     {TYPE_TROLL,            {50,        20,         15,         10}},
-    {TYPE_WOLF,             {50,        20,         15,         10}},
-    {TYPE_VAMPIRE,          {50,        20,         15,         10}},
+    {TYPE_WOLF,             {50,        20,          5,         10}},
+    {TYPE_VAMPIRE,          {50,        15,          5,         10}},
     {TYPE_FINAL_MONSTER,    {100,       50,         50,         10}}
 };
 
@@ -21,8 +21,6 @@ Character::Character(const std::string &name, const std::string &type, Place *pl
     : name_(name),
       type_(type),
       current_place_(place),
-      life_points_(MAX_LIFE),
-      initiative_(DEFAULT_INITIATIVE),
       is_fighting_(false)
 {
     // ** Set attributes
@@ -35,7 +33,13 @@ Character::Character(const std::string &name, const std::string &type, Place *pl
 }
 
 Character::~Character()
-{}
+{
+    for(Object *o : objects_)
+    {
+        delete o;
+        o = nullptr;
+    }
+}
 
 std::string Character::type() const { return this->type_;}
 
@@ -63,12 +67,19 @@ bool Character::go(const std::string& direction)
 bool Character::fight(Character &character)
 {
     if(!this->isFighting())
+    {
         this->is_fighting_ = true;
+        this->fighter_ = &character;
+    }
     if(!character.isFighting())
+    {
         character.is_fighting_ = true;
+        character.fighter_ = this;
+    }
 
     // XXXX Include randomnesss
     lab3::utils_io::print_newline("-------- Fight between "+this->name() +" and "+character.name());
+    lab3::utils_io::wait_for_enter();
     std::stringstream ss;
     ss<< "["<<this->name()<<"] Life: "<<this->getLifePoints()<<"; Strength: "<<this->getStrength()<<"; Defense: "<< this->getDefense()<<std::endl;
     ss<< "["<<character.name()<<"] Life: "<<character.getLifePoints()<<"; Strength: "<<character.getStrength()<<"; Defense: "<< character.getDefense()<<std::endl;
@@ -82,19 +93,15 @@ bool Character::fight(Character &character)
     std::cout << this->name() <<" attacks "<<character.name()<<", who is injured and loses "<<damage<<" life points"<<std::endl;
     lab3::utils_io::wait_for_enter();
 
-    if(!character.isAlive())
+    if(!character.isAlive())             // The oponent died
     {
         lab3::utils_io::print_newline(character.name() + " has died");
         return true;
     }
-    else if(!character.isFighting())
+    else if(!character.isFighting())    // The oponent scaped
     {
         lab3::utils_io::print_newline(character.name() + " has scaped the fight");
         return true;
-    }
-    else
-    {
-        return character.fight(*this);      // The other character fights back
     }
     return false;
 }
@@ -145,6 +152,11 @@ void Character::add_life(int life)
 void Character::add_strength(int stregth)
 {
     this->life_points_ = std::min(this->strength_ + stregth, MAX_STRENGTH); // XXX CHANGE so that every player has its own
+}
+
+void Character::set_talk_msgs(const std::vector<std::string> &msgs)
+{
+    this->talk_msgs_ = msgs;
 }
 
 // ** Accessors

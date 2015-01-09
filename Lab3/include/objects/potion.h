@@ -20,7 +20,7 @@ public:
            int volume,
            int weight);
 
-//    virtual void use(lab3::characters::Player &player);
+    bool use(Character &c);
     ~Potion();
 
 protected:

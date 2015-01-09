@@ -1,5 +1,5 @@
 #include "place.h"
-
+#include <characters/animal.h>
 using namespace lab3;
 
 Place::Place()
@@ -12,6 +12,25 @@ Place::Place(const std::string &name)
 
 Place::~Place()
 {
+    // ** Delete objects
+    for(Object* o : objects_)
+    {
+        if(o != nullptr)
+        {
+            delete o;
+            o = nullptr;
+        }
+    }
+
+//    // Delete animals (they don't get out of the place)
+//    for(Character* c : characters_)
+//    {
+//        if(dynamic_cast<characters::Animal*>(c) != nullptr)
+//        {
+//            delete c;
+//            c = nullptr;
+//        }
+//    }
 }
 
 void Place::generateObjects()
@@ -61,17 +80,15 @@ void Place::drop(Object &object)
 bool Place::pick_up(Object &object)
 {
     // ** Find object
-    auto it = std::find(this->objects_.begin(), this->objects_.end(), &object);
-    if(it != this->objects_.end())
+    for(auto it = this->objects_.begin(); it != this->objects_.end(); ++it)
     {
-        return false;
+        if (**it == object)
+        {
+            this->objects_.erase(it);
+            return true;
+        }
     }
-    else
-    {
-        // ** If found, delete it
-        this->objects_.erase(it);
-        return true;
-    }
+    return false;
 }
 
 void Place::addDirection(const std::string &d, Place *p)
@@ -151,6 +168,14 @@ std::string Place::description() const
 bool Place::operator ==(const Place &p2) const
 {
     return this->name() == p2.name();
+}
+
+void Place::killCharacter(Character &character)
+{
+    this->leave(character);
+    Character*c = &character;
+    delete c;
+    c = nullptr;
 }
 
 void lab3::places::connectPlaces(Place &p1, Place &p2, const std::string &d12)

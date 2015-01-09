@@ -9,7 +9,6 @@
 #include <types.h>
 #include <utils/utils_io.h>
 #include <events_def.h>
-
 #define MAX_LIFE                50
 #define MAX_STRENGTH            50
 #define DEFAULT_INITIATIVE      10
@@ -28,7 +27,7 @@ public:
     Character(const std::string &name, const std::string &type, Place *place);
     virtual ~Character();
 
-    virtual std::string action() = 0;
+    virtual std::string action(bool display_info) = 0;
     virtual bool fight(Character &character);
     bool go(const std::string &direction);
     virtual bool pick_up(lab3::Object &object);
@@ -41,6 +40,7 @@ public:
     void set_damage(int damage);
     void add_life(int life);
     void add_strength(int stregth);
+    void set_talk_msgs(const std::vector<std::string> &msgs);
 
     // Accessors
     int getLifePoints()             const;
@@ -104,6 +104,8 @@ protected:
     // ** Actual commands, that each character will extend
     std::vector<std::string> commands_ = basic_commands_;
     std::vector<std::string> fight_commands_ = fight_basic_commands_;
+
+    Character* fighter_;
 };
 
 int computeDamage(const Character &attacker, const Character &defender);

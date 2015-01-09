@@ -14,9 +14,18 @@ Container::Container(const std::string &name,
     : Object(name, "It contains objects", price, volume, weight),
       max_hold_weight_(max_weight),
       max_hold_volume_(max_volume),
-      current_hold_volume_(0),
-      current_hold_weight_(0)
+      current_hold_weight_(0),
+      current_hold_volume_(0)
 {}
+
+Container::~Container()
+{
+    for(Object *o : objects_)
+    {
+        delete o;
+        o = nullptr;
+    }
+}
 
 bool Container::add(Object &object)
 {
