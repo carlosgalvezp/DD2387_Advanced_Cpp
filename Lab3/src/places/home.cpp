@@ -9,9 +9,23 @@ Home::Home(const std::string &name)
     : House(name, true)
 {}
 
+bool Home::enter(Character &character)
+{
+    if(character.type()!= TYPE_PLAYER)
+    {
+        this->rest(character);
+        return Place::enter(character);
+    }else
+    {
+        lab3::utils_io::print_newline(character.name() +" can't enter the Player's house!");
+        return false;
+    }
+
+}
+
 void Home::rest(Character &c) const
 {
-    c.add_life(MAX_LIFE/2.0);
+    c.set_life(MAX_LIFE/2.0);
 }
 
 Home::~Home()

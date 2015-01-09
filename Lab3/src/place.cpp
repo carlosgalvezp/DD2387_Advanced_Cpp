@@ -46,8 +46,7 @@ void Place::addCharacter(Character &character)
 
 bool Place::enter(Character &character)
 {
-    std::cout << "PLACE::enter"<<std::endl;
-    // ** Remove player from previous place
+       // ** Remove player from previous place
     Place* old_place = character.currentPlace();
     if(old_place != nullptr)
         old_place->leave(character);

@@ -56,6 +56,7 @@ private:
     bool is_finished_;
 
     Character* player_;
+    Place* home_;
 
     int mainMenu();
     void newGame();

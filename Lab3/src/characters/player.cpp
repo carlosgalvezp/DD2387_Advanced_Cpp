@@ -5,12 +5,14 @@ using namespace lab3::characters;
 Player::Player()
 {}
 
-Player::Player(const std::string &name, Place *place)
+Player::Player(const std::string &name, Place *place, Place *home)
     : Human(name, TYPE_PLAYER, place),
       finished_game_(false),
       experience_(0),
       kills_wolf_(0),
-      kills_vampire_(0)
+      kills_vampire_(0),
+      event_trained_(false),
+      home_(home)
 {
     // ** The player always starts with a small backpack
     this->objects_.push_back((Object*)new objects::Container("small backpack",5,DEFAULT_BACKPACK_VOLUME,
@@ -25,10 +27,6 @@ Player::Player(const std::string &name, Place *place)
     // Action commands
     this->commands_.insert(this->commands_.end()-1,"use item");
     this->commands_.insert(this->commands_.end()-1,"status");
-
-    // Fight commands
-    this->fight_commands_.insert(this->fight_commands_.end()-1, "use health potion");
-    this->fight_commands_.insert(this->fight_commands_.end()-1, "use strength potion");
 }
 
 Player::~Player()
@@ -103,21 +101,15 @@ bool Player::fight(Character &character)
 {
     bool finished = Character::fight(character);
 
-    if(finished && this->isAlive()) // Increase experience and check if we have killed all the monsters
+    if(finished) // Increase experience and check if we have killed all the monsters
     {
-        ++this->experience_;
-        if(character.type() == TYPE_WOLF)  // it's a wolf
-            ++this->kills_wolf_;
-        else if(character.type() == TYPE_VAMPIRE) // it's a vampire
-            ++this->kills_vampire_;
-
-        if(this->experience_ >= MIN_EXPERIENCE &&
-           this->kills_vampire_ >= MIN_KILL_ANIMAL &&
-           this->kills_wolf_  >= MIN_KILL_ANIMAL)
+        if(this->isAlive())                 // Won -> increase experience
         {
-            throw std::runtime_error(EVENT_ENOUGH_TRAIN);
+            ++this->experience_;
+            check_event_trained(character);
         }
         this->is_fighting_ = false;
+
     }
     return finished;
 }
@@ -185,4 +177,19 @@ std::vector<std::string> Player::getCommands()
         cmds = {"fight","scape","use item","exit game"};
     }
     return cmds;
+}
+
+void Player::check_event_trained(const Character &character)
+{
+    if(character.type() == TYPE_WOLF)  // it's a wolf
+        ++this->kills_wolf_;
+    else if(character.type() == TYPE_VAMPIRE) // it's a vampire
+        ++this->kills_vampire_;
+
+    if(this->experience_ >= MIN_EXPERIENCE &&
+       this->kills_vampire_ >= MIN_KILL_ANIMAL &&
+       this->kills_wolf_  >= MIN_KILL_ANIMAL)
+    {
+        throw std::runtime_error(EVENT_ENOUGH_TRAIN);
+    }
 }

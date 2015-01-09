@@ -13,6 +13,7 @@ public:
     Home();
     Home(const std::string &name);
     void rest(Character &c) const;
+    bool enter(Character &character);
     ~Home();
 };
 

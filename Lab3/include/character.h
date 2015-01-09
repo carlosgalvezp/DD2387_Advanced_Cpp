@@ -41,6 +41,7 @@ public:
     void set_fighting(bool fighting);
     void set_damage(int damage);
     void add_life(int life);
+    void set_life(int life);
     void add_strength(int stregth);
     void set_talk_msgs(const std::vector<std::string> &msgs);
 

@@ -54,7 +54,7 @@ void GameEngine::newGame()
     lab3::utils_io::print_newline(this->introduction_);
     lab3::utils_io::wait_for_enter();
     // ** Create places
-    Place* home         = new places::House("Home", true);
+    home_               = new places::House("Home", true);
     Place* old_house    = new places::House("Old House", false);
     Place* hospital     = new places::Hospital("Hospital");
     Place* food_shop    = new places::Multi_Shop("Food Shop", true);
@@ -63,7 +63,7 @@ void GameEngine::newGame()
     Place* castle       = new places::Castle("Kings Castle", false);
     Place* cave         = new places::Cave("Dark Cave");
 
-    this->places_.push_back(home);
+    this->places_.push_back(home_);
     this->places_.push_back(old_house);
     this->places_.push_back(hospital);
     this->places_.push_back(forest);
@@ -74,7 +74,7 @@ void GameEngine::newGame()
 
 
     // ** Create main characters
-    player_ = new characters::Player("Brave Player",home);
+    player_ = new characters::Player("Brave Player",home_, home_);
     this->characters_.push_back(player_);
     this->characters_.push_back(new characters::Princess("Trapped Princess",castle));
     this->characters_.push_back(new characters::Wise_Man("Wise Man",old_house));
@@ -91,12 +91,12 @@ void GameEngine::newGame()
     this->createObjects(this->objects_, object_places);
 
     // ** Connect places
-    lab3::places::connectPlaces(*home, *forest, DIRECTION_NORTH);
-    lab3::places::connectPlaces(*home, *food_shop, DIRECTION_EAST);
+    lab3::places::connectPlaces(*home_, *forest, DIRECTION_NORTH);
+    lab3::places::connectPlaces(*home_, *food_shop, DIRECTION_EAST);
     lab3::places::connectPlaces(*food_shop, *armory, DIRECTION_WEST);
-    lab3::places::connectPlaces(*home, *food_shop, DIRECTION_EAST);
-    lab3::places::connectPlaces(*home, *old_house, DIRECTION_WEST);
-    lab3::places::connectPlaces(*home, *hospital, DIRECTION_SOUTH);
+    lab3::places::connectPlaces(*home_, *food_shop, DIRECTION_EAST);
+    lab3::places::connectPlaces(*home_, *old_house, DIRECTION_WEST);
+    lab3::places::connectPlaces(*home_, *hospital, DIRECTION_SOUTH);
     lab3::places::connectPlaces(*forest, *castle, DIRECTION_EAST);
     lab3::places::connectPlaces(*forest, *cave, DIRECTION_WEST);
 }
@@ -162,6 +162,14 @@ void GameEngine::run()
                 lab3::utils_io::wait_for_enter();
             }
         }
+        // ** Put player in hospital if dead
+        if(!player_->isAlive())
+        {
+            lab3::utils_io::print_newline("The player has been seriosly injured. He was translated back home, "
+                                          "where it now recovers from the attack...");
+            lab3::utils_io::wait_for_enter();
+            home_->enter(*player_);
+        }
 
         // ** Remove dead characters
         std::vector<Character*> tmp;
@@ -226,7 +234,7 @@ void GameEngine::regenerateStuff()
 // ======================= Event callback functions ==========================
 void GameEngine::event_EnoughTrain()
 {
-    std::cout << "ENOUGH TRAIN"<< std::endl;
+    lab3::utils_io::print_newline(">>> The "+player_->name()+" is now trained well enough... <<<");
     lab3::utils_io::wait_for_enter();
     places::House* old_house= static_cast<places::House*>(this->places_[1]); // The Old house
     old_house->setOpen(true);
@@ -241,6 +249,8 @@ void GameEngine::event_TriedMonster()
                             "The legend says there exists a Wizard living in a lake, inside the forest."
                              "He will only appears in exceptional cases, and only to the person that requires "
                              "his help."});
+    lab3::utils_io::print_newline(">>> The "+player_->name()+" is now prepared to find the Wizard... <<<");
+    lab3::utils_io::wait_for_enter();
 }
 void GameEngine::event_MentionedWizard()
 {

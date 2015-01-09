@@ -5,7 +5,7 @@ using namespace lab3;
 
 const std::map<std::string, std::vector<int>> attributes =
 { // Type                    Life       Strength    Defense     Initiative
-    {TYPE_PLAYER,           {50,        20,         15,         10}},
+    {TYPE_PLAYER,           {50,        2,         1.5,         10}},
     {TYPE_PRINCESS,         {50,        20,         15,         10}},
     {TYPE_WIZARD,           {50,        20,         15,         10}},
     {TYPE_HUMAN,            {50,        20,         15,         10}},
@@ -95,12 +95,19 @@ bool Character::fight(Character &character)
 
     if(!character.isAlive())             // The oponent died
     {
-        lab3::utils_io::print_newline(character.name() + " has died");
+        if(character.type() != TYPE_PLAYER)
+            lab3::utils_io::print_newline(character.name() + " has died");
+        else
+            lab3::utils_io::print_newline(character.name() + " has been seriously injured");
+        this->is_fighting_ = false;
+        character.is_fighting_ = false;
         return true;
     }
     else if(!character.isFighting())    // The oponent scaped
     {
         lab3::utils_io::print_newline(character.name() + " has scaped the fight");
+        this->is_fighting_ = false;
+        character.is_fighting_ = false;
         return true;
     }
     return false;
@@ -152,6 +159,11 @@ void Character::set_fighting(bool fighting) {    this->is_fighting_ = fighting;}
 void Character::set_damage(int damage)
 {
     this->life_points_ -= damage;
+}
+
+void Character::set_life(int life)
+{
+    this->life_points_ = life;
 }
 
 void Character::add_life(int life)

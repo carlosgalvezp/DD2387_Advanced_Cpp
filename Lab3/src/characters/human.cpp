@@ -8,10 +8,7 @@ Human::Human()
 Human::Human(const std::string &name, const std::string &type, Place *place)
     : Character(name, type, place)
 
-{
-    strength_ = PARAM_HUMAN_STRENGTH;
-    defense_  = PARAM_HUMAN_DEFENSE;
-}
+{}
 
 Human::~Human()
 {}
