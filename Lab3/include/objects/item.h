@@ -19,7 +19,7 @@ public:
          int weight,
          int volume);
 
-    virtual void use(Character &c);
+    virtual bool use(Character &c);
     ~Item();
 };
 

@@ -14,6 +14,8 @@ public:
     Indoor();
     Indoor(const std::string &name, bool is_open);
     bool isOpen()   const;
+    void open();
+
     ~Indoor();
 private:
     bool is_open_;

@@ -10,7 +10,7 @@ Protection::Protection(const std::string &name,
                        int price,
                        int volume,
                        int weight)
-    : Object(name, "A protection that gives you extra defense", price, volume, weight), defense_(defense_points)
+    : Equipment(name, "A protection that gives you extra defense", price, volume, weight), defense_(defense_points)
 {}
 
 Protection::~Protection()

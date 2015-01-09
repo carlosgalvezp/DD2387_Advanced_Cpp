@@ -10,14 +10,10 @@
 #include <algorithm>
 // Own
 #include <object.h>
-#include <objects/armor.h>
-#include <objects/axe.h>
 #include <objects/container.h>
 #include <objects/health_potion.h>
 #include <objects/strength_potion.h>
 #include <objects/key.h>
-#include <objects/shield.h>
-#include <objects/sword.h>
 
 #include <character.h>
 #include <characters/player.h>
@@ -36,6 +32,8 @@
 #include <places/multi_shop.h>
 #include <places/castle.h>
 #include <places/cave.h>
+
+#include <events_def.h>
 
 #include <utils/utils.h>
 
@@ -63,6 +61,33 @@ private:
     void createAnimals(std::vector<Character*> &characters,
                              std::vector<Place*> &animalPlaces);
     void createObjects(std::vector<Object *> &objects, std::vector<Place*> &objectPlaces);
+
+
+    // ** Event callback functions
+    void event_EnoughTrain();
+    void event_TriedMonster();
+    void event_MentionedWizard();
+    void event_GameFinished();
+    void event_QuitGame();
+    void event_Null();
+
+    typedef void (GameEngine::*GameEngineFptr)(void);
+    const std::map<std::string, GameEngineFptr> event_callbacks_ =
+    {
+        {EVENT_ENOUGH_TRAIN,        &GameEngine::event_EnoughTrain},
+        {EVENT_TRIED_MONSTER,       &GameEngine::event_TriedMonster},
+        {EVENT_MENTIONED_WIZARD,    &GameEngine::event_MentionedWizard},
+        {EVENT_GAME_FINISHED,       &GameEngine::event_GameFinished},
+        {EVENT_QUIT_GAME,           &GameEngine::event_QuitGame},
+        {EVENT_NULL,                &GameEngine::event_Null}
+    };
+
+    const std::string introduction_ =
+            "You wake up at home and all you hear is people crying on the streets. "
+            "The news are everywhere: the Dark Monster has invaded the King's Castle, killed"
+            "the King and trapped the Princess. You, as a soon-to-be Warrior of the King's Guard,"
+            "can't just stay home and decide to go for an adventure to kill the Dark Monster and rescue"
+            "the poor Princess...";
 };
 
 } // namespace lab3

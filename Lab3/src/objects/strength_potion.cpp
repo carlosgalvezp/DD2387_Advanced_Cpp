@@ -16,5 +16,11 @@ Strength_Potion::Strength_Potion(const std::string &name,
 Strength_Potion::~Strength_Potion()
 {}
 
+bool Strength_Potion::use(Character &c)
+{
+    c.add_strength(this->extra_points_);
+    return true;
+}
+
 
 

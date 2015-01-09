@@ -56,3 +56,14 @@ void Armory::generateObjects()
     f(protections_config, 1);
 }
 
+void Armory::repairEquipment(Character &p) const
+{
+    for(Object* o : p.objects())
+    {
+        lab3::objects::Equipment* o_equip = dynamic_cast<lab3::objects::Equipment*>(o);
+        if(o_equip != nullptr)    // Check for Equipment only
+        {
+            o_equip->repair();
+        }
+    }
+}

@@ -15,7 +15,7 @@ public:
     FinalMonster(const std::string &name, Place* place);
     ~FinalMonster();
 
-    bool action();
+    std::string action();
     std::string type() const;
 };
 

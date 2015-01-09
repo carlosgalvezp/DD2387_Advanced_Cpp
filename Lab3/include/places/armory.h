@@ -4,6 +4,7 @@
 #include <places/shop.h>
 #include <character.h>
 
+#include <objects/equipment.h>
 #include <objects/protection.h>
 #include <objects/weapon.h>
 
@@ -18,7 +19,7 @@ public:
     Armory(const std::string &name, bool is_open);
 
     void generateObjects();
-    void repairEquipment(Character &p)  const;      //XXXXXXXXX to do
+    void repairEquipment(Character &p)  const;
     ~Armory();
 };
 

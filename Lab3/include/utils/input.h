@@ -10,6 +10,8 @@
 
 #include <utils/utils_io.h>
 
+#include <events_def.h>
+
 // STL
 #include <sstream>
 #include <string>
@@ -35,7 +37,7 @@ std::string read_input(const std::vector<std::string> &available_commands);
 std::string read_input(const std::vector<std::string> &available_commands,
                        const std::vector<std::string> &descriptions);
 
-bool read_player_input(lab3::characters::Player* player);
+std::string read_player_input(lab3::characters::Player* player);
 void display_commands(const std::vector<std::string> &commands);
 void display_commands(const std::vector<std::string> &commands, const std::vector<std::string>& description);
 std::string tab_completion(const std::string &tmp_str, const std::vector<std::string> &available_commands);
@@ -47,7 +49,7 @@ bool cmd_drop       (lab3::characters::Player* player);
 bool cmd_talk       (lab3::characters::Player* player);
 bool cmd_fight      (lab3::characters::Player* player);
 bool cmd_status     (lab3::characters::Player* player);
-bool cmd_exit_game  (lab3::characters::Player *player);
+bool cmd_exit_game  (lab3::characters::Player* player);
 bool cmd_buy        (lab3::characters::Player* player);
 
 }

@@ -13,4 +13,6 @@ Indoor::Indoor(const std::string &name, bool is_open)
 Indoor::~Indoor()
 {}
 
+void Indoor::open(){ this->is_open_ = true;}
+
 

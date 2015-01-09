@@ -1,13 +1,13 @@
 #ifndef PROTECTION_H
 #define PROTECTION_H
 
-#include <object.h>
+#include <objects/equipment.h>
 
 namespace lab3
 {
 namespace objects
 {
-class Protection : public Object
+class Protection : public Equipment
 {
 public:
     Protection();

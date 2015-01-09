@@ -11,7 +11,7 @@ Weapon::Weapon(const std::string &name,
                int price,
                int volume,
                int weight)
-    : Object(name, "A weapon that gives you extra strength", price, volume, weight),
+    : Equipment(name, "A weapon that gives you extra strength", price, volume, weight),
       attack_(attack_points),
       hands_required_(hands_required)
 {}

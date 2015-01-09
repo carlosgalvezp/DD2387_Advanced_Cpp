@@ -137,6 +137,16 @@ void Character::set_damage(int damage)
     this->life_points_ -= damage;
 }
 
+void Character::add_life(int life)
+{
+    this->life_points_ = std::min(this->life_points_ + life, MAX_LIFE); // XXX CHANGE so that every player has its own
+}
+
+void Character::add_strength(int stregth)
+{
+    this->life_points_ = std::min(this->strength_ + stregth, MAX_STRENGTH); // XXX CHANGE so that every player has its own
+}
+
 // ** Accessors
 int Character::getLifePoints()    const{    return this->life_points_; }
 int Character::getStrength()      const{    return this->strength_;    }

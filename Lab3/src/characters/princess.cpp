@@ -20,10 +20,10 @@ Princess::~Princess()
 
 }
 
-bool Princess::action()
+std::string Princess::action()
 {
     lab3::utils_io::print_newline("Princess action [TO DO]");
-    return false;
+    return EVENT_NULL;
 }
 
 std::string Princess::type() const

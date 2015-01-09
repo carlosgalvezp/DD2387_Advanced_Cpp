@@ -29,7 +29,7 @@ public:
     Player(const std::string &name, Place *place);
     ~Player();
 
-    bool action();
+    std::string action();
     bool pick_up(Object &object);
     bool drop(Object &object);
     void talk_to(Character* character);

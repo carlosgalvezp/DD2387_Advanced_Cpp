@@ -17,6 +17,8 @@ public:
                     int price,
                     int volume,
                     int weight);
+
+    bool use(Character &c);
     ~Strength_Potion();
 };
 

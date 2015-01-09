@@ -20,8 +20,8 @@ Wise_Man::Wise_Man(const std::string &name, Place *place)
 Wise_Man::~Wise_Man()
 {}
 
-bool Wise_Man::action()
+std::string Wise_Man::action()
 {
     std::cout << "[Wise_Man::action] TO-DO" << std::endl;
-    return false;
+    return EVENT_NULL;
 }

@@ -48,6 +48,8 @@ public:
     const std::map<std::string, Place*>& directions() const;
     const std::vector<Object*> &objects()             const;
     const std::vector<Character*> &characters()       const;
+
+    bool operator==(const Place& p) const;
 protected:
     std::string name_;
 
@@ -57,10 +59,10 @@ protected:
 
     void display_information(const Character &character);
 
-    const std::vector<std::string> talk_msgs =
-    {
-       "Hi "
-    };
+//    const std::vector<std::string> talk_msgs =
+//    {
+//       "Hi "
+//    };
 
 };
 

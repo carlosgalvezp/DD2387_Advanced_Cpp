@@ -17,7 +17,7 @@ public:
     Animal();
     Animal(const std::string &name, const std::string &type, Place *place);
 
-    bool action();
+    std::string action();
     ~Animal();
 };
 

@@ -148,6 +148,11 @@ std::string Place::description() const
     return ss.str();
 }
 
+bool Place::operator ==(const Place &p2) const
+{
+    return this->name() == p2.name();
+}
+
 void lab3::places::connectPlaces(Place &p1, Place &p2, const std::string &d12)
 {
     auto oppositeDir = [&]() ->std::string
@@ -165,3 +170,4 @@ void lab3::places::connectPlaces(Place &p1, Place &p2, const std::string &d12)
     p1.addDirection(d12, &p2);
     p2.addDirection(oppositeDir(), &p1);
 }
+

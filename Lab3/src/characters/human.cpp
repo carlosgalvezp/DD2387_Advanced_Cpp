@@ -16,21 +16,26 @@ Human::Human(const std::string &name, const std::string &type, Place *place)
 Human::~Human()
 {}
 
-int Human::money()   const   {return this->money_; }
+int Human::getMoney()   const   {return this->money_; }
+
+void Human::addMoney(int money)
+{
+    this->money_ += money;
+}
 
 bool Human::buy(Object &o)
 {
-    if(this->money() > o.price())
+    if(this->getMoney() > o.price())
     {
         this->pick_up(o);
         std::cout << this->name() <<" has bought a "<<o.name()<<", which costs "<<o.price()
-                  <<". Current money: "<<this->money()<<std::endl;
+                  <<". Current money: "<<this->getMoney()<<std::endl;
         return true;
     }
     else
     {
         std::cout << this->name() << " can't buy a"<<o.name()<<" since it costs" <<o.price()
-                  <<" and the current money is " <<this->money() << std::endl;
+                  <<" and the current money is " <<this->getMoney() << std::endl;
         return false;
     }
 

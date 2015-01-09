@@ -1,5 +1,5 @@
-#ifndef HOME_H
-#define HOME_H
+#ifndef HOUSE_H
+#define HOUSE_H
 
 #include <places/indoor.h>
 

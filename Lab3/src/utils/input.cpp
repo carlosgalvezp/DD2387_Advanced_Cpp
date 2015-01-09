@@ -74,7 +74,7 @@ std::string lab3::input::read_input(const std::vector<std::string> &available_co
     return ss.str();
 }
 
-bool lab3::input::read_player_input(lab3::characters::Player *player)
+std::string lab3::input::read_player_input(lab3::characters::Player *player)
 {
     // ** Update commands depending on the current place
     bool success(false);
@@ -88,11 +88,13 @@ bool lab3::input::read_player_input(lab3::characters::Player *player)
 
             if(!success) lab3::utils_io::wait_for_enter();
         }
-        if(player->finishedGame() || cmd == "exit game")
-            return true;
+        if(player->finishedGame())
+            return EVENT_GAME_FINISHED;
+        else if(cmd == "exit game")
+            return EVENT_QUIT_GAME;
     }while(!success);
 
-    return false;
+    return EVENT_NULL;
 }
 
 std::string lab3::input::tab_completion(const std::string &tmp_str, const std::vector<std::string> &available_commands)

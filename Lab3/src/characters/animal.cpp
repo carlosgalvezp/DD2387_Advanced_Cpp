@@ -21,8 +21,8 @@ Animal::Animal(const std::string &name, const std::string &type, Place* place)
 Animal::~Animal()
 {}
 
-bool Animal::action()
+std::string Animal::action()
 {
     lab3::utils_io::print_newline("[Animal::action] TO DO");
-    return false;
+    return EVENT_NULL;
 }

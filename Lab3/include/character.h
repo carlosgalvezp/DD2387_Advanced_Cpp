@@ -8,8 +8,10 @@
 #include <place.h>
 #include <types.h>
 #include <utils/utils_io.h>
+#include <events_def.h>
 
 #define MAX_LIFE                50
+#define MAX_STRENGTH            50
 #define DEFAULT_INITIATIVE      10
 
 namespace lab3
@@ -26,7 +28,7 @@ public:
     Character(const std::string &name, const std::string &type, Place *place);
     virtual ~Character();
 
-    virtual bool action() = 0;
+    virtual std::string action() = 0;
     virtual bool fight(Character &character);
     bool go(const std::string &direction);
     virtual bool pick_up(lab3::Object &object);
@@ -37,6 +39,8 @@ public:
     void set_place(Place* p);
     void set_fighting(bool fighting);
     void set_damage(int damage);
+    void add_life(int life);
+    void add_strength(int stregth);
 
     // Accessors
     int getLifePoints()             const;

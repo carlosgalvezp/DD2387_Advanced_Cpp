@@ -14,7 +14,7 @@ public:
     Wise_Man(const std::string &name, Place *place);
     ~Wise_Man();
 
-    bool action();
+    std::string action();
 };
 }
 }

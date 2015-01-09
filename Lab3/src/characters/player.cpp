@@ -30,7 +30,7 @@ Player::~Player()
     delete objects_[0];
 }
 
-bool Player::action()
+std::string Player::action()
 {
     lab3::utils_io::print_newline("Player action [TO DO]");
     return lab3::input::read_player_input(this);
@@ -112,7 +112,7 @@ void Player::status()       const
     // ** Attributes
     lab3::utils_io::print_newline("----- Attributes -----");
     std::cout << "-Life: "          <<this->getLifePoints()     <<std::endl;
-    std::cout << "-Money: "         <<this->money()             <<std::endl;
+    std::cout << "-Money: "         <<this->getMoney()             <<std::endl;
     std::cout << "-Strength: "      <<this->getStrength()       <<std::endl;
     std::cout << "-Defense: "       <<this->getDefense()        <<std::endl;
     std::cout << "-Initiative: "    <<this->getInitiative()     <<std::endl;

@@ -93,9 +93,6 @@ void GameEngine::newGame()
     lab3::places::connectPlaces(*home, *armory, DIRECTION_WEST);
     lab3::places::connectPlaces(*home, *hospital, DIRECTION_SOUTH);
     lab3::places::connectPlaces(*forest, *castle, DIRECTION_EAST);
-
-    std::cout << "END INIT" << std::endl;
-    lab3::utils_io::wait_for_enter();
 }
 
 int GameEngine::mainMenu()
@@ -128,6 +125,9 @@ int GameEngine::mainMenu()
 void GameEngine::run()
 {
     lab3::utils_io::clearScreen();
+    lab3::utils_io::print_newline(this->introduction_);
+    lab3::utils_io::wait_for_enter();
+
     int round(1);
     while(!this->is_finished_)
     {
@@ -143,12 +143,15 @@ void GameEngine::run()
         {
             if(c!= nullptr && c->isAlive())
             {
-                bool finished = c->action();
-                if (finished && c->type() == TYPE_PLAYER)
-                {
-                    is_finished_ = true;
+                // ** Execute action
+                std::string event = c->action();
+
+                // ** Process event
+                GameEngineFptr fptr = this->event_callbacks_.at(event);
+                (this->*fptr)();
+
+                if(is_finished_)
                     break;
-                }
                 lab3::utils_io::wait_for_enter();
             }
         }
@@ -183,13 +186,26 @@ void GameEngine::createObjects(std::vector<Object*> &objects,
 {
     for(Place *p : objectPlaces)
     {
-        std::cout << "Starting place "<<p->name()<<std::endl;
         p->generateObjects();
         const std::vector<Object*> &objs = p->objects();
-        std::cout << "Objects: "<<objs.size()<<std::endl;
 
         for(Object *o : objs)
             objects.push_back(o);
     }
-    std::cout << "END OBJECTS"<< std::endl;
 }
+
+// ** Event callback functions
+void GameEngine::event_EnoughTrain(){}
+void GameEngine::event_TriedMonster(){}
+void GameEngine::event_MentionedWizard(){}
+
+void GameEngine::event_GameFinished()
+{
+    this->is_finished_ = true;
+}
+void GameEngine::event_QuitGame()
+{
+    this->is_finished_ = true;
+}
+
+void GameEngine::event_Null(){}

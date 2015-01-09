@@ -20,10 +20,12 @@ public:
     Human(const std::string &name, const std::string &type, Place *p);
     ~Human();
 
-    virtual bool action() = 0;
+    virtual std::string action() = 0;
 //    virtual std::string type() const = 0;
 
-    int money()      const;
+    int getMoney()      const;
+    void addMoney(int money);
+
 
     bool buy(Object &o);
     bool sell(Object &o);

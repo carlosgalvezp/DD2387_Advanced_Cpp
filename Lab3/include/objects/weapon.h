@@ -1,14 +1,14 @@
 #ifndef WEAPON_H
 #define WEAPON_H
 
-#include <object.h>
+#include <objects/equipment.h>
 
 namespace lab3
 {
 namespace objects
 {
 
-class Weapon : public Object
+class Weapon : public Equipment
 {
 public:
     Weapon();

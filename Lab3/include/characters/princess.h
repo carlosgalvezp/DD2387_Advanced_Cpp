@@ -15,7 +15,7 @@ public:
     Princess(const std::string& name, Place *place);
     ~Princess();
 
-    bool action();
+    std::string action();
     std::string type() const;
 };
 
