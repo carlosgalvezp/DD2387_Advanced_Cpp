@@ -38,16 +38,22 @@ void Place::generateObjects()
     std::cout << "[Place::generateObjects]"<<std::endl;
 }
 
+void Place::addCharacter(Character &character)
+{
+    this->characters_.push_back(&character);
+    character.set_place(this);
+}
+
 bool Place::enter(Character &character)
 {
+    std::cout << "PLACE::enter"<<std::endl;
     // ** Remove player from previous place
     Place* old_place = character.currentPlace();
     if(old_place != nullptr)
         old_place->leave(character);
 
     // ** The character is now here
-    this->characters_.push_back(&character);
-    character.set_place(this);
+    this->addCharacter(character);
 
     // ** Display the information
     display_information(character);

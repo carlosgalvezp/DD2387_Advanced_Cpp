@@ -21,7 +21,7 @@ bool Key::use(Character &c)
         // ** Check if the place is the same
         if(*place_ptr == *c.currentPlace())
         {
-            place_ptr->open();
+            place_ptr->setOpen(true);
             lab3::utils_io::print_newline("You have successfully opened the " + place_ptr->name());
             return true;
         }

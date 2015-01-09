@@ -93,7 +93,9 @@ void GameEngine::newGame()
     // ** Connect places
     lab3::places::connectPlaces(*home, *forest, DIRECTION_NORTH);
     lab3::places::connectPlaces(*home, *food_shop, DIRECTION_EAST);
-    lab3::places::connectPlaces(*home, *armory, DIRECTION_WEST);
+    lab3::places::connectPlaces(*food_shop, *armory, DIRECTION_WEST);
+    lab3::places::connectPlaces(*home, *food_shop, DIRECTION_EAST);
+    lab3::places::connectPlaces(*home, *old_house, DIRECTION_WEST);
     lab3::places::connectPlaces(*home, *hospital, DIRECTION_SOUTH);
     lab3::places::connectPlaces(*forest, *castle, DIRECTION_EAST);
     lab3::places::connectPlaces(*forest, *cave, DIRECTION_WEST);
@@ -227,7 +229,7 @@ void GameEngine::event_EnoughTrain()
     std::cout << "ENOUGH TRAIN"<< std::endl;
     lab3::utils_io::wait_for_enter();
     places::House* old_house= static_cast<places::House*>(this->places_[1]); // The Old house
-    old_house->open();
+    old_house->setOpen(true);
 }
 
 void GameEngine::event_TriedMonster()

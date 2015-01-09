@@ -1,4 +1,5 @@
 #include "character.h"
+#include <places/indoor.h>
 
 using namespace lab3;
 
@@ -29,7 +30,7 @@ Character::Character(const std::string &name, const std::string &type, Place *pl
     this->defense_     = attributes.at(type)[2];
     this->initiative_  = attributes.at(type)[3];
 
-    place->enter(*this);
+    place->addCharacter(*this);
 }
 
 Character::~Character()
@@ -60,8 +61,7 @@ bool Character::go(const std::string& direction)
     }
 
     // ** Enter the place
-    new_place->enter(*this);
-    return true;
+    return new_place->enter(*this);
 }
 
 bool Character::fight(Character &character)

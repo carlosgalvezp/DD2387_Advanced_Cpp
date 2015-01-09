@@ -34,7 +34,7 @@ public:
 
     Place& neighbour(const std::string &direction);
 
-    bool enter(Character &character);
+    virtual bool enter(Character &character);
     bool leave(Character &character);
     bool pick_up(Object &object);
     void drop(Object &object);
@@ -44,6 +44,7 @@ public:
 
     void killCharacter(Character &character);
 
+    void addCharacter(Character &character);
     // Accessors
     std::string name()        const;
     std::string description() const;
