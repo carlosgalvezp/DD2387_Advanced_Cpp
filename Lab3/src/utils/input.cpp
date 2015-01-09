@@ -11,7 +11,8 @@ std::map<std::string, CmdFunction> cmd_map =
     {"status",    &lab3::input::cmd_status},
     {"use item",  &lab3::input::cmd_use_item},
     {"exit game", &lab3::input::cmd_exit_game},
-    {"buy",       &lab3::input::cmd_buy}
+    {"buy",       &lab3::input::cmd_buy},
+    {"scape",     &lab3::input::cmd_scape}
 };
 
 std::string lab3::input::read_input(const std::vector<std::string> &available_commands)
@@ -314,6 +315,12 @@ bool lab3::input::cmd_talk(lab3::characters::Player *player)
 
 bool lab3::input::cmd_fight(lab3::characters::Player *player)
 {
+    // ** Check if already fighting
+    if(player->isFighting())
+    {
+        player->fight(*player->fighter());
+        return true;
+    }
     // ** Get other characters
     if(player->currentPlace()->characters().size() > 1) // There are other characters appart from myself
     {
@@ -442,4 +449,10 @@ bool lab3::input::cmd_use_item(lab3::characters::Player *player)
         return true;
     }
     return false;
+}
+
+bool lab3::input::cmd_scape(lab3::characters::Player *player)
+{
+    player->scape();
+    return true;
 }

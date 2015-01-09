@@ -106,6 +106,16 @@ bool Character::fight(Character &character)
     return false;
 }
 
+bool Character::scape()
+{
+    lab3::utils_io::print_newline(this->name_ + " has scaped the fight");
+    this->is_fighting_ = false;
+    this->fighter_->is_fighting_ = false;
+    this->fighter_->fighter_ = nullptr;
+    this->fighter_ = nullptr;
+    return true;
+}
+
 bool Character::pick_up(lab3::Object &object)
 {
     // ** Find it in the objects vector
@@ -179,6 +189,8 @@ const Place* Character::currentPlace()      const           {    return this->cu
 
 const std::vector<Object*>& Character::objects()  const {    return this->objects_;          }
       std::vector<Object*>& Character::objects()        {    return this->objects_;          }
+
+Character* Character::fighter() {return this->fighter_;}
 
 bool Character::operator ==(const Character &obj) const
 {

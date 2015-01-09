@@ -29,6 +29,8 @@ public:
 
     virtual std::string action(bool display_info) = 0;
     virtual bool fight(Character &character);
+    virtual bool scape();
+
     bool go(const std::string &direction);
     virtual bool pick_up(lab3::Object &object);
     virtual bool drop(lab3::Object &object);
@@ -52,6 +54,8 @@ public:
 
     const Place* currentPlace()      const;
     Place*       currentPlace()      ;
+
+    Character* fighter();
 
 
     const    std::vector<Object*>& objects()    const;

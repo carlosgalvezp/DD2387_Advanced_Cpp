@@ -52,6 +52,7 @@ bool cmd_status     (lab3::characters::Player* player);
 bool cmd_exit_game  (lab3::characters::Player* player);
 bool cmd_buy        (lab3::characters::Player* player);
 bool cmd_use_item   (lab3::characters::Player* player);
+bool cmd_scape      (lab3::characters::Player* player);
 
 }
 }

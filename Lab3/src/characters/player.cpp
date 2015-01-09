@@ -56,7 +56,6 @@ bool Player::pick_up(Object &object)
             return true;
         }
     }
-
     return false;
 }
 
@@ -178,6 +177,12 @@ std::vector<std::string> Player::getCommands()
     if(dynamic_cast<places::Shop*>(this->currentPlace()) != nullptr)
     {
         cmds.insert(cmds.end()-1, "buy");
+    }
+
+    // ** Commands when the player is fighting
+    if(this->isFighting())
+    {
+        cmds = {"fight","scape","use item","exit game"};
     }
     return cmds;
 }
