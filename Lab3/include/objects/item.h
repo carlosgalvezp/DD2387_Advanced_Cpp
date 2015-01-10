@@ -17,10 +17,16 @@ public:
          const std::string &description,
          int price,
          int weight,
-         int volume);
+         int volume,
+         bool is_single_use);
+    ~Item();
 
     virtual bool use(Character &c);
-    ~Item();
+
+    bool isSingleUse()   const;
+
+protected:
+    bool is_single_use_;
 };
 
 }

@@ -120,12 +120,16 @@ bool Player::use(Object &o)
     lab3::objects::Item* item_ptr = static_cast<lab3::objects::Item*>(&o);
     if(item_ptr->use(*this))
     {
-        // Remove from backpack
-        this->getBackpack()->remove(o);
-        // Delete object
-        delete item_ptr;
+        // Remove from backpack if it's single use
+        if(item_ptr->isSingleUse())
+        {
+            this->getBackpack()->remove(o);
+            // Delete object
+            delete item_ptr;
+        }
+        return true;
     }
-    return true;
+    return false;
 }
 
 std::string Player::type() const

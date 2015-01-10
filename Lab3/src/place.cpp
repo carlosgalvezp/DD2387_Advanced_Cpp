@@ -1,5 +1,4 @@
 #include "place.h"
-#include <characters/animal.h>
 using namespace lab3;
 
 Place::Place()
@@ -21,16 +20,6 @@ Place::~Place()
             o = nullptr;
         }
     }
-
-//    // Delete animals (they don't get out of the place)
-//    for(Character* c : characters_)
-//    {
-//        if(dynamic_cast<characters::Animal*>(c) != nullptr)
-//        {
-//            delete c;
-//            c = nullptr;
-//        }
-//    }
 }
 
 void Place::generateObjects()
@@ -146,12 +135,17 @@ std::string Place::description() const
     // ** Display objects
     if(this->objects_.size() > 0)
     {
-        ss << "The following objects appear in the place: ";
-        for(Object* o : this->objects_)
+        ss << "The following objects appear in the place: "<<std::endl;
+        // ** Create unique names
+        std::vector<std::string> unique_names;
+        for(Object *o : this->objects())
         {
-            if(o != nullptr)
-                ss << o->name() << ", ";
-        }
+            if(o != nullptr && std::find(unique_names.begin(), unique_names.end(),o->name())==unique_names.end())
+            {
+                unique_names.push_back(o->name());
+                ss << "  -"<<o->name() << std::endl;
+            }
+        }        
         ss << std::endl;
     }
     else
@@ -160,11 +154,11 @@ std::string Place::description() const
     // ** Display other characters
     if(this->characters_.size() > 0)
     {
-        ss << "There are some characters in the place: ";
+        ss << "There are some characters in the place: "<<std::endl;
         for(Character* c : this->characters_)
         {
             if(c != nullptr)
-                ss << c->name() <<", ";
+                ss << "  -"<<c->name() <<std::endl;
         }
     }
     else

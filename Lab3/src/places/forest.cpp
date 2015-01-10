@@ -1,5 +1,6 @@
 #include <places/forest.h>
 #include <characters/wolf.h>
+#include <objects/torch.h>
 
 using namespace lab3::places;
 
@@ -17,7 +18,7 @@ Forest::~Forest()
 void Forest::generateObjects()
 {
     std::cout << "[Forest::generateObjects] TO DO" << std::endl;
-    Object *o = new objects::Item("torch", "It illuminates the place if you turn it on", 5, 5, 5);
+    Object *o = new objects::Torch();
     this->objects_.push_back(o);
 }
 

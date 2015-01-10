@@ -6,7 +6,7 @@ Key::Key()
 {}
 
 Key::Key(const std::string &name, Place *place)
-    : Item(name, "It opens a specific door",100,0,0), place_(place)
+    : Item(name, "It opens a specific door",100,0,0, false), place_(place)
 {}
 
 Key::~Key()

@@ -28,19 +28,20 @@ bool Human::buy(Object &o)
 {
     if(this->getMoney() > o.price())
     {
-        this->pick_up(o);
-        this->money_ -= o.price();
-        std::cout << this->name() <<" has bought a "<<o.name()<<", which costs "<<o.price()
-                  <<". Current money: "<<this->getMoney()<<std::endl;
-        return true;
+        if(this->pick_up(o))
+        {
+            this->money_ -= o.price();
+            std::cout << this->name() <<" has bought a "<<o.name()<<", which costs "<<o.price()
+                      <<". Current money: "<<this->getMoney()<<std::endl;
+            return true;
+        }
     }
     else
     {
         std::cout << this->name() << " can't buy a"<<o.name()<<" since it costs" <<o.price()
                   <<" and the current money is " <<this->getMoney() << std::endl;
-        return false;
     }
-
+    return false;
 }
 
 bool Human::sell(Object &o)

@@ -387,8 +387,12 @@ bool lab3::input::cmd_buy(lab3::characters::Player *player)
     for(lab3::Object* o : player->currentPlace()->objects())
     {
         command_map.insert(std::make_pair(o->name(), o));
-        command_str.push_back(o->name());
-        command_desc.push_back(o->description());
+        // Don't show duplicates
+        if(std::find(command_str.begin(), command_str.end(), o->name()) == command_str.end())
+        {
+            command_str.push_back(o->name());
+            command_desc.push_back(o->description());
+        }
     }
 
     command_str.push_back(CMD_BACK_TO_MAIN);
@@ -405,8 +409,7 @@ bool lab3::input::cmd_buy(lab3::characters::Player *player)
     lab3::Object *o = command_map.at(cmd);
     if(o != nullptr)
     {
-        player->buy(*o);
-        return true;
+        return player->buy(*o);
     }
     return false;
 }
@@ -445,8 +448,7 @@ bool lab3::input::cmd_use_item(lab3::characters::Player *player)
     lab3::objects::Item *o = command_map.at(cmd);
     if(o != nullptr)
     {
-        player->use(*o);
-        return true;
+        return player->use(*o);
     }
     return false;
 }

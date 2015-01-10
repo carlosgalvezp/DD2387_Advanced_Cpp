@@ -8,27 +8,20 @@ Item::Item(const std::string &name,
            const std::string &description,
            int price,
            int weight,
-           int volume)
-    : Object(name, description, price, weight, volume)
+           int volume,
+           bool is_single_use)
+    : Object(name, description, price, weight, volume),
+      is_single_use_(is_single_use)
 {}
 
 Item::~Item()
 {}
 
+bool Item::isSingleUse() const  {   return this->is_single_use_;}
+
 bool Item::use(Character &c)
 {
-    if(this->name() == "torch")
-    {
-        if(c.currentPlace()->name() == NAME_CAVE)
-        {
-            throw std::runtime_error(EVENT_TORCH_ON);
-        }
-        else
-        {
-            lab3::utils_io::print_newline("You cannot use the torch here, it's already light enough.");
-            return false;
-        }
-    }
+    std::cout<< "[Item::use]"<<std::endl;
     return true;
 }
 

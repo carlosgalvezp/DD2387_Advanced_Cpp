@@ -73,7 +73,7 @@ void Multi_Shop::generateObjects()
                 else if(potion_type == 2)
                     o = new objects::Container(it->first, it->second[1], it->second[2], it->second[3], it->second[4],it->second[5]);
 
-                objects_.push_back(o);
+                this->objects_.push_back(o);
             }
         }
     };
