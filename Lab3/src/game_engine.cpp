@@ -280,7 +280,7 @@ void GameEngine::event_TriedMonster()
 void GameEngine::event_MentionedWizard()
 {
     // ** Create wizard
-    this->characters_map_.insert(std::make_pair(NAME_WIZARD,new characters::Wizard(NAME_WIZARD,this->places_map_.at(NAME_FOREST))));
+    this->characters_map_.insert(std::make_pair(NAME_WIZARD,new characters::Wizard(NAME_WIZARD,this->places_map_.at(NAME_FOREST), this->places_map_)));
 
     lab3::utils_io::print_newline(">>> You see a big light in the forest. It seems like something happened there...<<<");
 }
