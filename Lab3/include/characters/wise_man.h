@@ -15,6 +15,11 @@ public:
     ~Wise_Man();
 
     std::string action();
+    void talk_to(Character &c);
+
+    void setTellAboutWizard(bool x);
+private:
+    bool will_tell_about_wizard_;
 };
 }
 }

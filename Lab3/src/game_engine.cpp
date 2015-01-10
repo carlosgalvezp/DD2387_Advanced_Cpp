@@ -39,8 +39,9 @@ GameEngine::~GameEngine()
 //    }
 
     // ** Destroy characters
-    for(Character*c : this->characters_)
+    for(auto it = this->characters_map_.begin(); it != this->characters_map_.end(); ++it)
     {
+        Character *c = it->second;
         delete c;
     }
 }
@@ -81,24 +82,19 @@ void GameEngine::newGame()
     this->places_map_.insert(std::make_pair(NAME_CAVE,      new places::Cave(NAME_CAVE)));
 
     // ** Create main characters
-    player_ = new characters::Player(NAME_PLAYER,this->places_map_.at(NAME_HOME));
-    this->characters_.push_back(player_);
-    this->characters_.push_back(new characters::Princess("Trapped Princess",this->places_map_.at(NAME_CASTLE)));
-    this->characters_.push_back(new characters::Wise_Man("Wise Man",this->places_map_.at(NAME_OLD_HOUSE)));
-    this->characters_.push_back(new characters::FinalMonster("Powerful Final Monster", this->places_map_.at(NAME_CASTLE)));
+    this->characters_map_.insert(std::make_pair(NAME_PLAYER,       new characters::Player(NAME_PLAYER,this->places_map_.at(NAME_HOME))));
+    this->characters_map_.insert(std::make_pair(NAME_PRINCESS,     new characters::Princess(NAME_PRINCESS,this->places_map_.at(NAME_CASTLE))));
+    this->characters_map_.insert(std::make_pair(NAME_WISE_MAN,     new characters::Wise_Man(NAME_WISE_MAN,this->places_map_.at(NAME_OLD_HOUSE))));
+    this->characters_map_.insert(std::make_pair(NAME_FINAL_MONSTER,new characters::FinalMonster(NAME_FINAL_MONSTER, this->places_map_.at(NAME_CASTLE))));
 
 
     // ** Create random animals in forest and cave
     std::vector<places::Outdoor*> animal_places = {static_cast<places::Outdoor*>(this->places_map_.at(NAME_FOREST)),
                                                    static_cast<places::Outdoor*>(this->places_map_.at(NAME_CAVE))};
-    this->createAnimals(this->characters_, animal_places);
+    this->createAnimals(this->characters_map_, animal_places);
 
     // ** Create random objects
-    std::vector<Place*> object_places = {this->places_map_.at(NAME_MULTI_SHOP),
-                                         this->places_map_.at(NAME_ARMORY),
-                                         this->places_map_.at(NAME_FOREST),
-                                         this->places_map_.at(NAME_CAVE)};
-    this->createObjects(this->objects_, object_places);
+    this->createObjects();
 
     // ** Connect places
     lab3::places::connectPlaces(*this->places_map_.at(NAME_HOME), *this->places_map_.at(NAME_FOREST), DIRECTION_NORTH);
@@ -141,27 +137,31 @@ int GameEngine::mainMenu()
 void GameEngine::run()
 {
     lab3::utils_io::clearScreen();
-
+    Character* player =characters_map_.at(NAME_PLAYER);
     int round(1);
     while(!this->is_finished_)
     {
         lab3::utils_io::clearScreen();
-        std::vector<Character*> total_characters(characters_);
 
         std::cout << "Round "<<round++<<std::endl;
         // ** Sort by initiative
-        std::sort(total_characters.begin(), total_characters.end(),
+        std::vector<Character*> tmp_character;
+        for(std::pair<std::string, Character*> p : characters_map_)
+        {
+            tmp_character.push_back(p.second);
+        }
+        std::sort(tmp_character.begin(), tmp_character.end(),
                   [](Character* char1, Character* char2)
                   {return 100*char1->isFighting() + char1->getInitiative() >
                           100*char2->isFighting() + char2->getInitiative();});
 
         // ** Run actions
-        for(Character *c : total_characters)
+        for(Character* c: tmp_character)
         {
             if(c!= nullptr && c->isAlive())
             {
                 // ** Execute action
-                std::string event = c->action(c->currentPlace() == player_->currentPlace()); // Switch to true to see all messages
+                std::string event = c->action(c->currentPlace() == player->currentPlace()); // Switch to true to see all messages
 
                 // ** Process event
                 GameEngineFptr fptr = this->event_callbacks_.at(event);
@@ -173,18 +173,19 @@ void GameEngine::run()
             }
         }
         // ** Put player in hospital if dead
-        if(!player_->isAlive())
+        if(!player->isAlive())
         {
             lab3::utils_io::print_newline("The player has been seriosly injured. He was translated back home, "
                                           "where it now recovers from the attack...");
             lab3::utils_io::wait_for_enter();
-            home_->enter(*player_);
+            places_map_.at(NAME_HOME)->enter(*player);
         }
 
         // ** Remove dead characters
-        std::vector<Character*> tmp;
-        for(Character* c : characters_)
+        std::map<std::string, Character*> tmp;
+        for(auto it = characters_map_.begin(); it != characters_map_.end(); ++it)
         {
+            Character *c = it->second;
             if (!c->isAlive())
             {
                 // Remove from place
@@ -193,9 +194,9 @@ void GameEngine::run()
                 c = nullptr;
                 continue;
             }
-            tmp.push_back(c);
+            tmp.insert(*it);
         }
-        characters_ = tmp;
+        characters_map_= tmp;
 
         // ** Create more dynamic objects (restock potions, animals etc)
 //        regenerateStuff();
@@ -203,28 +204,28 @@ void GameEngine::run()
     lab3::utils_io::print_newline("Thanks for playing!");
 }
 
-void GameEngine::createAnimals(std::vector<Character *> &characters,
+void GameEngine::createAnimals(std::map<std::string,Character *> &characters,
                                std::vector<places::Outdoor *> &animalPlaces)
 {
     for(places::Outdoor* place : animalPlaces)
     {
         place->generateAnimals();
         for(Character* c: place->characters())
-            characters.push_back(c);
+            characters.insert(std::make_pair(c->name(),c));
     }
 }
 
-void GameEngine::createObjects(std::vector<Object*> &objects,
-                               std::vector<Place *> &objectPlaces)
+void GameEngine::createObjects()
 {
-    for(Place *p : objectPlaces)
+    for(std::pair<std::string, Place*> pair : this->places_map_)
     {
+        Place* p = pair.second;
         p->generateObjects();
-        const std::vector<Object*> &objs = p->objects();
-
-        for(Object *o : objs)
-            objects.push_back(o);
     }
+
+    // Special objects
+    Object* torch = new lab3::objects::Torch();
+    this->places_map_.at(NAME_OLD_HOUSE)->addObject(*torch);
 }
 
 void GameEngine::regenerateStuff()
@@ -245,7 +246,7 @@ void GameEngine::regenerateStuff()
 // ======================= Event callback functions ==========================
 void GameEngine::event_EnoughTrain()
 {
-    lab3::utils_io::print_newline(">>> The "+player_->name()+" is now trained well enough... <<<");
+    lab3::utils_io::print_newline(">>> The "+characters_map_.at(NAME_PLAYER)->name()+" is now trained well enough... <<<");
     lab3::utils_io::wait_for_enter();
     places::House* old_house= static_cast<places::House*>(this->places_map_.at(NAME_OLD_HOUSE)); // The Old house
     old_house->setOpen(true);
@@ -261,23 +262,27 @@ void GameEngine::event_TorchOn()
 void GameEngine::event_TriedMonster()
 {
     // ** The wise man tells you new info
-    Character* wise_man = this->characters_[2]; // The wise man
-    std::stringstream ss;
+    characters::Wise_Man* wise_man = static_cast<characters::Wise_Man*>(characters_map_.at(NAME_WISE_MAN));
+    std::stringstream ss, ss2;
     ss <<"As you have seen, the "<< NAME_FINAL_MONSTER<<" is extremely strong...";
-    wise_man->set_talk_msgs({ss.str(),
-                             "You will need some help in order to defeat him...",
+    wise_man->set_talk_msgs({ss.str()+
+                             "You will need some help in order to defeat him..."+
                              "The legend says there exists a Wizard living in a lake, inside the forest."
                               "He will only appears in exceptional cases, and only to the person that requires "
                               "his help."});
-    lab3::utils_io::print_newline(">>> The "+player_->name()+" is now prepared to find the Wizard... <<<");
+    wise_man->setTellAboutWizard(true);
+
+    ss2 << ">>> You should probably talk to the "<<NAME_WISE_MAN<<". He will give you advice on how to defeat the "<<NAME_FINAL_MONSTER;
+
+    lab3::utils_io::print_newline(ss2.str());
     lab3::utils_io::wait_for_enter();
 }
 void GameEngine::event_MentionedWizard()
 {
     // ** Create wizard
-    this->characters_.push_back(new characters::Wizard(NAME_WIZARD,this->places_map_.at(NAME_FOREST)));
+    this->characters_map_.insert(std::make_pair(NAME_WIZARD,new characters::Wizard(NAME_WIZARD,this->places_map_.at(NAME_FOREST))));
 
-    lab3::utils_io::print_newline(">>>You see a big light in the forest. It seems like something happened there...<<<");
+    lab3::utils_io::print_newline(">>> You see a big light in the forest. It seems like something happened there...<<<");
 }
 
 void GameEngine::event_GameFinished()

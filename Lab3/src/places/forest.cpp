@@ -18,8 +18,8 @@ Forest::~Forest()
 void Forest::generateObjects()
 {
     std::cout << "[Forest::generateObjects] TO DO" << std::endl;
-    Object *o = new objects::Torch();
-    this->objects_.push_back(o);
+//    Object *o = new objects::Torch();
+//    this->objects_.push_back(o);
 }
 
 void Forest::generateAnimals()

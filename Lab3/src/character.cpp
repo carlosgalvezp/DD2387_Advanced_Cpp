@@ -22,7 +22,8 @@ Character::Character(const std::string &name, const std::string &type, Place *pl
     : name_(name),
       type_(type),
       current_place_(place),
-      is_fighting_(false)
+      is_fighting_(false),
+      n_msg_talk_(0)
 {
     // ** Set attributes
     this->life_points_ = attributes.at(type)[0];
@@ -145,10 +146,10 @@ bool Character::drop(lab3::Object &object)
     return true;
 }
 
-void Character::talk_to(Character *character)
+void Character::talk_to(Character &character)
 {
-    int n_msg = 0; // Make this dynamic! XXXXXX
-    std::string msg = "[" + this->name()+"] " + this->getTalkMessages()[n_msg];
+    std::string msg = "[" + this->name()+"] "
+            + this->getTalkMessages()[n_msg_talk_++%this->getTalkMessages().size()];
     lab3::utils_io::print_newline(msg);
 }
 

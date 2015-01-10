@@ -6,7 +6,8 @@ Wise_Man::Wise_Man()
 {}
 
 Wise_Man::Wise_Man(const std::string &name, Place *place)
-    : Human(name, TYPE_HUMAN, place)
+    : Human(name, TYPE_HUMAN, place),
+      will_tell_about_wizard_(false)
 {
     this->talk_msgs_ =
     {
@@ -23,6 +24,36 @@ Wise_Man::~Wise_Man()
 
 std::string Wise_Man::action()
 {
-    std::cout << "[Wise_Man::action] TO-DO" << std::endl;
+    try
+    {
+        if(this->currentPlace()->characters().size() != 0)
+        {
+            // Only talk to player
+            for(Character* c : this->currentPlace()->characters())
+            {
+                if(c->type() == TYPE_PLAYER)
+                {
+                    talk_to(*c);
+                    break;
+                }
+            }
+        }
+    }
+    catch (std::runtime_error &e)   {return e.what();}
     return EVENT_NULL;
+}
+
+void Wise_Man::talk_to(Character &c)
+{
+    Character::talk_to(c);
+
+    if(will_tell_about_wizard_)
+    {
+        throw std::runtime_error(EVENT_MENTIONED_WIZARD);
+    }
+}
+
+void Wise_Man::setTellAboutWizard(bool x)
+{
+    will_tell_about_wizard_ = x;
 }

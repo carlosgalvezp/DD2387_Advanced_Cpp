@@ -440,7 +440,8 @@ bool lab3::input::cmd_use_item(lab3::characters::Player *player)
     lab3::utils_io::print_newline("Use what?");
     std::string cmd = lab3::input::read_input(command_str);
 
-    if(cmd == CMD_BACK_TO_MAIN){
+    if(cmd == CMD_BACK_TO_MAIN)
+    {
         lab3::utils_io::print_newline("Going back to main menu...");
         return false;
     }

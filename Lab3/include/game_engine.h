@@ -16,6 +16,7 @@
 #include <objects/health_potion.h>
 #include <objects/strength_potion.h>
 #include <objects/key.h>
+#include <objects/torch.h>
 
 #include <character.h>
 #include <characters/player.h>
@@ -54,21 +55,20 @@ public:
 
 private:
     std::vector<Object*> objects_;
-    std::vector<Character*> characters_;
-
+    std::map<std::string, Character*> characters_map_;
     std::map<std::string, Place*> places_map_;
 
     bool is_finished_;
+    std::string introduction_;
+    std::string ending_;
 
-    Character* player_;
-    Place* home_;
 
     int mainMenu();
     void newGame();
 
-    void createAnimals(std::vector<Character*> &characters,
+    void createAnimals(std::map<std::string, Character *> &characters,
                              std::vector<places::Outdoor *> &animalPlaces);
-    void createObjects(std::vector<Object *> &objects, std::vector<Place*> &objectPlaces);
+    void createObjects();
 
     void regenerateStuff();
 
@@ -93,8 +93,7 @@ private:
         {EVENT_NULL,                &GameEngine::event_Null}
     };
 
-    std::string introduction_;
-    std::string ending_;
+
 };
 
 } // namespace lab3

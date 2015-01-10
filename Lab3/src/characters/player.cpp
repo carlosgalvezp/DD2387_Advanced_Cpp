@@ -89,12 +89,11 @@ bool Player::drop(Object &object)
 void Player::talk_to(Character *character)
 {
     // ** I talk first
-    int n_msg = 0; // Make this dynamic! XXXXXX
-    std::string msg = "[Player] " + this->getTalkMessages()[n_msg];
+    std::string msg = "[Player] " + this->getTalkMessages()[0];
     lab3::utils_io::print_newline(msg);
 
     // Let the other talk
-    character->talk_to(this);
+    character->talk_to(*this);
 }
 
 bool Player::fight(Character &character)

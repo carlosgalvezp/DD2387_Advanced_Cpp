@@ -15,8 +15,13 @@ public:
     FinalMonster(const std::string &name, Place* place);
     ~FinalMonster();
 
+    bool fight(Character &character);
+
     std::string action(bool display_info);
     std::string type() const;
+
+private:
+    bool defeated_player_;
 };
 
 }

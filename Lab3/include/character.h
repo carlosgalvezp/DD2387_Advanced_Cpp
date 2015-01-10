@@ -31,10 +31,10 @@ public:
     virtual bool fight(Character &character);
     virtual bool scape();
 
-    bool go(const std::string &direction);
+    virtual bool go(const std::string &direction);
     virtual bool pick_up(lab3::Object &object);
     virtual bool drop(lab3::Object &object);
-    virtual void talk_to(Character* character);
+    virtual void talk_to(Character& character);
 
     // Setters
     void set_place(Place* p);
@@ -111,6 +111,9 @@ protected:
     std::vector<std::string> fight_commands_ = fight_basic_commands_;
 
     Character* fighter_;
+
+private:
+    int n_msg_talk_;
 };
 
 int computeDamage(const Character &attacker, const Character &defender);
