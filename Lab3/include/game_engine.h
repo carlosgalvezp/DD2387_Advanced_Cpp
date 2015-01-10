@@ -8,6 +8,8 @@
 #include <cstdlib>
 #include <ctime>
 #include <algorithm>
+#include <utility>
+
 // Own
 #include <object.h>
 #include <objects/container.h>
@@ -35,6 +37,7 @@
 #include <places/cave.h>
 
 #include <events_def.h>
+#include <names.h>
 
 #include <utils/utils.h>
 
@@ -52,7 +55,8 @@ public:
 private:
     std::vector<Object*> objects_;
     std::vector<Character*> characters_;
-    std::vector<Place*> places_;
+
+    std::map<std::string, Place*> places_map_;
 
     bool is_finished_;
 
@@ -70,6 +74,7 @@ private:
 
     // ** Event callback functions
     void event_EnoughTrain();
+    void event_TorchOn();
     void event_TriedMonster();
     void event_MentionedWizard();
     void event_GameFinished();
@@ -80,6 +85,7 @@ private:
     const std::map<std::string, GameEngineFptr> event_callbacks_ =
     {
         {EVENT_ENOUGH_TRAIN,        &GameEngine::event_EnoughTrain},
+        {EVENT_TORCH_ON,            &GameEngine::event_TorchOn},
         {EVENT_TRIED_MONSTER,       &GameEngine::event_TriedMonster},
         {EVENT_MENTIONED_WIZARD,    &GameEngine::event_MentionedWizard},
         {EVENT_GAME_FINISHED,       &GameEngine::event_GameFinished},
@@ -87,13 +93,8 @@ private:
         {EVENT_NULL,                &GameEngine::event_Null}
     };
 
-    const std::string monster_name_ = "Dark Monster";
-    const std::string introduction_ =
-            "You wake up at home and all you hear is people crying on the streets. "
-            "The news are everywhere: the "+monster_name_+" has invaded the King's Castle, killed"
-            "the King and trapped the Princess. You, as a soon-to-be Warrior of the King's Guard,"
-            "can't just stay home and decide to go for an adventure to kill the "+monster_name_+" and rescue"
-            "the poor Princess...";
+    std::string introduction_;
+    std::string ending_;
 };
 
 } // namespace lab3

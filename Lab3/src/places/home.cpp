@@ -14,7 +14,10 @@ bool Home::enter(Character &character)
     lab3::utils_io::wait_for_enter();
     if(character.type() == TYPE_PLAYER)
     {
-        this->rest(character);
+        if(!character.isAlive()) // The case in which the player is seriously injured
+        {
+             this->rest(character);
+        }
         return Place::enter(character);
     }else
     {
@@ -26,7 +29,17 @@ bool Home::enter(Character &character)
 
 void Home::rest(Character &c) const
 {
-    c.set_life(MAX_LIFE/2.0);
+    if(c.getLifePoints() < MAX_LIFE/2.0)
+    {
+        c.set_life(MAX_LIFE/2.0);
+        std::stringstream ss;
+        ss << "You rest at home. Now you have " << c.getLifePoints() << " life points"<<std::endl;
+        lab3::utils_io::print_newline(ss.str());
+    }
+    else
+    {
+        lab3::utils_io::print_newline("You have enough life points, it's not time to sleep!");
+    }
 }
 
 Home::~Home()

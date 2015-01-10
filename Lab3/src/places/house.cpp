@@ -11,7 +11,7 @@ House::House(const std::string &name, bool is_open)
 
 bool House::enter(Character &character)
 {
-    return true;
+    return Indoor::enter(character);
 }
 
 House::~House()

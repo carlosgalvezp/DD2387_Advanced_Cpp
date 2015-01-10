@@ -5,13 +5,29 @@ using namespace lab3;
 GameEngine::GameEngine()
     : is_finished_(false)
 {
+    std::stringstream ss1, ss2;
+
+    ss1 << "You wake up at home and all you hear is people crying on the streets. "
+          "The news are everywhere: the "<<NAME_FINAL_MONSTER<<" has invaded the "<<NAME_CASTLE<<", killed "
+    "the King and trapped the "<<NAME_PRINCESS<<". You, as a soon-to-be Warrior of the King's Guard, "
+    "can't just stay home and decide to go for an adventure to kill the "<<NAME_FINAL_MONSTER<<" and rescue "
+    "the poor Princess...";
+
+    introduction_ = ss1.str();
+
+    ss2 << "The " <<  NAME_FINAL_MONSTER << " has been defeated thanks to the joint effort of the "
+        << NAME_PLAYER<< " and the " << NAME_WIZARD << "! The "<< NAME_PRINCESS <<" has been rescued and you have been "
+               <<" achieved the King's Guard Leader position, ready for new adventures to come...";
+
+    ending_ = ss2.str();
 }
 
 GameEngine::~GameEngine()
 {
     // ** Destroy places
-    for(Place* p : this->places_)
+    for(auto it = this->places_map_.begin(); it != this->places_map_.end(); ++it)
     {
+        Place*p = it->second;
         delete p;
     }
 
@@ -53,52 +69,46 @@ void GameEngine::newGame()
     lab3::utils_io::clearScreen();
     lab3::utils_io::print_newline(this->introduction_);
     lab3::utils_io::wait_for_enter();
+
     // ** Create places
-    home_               = new places::Home("Player's Home");
-    Place* old_house    = new places::House("Old House", false);
-    Place* hospital     = new places::Hospital("Hospital");
-    Place* food_shop    = new places::Multi_Shop("Food Shop", true);
-    Place* armory       = new places::Armory("Armory",true);
-    Place* forest       = new places::Forest("Enchanted Forest");
-    Place* castle       = new places::Castle("Kings Castle", false);
-    Place* cave         = new places::Cave("Dark Cave");
-
-    this->places_.push_back(home_);
-    this->places_.push_back(old_house);
-    this->places_.push_back(hospital);
-    this->places_.push_back(forest);
-    this->places_.push_back(castle);
-    this->places_.push_back(food_shop);
-    this->places_.push_back(armory);
-    this->places_.push_back(cave);
-
+    this->places_map_.insert(std::make_pair(NAME_HOME,      new places::Home(NAME_HOME)));
+    this->places_map_.insert(std::make_pair(NAME_OLD_HOUSE, new places::House(NAME_OLD_HOUSE, false)));
+    this->places_map_.insert(std::make_pair(NAME_HOSPITAL,  new places::Hospital(NAME_HOSPITAL)));
+    this->places_map_.insert(std::make_pair(NAME_MULTI_SHOP,new places::Multi_Shop(NAME_MULTI_SHOP, true)));
+    this->places_map_.insert(std::make_pair(NAME_ARMORY,    new places::Armory(NAME_ARMORY, true)));
+    this->places_map_.insert(std::make_pair(NAME_FOREST,    new places::Forest(NAME_FOREST)));
+    this->places_map_.insert(std::make_pair(NAME_CASTLE,    new places::Castle(NAME_CASTLE, false)));
+    this->places_map_.insert(std::make_pair(NAME_CAVE,      new places::Cave(NAME_CAVE)));
 
     // ** Create main characters
-    player_ = new characters::Player("Brave Player",home_, home_);
+    player_ = new characters::Player(NAME_PLAYER,this->places_map_.at(NAME_HOME));
     this->characters_.push_back(player_);
-    this->characters_.push_back(new characters::Princess("Trapped Princess",castle));
-    this->characters_.push_back(new characters::Wise_Man("Wise Man",old_house));
-    this->characters_.push_back(new characters::FinalMonster("Powerful Final Monster", castle));
+    this->characters_.push_back(new characters::Princess("Trapped Princess",this->places_map_.at(NAME_CASTLE)));
+    this->characters_.push_back(new characters::Wise_Man("Wise Man",this->places_map_.at(NAME_OLD_HOUSE)));
+    this->characters_.push_back(new characters::FinalMonster("Powerful Final Monster", this->places_map_.at(NAME_CASTLE)));
 
 
     // ** Create random animals in forest and cave
-    std::vector<places::Outdoor*> animal_places = {static_cast<places::Outdoor*>(forest),
-                                                   static_cast<places::Outdoor*>(cave)};
+    std::vector<places::Outdoor*> animal_places = {static_cast<places::Outdoor*>(this->places_map_.at(NAME_FOREST)),
+                                                   static_cast<places::Outdoor*>(this->places_map_.at(NAME_CAVE))};
     this->createAnimals(this->characters_, animal_places);
 
     // ** Create random objects
-    std::vector<Place*> object_places = {food_shop, armory, forest, cave};
+    std::vector<Place*> object_places = {this->places_map_.at(NAME_MULTI_SHOP),
+                                         this->places_map_.at(NAME_ARMORY),
+                                         this->places_map_.at(NAME_FOREST),
+                                         this->places_map_.at(NAME_CAVE)};
     this->createObjects(this->objects_, object_places);
 
     // ** Connect places
-    lab3::places::connectPlaces(*home_, *forest, DIRECTION_NORTH);
-    lab3::places::connectPlaces(*home_, *food_shop, DIRECTION_EAST);
-    lab3::places::connectPlaces(*food_shop, *armory, DIRECTION_WEST);
-    lab3::places::connectPlaces(*home_, *food_shop, DIRECTION_EAST);
-    lab3::places::connectPlaces(*home_, *old_house, DIRECTION_WEST);
-    lab3::places::connectPlaces(*home_, *hospital, DIRECTION_SOUTH);
-    lab3::places::connectPlaces(*forest, *castle, DIRECTION_EAST);
-    lab3::places::connectPlaces(*forest, *cave, DIRECTION_WEST);
+    lab3::places::connectPlaces(*this->places_map_.at(NAME_HOME), *this->places_map_.at(NAME_FOREST), DIRECTION_NORTH);
+    lab3::places::connectPlaces(*this->places_map_.at(NAME_HOME), *this->places_map_.at(NAME_MULTI_SHOP), DIRECTION_EAST);
+    lab3::places::connectPlaces(*this->places_map_.at(NAME_MULTI_SHOP), *this->places_map_.at(NAME_ARMORY), DIRECTION_WEST);
+    lab3::places::connectPlaces(*this->places_map_.at(NAME_HOME), *this->places_map_.at(NAME_OLD_HOUSE), DIRECTION_WEST);
+    lab3::places::connectPlaces(*this->places_map_.at(NAME_HOME), *this->places_map_.at(NAME_HOSPITAL), DIRECTION_SOUTH);
+    lab3::places::connectPlaces(*this->places_map_.at(NAME_FOREST), *this->places_map_.at(NAME_CASTLE), DIRECTION_EAST);
+    lab3::places::connectPlaces(*this->places_map_.at(NAME_FOREST), *this->places_map_.at(NAME_CAVE), DIRECTION_WEST);
+
 }
 
 int GameEngine::mainMenu()
@@ -169,7 +179,6 @@ void GameEngine::run()
                                           "where it now recovers from the attack...");
             lab3::utils_io::wait_for_enter();
             home_->enter(*player_);
-            std::cout << "AFTER ENTERING HOME" << std::endl;
         }
 
         // ** Remove dead characters
@@ -179,7 +188,6 @@ void GameEngine::run()
             if (!c->isAlive())
             {
                 // Remove from place
-                std::cout << "REMOVING "<<c->name()<<std::endl;
                 c->currentPlace()->leave(*c);
                 delete c;
                 c = nullptr;
@@ -190,7 +198,7 @@ void GameEngine::run()
         characters_ = tmp;
 
         // ** Create more dynamic objects (restock potions, animals etc)
-        regenerateStuff();
+//        regenerateStuff();
     }
     lab3::utils_io::print_newline("Thanks for playing!");
 }
@@ -222,8 +230,9 @@ void GameEngine::createObjects(std::vector<Object*> &objects,
 void GameEngine::regenerateStuff()
 {
     // Stock in the Multi_Shop
-    for(Place* p : places_)
+    for(auto it = this->places_map_.begin(); it != this->places_map_.end(); ++it)
     {
+        Place* p = it->second;
         places::Shop *p_shop = dynamic_cast<places::Shop*>(p);
         if(p_shop != nullptr)
         {
@@ -238,40 +247,44 @@ void GameEngine::event_EnoughTrain()
 {
     lab3::utils_io::print_newline(">>> The "+player_->name()+" is now trained well enough... <<<");
     lab3::utils_io::wait_for_enter();
-    places::House* old_house= static_cast<places::House*>(this->places_[1]); // The Old house
+    places::House* old_house= static_cast<places::House*>(this->places_map_.at(NAME_OLD_HOUSE)); // The Old house
     old_house->setOpen(true);
+}
+
+void GameEngine::event_TorchOn()
+{
+    lab3::utils_io::print_newline(">>> You have turned on the torch. You should see new things now... <<<");
+    Place *cave = this->places_map_.at(NAME_CAVE);
+    cave->addObject(*(new objects::Item("key","The key to open the King's Castle",1000,0,0)));
 }
 
 void GameEngine::event_TriedMonster()
 {
     // ** The wise man tells you new info
     Character* wise_man = this->characters_[2]; // The wise man
-    wise_man->set_talk_msgs({"As you have seen, the "+this->monster_name_+" is extremely strong...",
-                            "You will need some help in order to defeat him...",
-                            "The legend says there exists a Wizard living in a lake, inside the forest."
-                             "He will only appears in exceptional cases, and only to the person that requires "
-                             "his help."});
+    std::stringstream ss;
+    ss <<"As you have seen, the "<< NAME_FINAL_MONSTER<<" is extremely strong...";
+    wise_man->set_talk_msgs({ss.str(),
+                             "You will need some help in order to defeat him...",
+                             "The legend says there exists a Wizard living in a lake, inside the forest."
+                              "He will only appears in exceptional cases, and only to the person that requires "
+                              "his help."});
     lab3::utils_io::print_newline(">>> The "+player_->name()+" is now prepared to find the Wizard... <<<");
     lab3::utils_io::wait_for_enter();
 }
 void GameEngine::event_MentionedWizard()
 {
-    // ** Create the Mana Lake and the Wizard in it
-    Place* lake        = new places::Outdoor("Mana Lake");
-    Place* forest      = this->places_[3];
-
-    this->places_.push_back(lake);
-
     // ** Create wizard
-    this->characters_.push_back(new characters::Wizard("Misterious Wizard",lake));
+    this->characters_.push_back(new characters::Wizard(NAME_WIZARD,this->places_map_.at(NAME_FOREST)));
 
-    // ** Connect places
-    lab3::places::connectPlaces(*forest, *lake, DIRECTION_WEST);
+    lab3::utils_io::print_newline(">>>You see a big light in the forest. It seems like something happened there...<<<");
 }
 
 void GameEngine::event_GameFinished()
 {
     this->is_finished_ = true;
+    lab3::utils_io::print_newline(this->ending_);
+    lab3::utils_io::wait_for_enter();
 }
 void GameEngine::event_QuitGame()
 {

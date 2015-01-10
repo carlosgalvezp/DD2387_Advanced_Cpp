@@ -19,7 +19,7 @@ public:
     bool enter(Character &character);
 
     ~Indoor();
-private:
+protected:
     bool is_open_;
 };
 

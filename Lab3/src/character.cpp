@@ -5,14 +5,14 @@ using namespace lab3;
 
 const std::map<std::string, std::vector<int>> attributes =
 { // Type                    Life       Strength    Defense     Initiative
-    {TYPE_PLAYER,           {50,        2,         1.5,         10}},
+    {TYPE_PLAYER,           {50,        20,         15,         10}},
     {TYPE_PRINCESS,         {50,        20,         15,         10}},
     {TYPE_WIZARD,           {50,        20,         15,         10}},
     {TYPE_HUMAN,            {50,        20,         15,         10}},
     {TYPE_TROLL,            {50,        20,         15,         10}},
     {TYPE_WOLF,             {50,        20,          5,         10}},
     {TYPE_VAMPIRE,          {50,        15,          5,         10}},
-    {TYPE_FINAL_MONSTER,    {100,       50,         50,         10}}
+    {TYPE_FINAL_MONSTER,    {100,       50,         0,         10}}
 };
 
 Character::Character()

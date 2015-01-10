@@ -45,6 +45,8 @@ public:
     void killCharacter(Character &character);
 
     void addCharacter(Character &character);
+    void addObject(Object &o);
+
     // Accessors
     std::string name()        const;
     std::string description() const;

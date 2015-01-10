@@ -5,14 +5,14 @@ using namespace lab3::characters;
 Player::Player()
 {}
 
-Player::Player(const std::string &name, Place *place, Place *home)
+Player::Player(const std::string &name, Place *place)
     : Human(name, TYPE_PLAYER, place),
       finished_game_(false),
       experience_(0),
       kills_wolf_(0),
       kills_vampire_(0),
       event_trained_(false),
-      home_(home)
+      home_(place)
 {
     // ** The player always starts with a small backpack
     this->objects_.push_back((Object*)new objects::Container("small backpack",5,DEFAULT_BACKPACK_VOLUME,
@@ -107,6 +107,7 @@ bool Player::fight(Character &character)
         {
             ++this->experience_;
             check_event_trained(character);
+            check_event_final_monster(character);
         }
         this->is_fighting_ = false;
 
@@ -191,5 +192,13 @@ void Player::check_event_trained(const Character &character)
        this->kills_wolf_  >= MIN_KILL_ANIMAL)
     {
         throw std::runtime_error(EVENT_ENOUGH_TRAIN);
+    }
+}
+
+void Player::check_event_final_monster(const Character &character)
+{
+    if(character.type() == TYPE_FINAL_MONSTER && !character.isAlive())
+    {
+        throw std::runtime_error(EVENT_GAME_FINISHED);
     }
 }

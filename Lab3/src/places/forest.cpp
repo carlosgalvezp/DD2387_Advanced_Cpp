@@ -23,6 +23,7 @@ void Forest::generateObjects()
 
 void Forest::generateAnimals()
 {
+    std::cout << "Forest animals"<<std::endl;
     new characters::Wolf("Wolf 1", this);
     new characters::Wolf("Wolf 2", this);
     new characters::Wolf("Wolf 3", this);

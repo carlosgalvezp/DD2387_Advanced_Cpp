@@ -13,6 +13,8 @@ public:
     Castle();
     Castle(const std::string &name, bool is_open);
     ~Castle();
+
+    bool enter(Character &character);
 };
 }
 }

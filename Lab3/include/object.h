@@ -5,6 +5,8 @@
 #include <sstream>
 #include <utils/utils_io.h>
 
+#include <names.h>
+
 namespace lab3
 {
 class Object

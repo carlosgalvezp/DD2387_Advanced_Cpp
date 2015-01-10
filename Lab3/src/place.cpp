@@ -101,6 +101,10 @@ void Place::addDirection(const std::string &d, Place *p)
     this->directions_.insert(std::pair<std::string,Place*>(d,p));
 }
 
+void Place::addObject(Object &o)
+{
+    this->objects_.push_back(&o);
+}
 
 Place &Place::neighbour(const std::string &direction)
 {

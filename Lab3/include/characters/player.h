@@ -34,7 +34,7 @@ class Player : public Human
 public:
 
     Player();
-    Player(const std::string &name, Place *place, Place *home);
+    Player(const std::string &name, Place *place);
     ~Player();
 
     std::string action(bool display_info);
@@ -61,6 +61,7 @@ private:
     Place* home_;
 
     void check_event_trained(const Character &character);
+    void check_event_final_monster(const Character &character);
 };
 
 }
