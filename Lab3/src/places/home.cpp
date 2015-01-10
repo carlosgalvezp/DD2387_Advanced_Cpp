@@ -11,7 +11,8 @@ Home::Home(const std::string &name)
 
 bool Home::enter(Character &character)
 {
-    if(character.type()!= TYPE_PLAYER)
+    lab3::utils_io::wait_for_enter();
+    if(character.type() == TYPE_PLAYER)
     {
         this->rest(character);
         return Place::enter(character);

@@ -118,8 +118,8 @@ bool Character::scape()
     lab3::utils_io::print_newline(this->name_ + " has scaped the fight");
     this->is_fighting_ = false;
     this->fighter_->is_fighting_ = false;
-    this->fighter_->fighter_ = nullptr;
-    this->fighter_ = nullptr;
+//    this->fighter_->fighter_ = nullptr;
+//    this->fighter_ = nullptr;
     return true;
 }
 

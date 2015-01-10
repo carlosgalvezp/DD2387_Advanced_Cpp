@@ -13,6 +13,9 @@ class House : public Indoor
 public:
     House();
     House(const std::string &name, bool is_open);
+
+    virtual bool enter(Character &character);
+
     ~House();
 };
 }

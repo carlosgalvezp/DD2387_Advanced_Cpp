@@ -35,9 +35,9 @@ public:
     Place& neighbour(const std::string &direction);
 
     virtual bool enter(Character &character);
-    bool leave(Character &character);
-    bool pick_up(Object &object);
-    void drop(Object &object);
+    virtual bool leave(Character &character);
+    virtual bool pick_up(Object &object);
+    virtual void drop(Object &object);
 
     void addDirection(const std::string &d, Place* p);
     virtual void generateObjects();

@@ -25,6 +25,7 @@
 #include <characters/finalmonster.h>
 
 #include <place.h>
+#include <places/home.h>
 #include <places/house.h>
 #include <places/hospital.h>
 #include <places/armory.h>

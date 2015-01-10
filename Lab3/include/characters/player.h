@@ -52,13 +52,13 @@ public:
     objects::Container *getBackpack();
 
     bool use(Object &o);
-    bool event_trained_;
 private:
-    Place* home_;
     bool finished_game_;
     int experience_;
     int kills_wolf_;
     int kills_vampire_;
+    bool event_trained_;
+    Place* home_;
 
     void check_event_trained(const Character &character);
 };

@@ -54,7 +54,7 @@ void GameEngine::newGame()
     lab3::utils_io::print_newline(this->introduction_);
     lab3::utils_io::wait_for_enter();
     // ** Create places
-    home_               = new places::House("Home", true);
+    home_               = new places::Home("Player's Home");
     Place* old_house    = new places::House("Old House", false);
     Place* hospital     = new places::Hospital("Hospital");
     Place* food_shop    = new places::Multi_Shop("Food Shop", true);
@@ -169,6 +169,7 @@ void GameEngine::run()
                                           "where it now recovers from the attack...");
             lab3::utils_io::wait_for_enter();
             home_->enter(*player_);
+            std::cout << "AFTER ENTERING HOME" << std::endl;
         }
 
         // ** Remove dead characters
@@ -178,6 +179,7 @@ void GameEngine::run()
             if (!c->isAlive())
             {
                 // Remove from place
+                std::cout << "REMOVING "<<c->name()<<std::endl;
                 c->currentPlace()->leave(*c);
                 delete c;
                 c = nullptr;
