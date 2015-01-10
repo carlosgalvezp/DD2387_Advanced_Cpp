@@ -3,7 +3,7 @@
 
 #include <places/outdoor.h>
 
-#include <objects/item.h>
+#include <objects/usable.h>
 
 namespace lab3
 {

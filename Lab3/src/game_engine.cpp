@@ -255,7 +255,7 @@ void GameEngine::event_TorchOn()
 {
     lab3::utils_io::print_newline(">>> You have turned on the torch. You should see new things now... <<<");
     Place *cave = this->places_map_.at(NAME_CAVE);
-    cave->addObject(*(new objects::Item("key","The key to open the King's Castle",1000,0,0, false)));
+    cave->addObject(*(new objects::Usable("key","The key to open the King's Castle",1000,0,0, false)));
 }
 
 void GameEngine::event_TriedMonster()

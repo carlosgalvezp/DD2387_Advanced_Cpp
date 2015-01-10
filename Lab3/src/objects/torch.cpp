@@ -3,7 +3,7 @@
 using namespace lab3::objects;
 
 Torch::Torch()
-    : Item("torch", "It illuminates the place if you use it", 10,5,5, true)
+    : Usable("torch", "It illuminates the place if you use it", 10,5,5, true)
 {}
 
 Torch::~Torch()

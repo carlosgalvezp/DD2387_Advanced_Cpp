@@ -11,7 +11,7 @@ Potion::Potion(const std::string &name,
                int price,
                int volume,
                int weight)
-    : Item(name, description, price, weight, volume, true),
+    : Usable(name, description, price, weight, volume, true),
       extra_points_(extra_points)
 {}
 

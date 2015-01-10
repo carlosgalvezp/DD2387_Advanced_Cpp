@@ -1,7 +1,7 @@
 #ifndef POTION_H
 #define POTION_H
 
-#include <objects/item.h>
+#include <objects/usable.h>
 //#include <characters/player.h>
 
 namespace lab3
@@ -9,7 +9,7 @@ namespace lab3
 namespace objects
 {
 
-class Potion : public Item
+class Potion : public Usable
 {
 public:
     Potion();

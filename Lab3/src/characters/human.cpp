@@ -1,5 +1,5 @@
 #include <characters/human.h>
-#include <objects/item.h>
+#include <objects/usable.h>
 using namespace lab3::characters;
 
 Human::Human()

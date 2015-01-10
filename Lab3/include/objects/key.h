@@ -1,7 +1,7 @@
 #ifndef KEY_H
 #define KEY_H
 
-#include <objects/item.h>
+#include <objects/usable.h>
 #include <place.h>
 #include <places/indoor.h>
 namespace lab3
@@ -9,7 +9,7 @@ namespace lab3
 namespace objects
 {
 
-class Key : public Item
+class Key : public Usable
 {
 public:
     Key();

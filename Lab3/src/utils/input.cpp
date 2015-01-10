@@ -422,14 +422,14 @@ bool lab3::input::cmd_use_item(lab3::characters::Player *player)
         lab3::utils_io::print_newline("The backpack is empty!");
         return false;
     }
-    std::map<std::string, lab3::objects::Item*> command_map;
+    std::map<std::string, lab3::objects::Usable*> command_map;
     std::vector<std::string> command_str;
     std::vector<std::string> command_desc;
 
     // ** Get objects
     for(lab3::Object* o : player->getBackpack()->objects())
     {
-        command_map.insert(std::make_pair(o->name(), static_cast<lab3::objects::Item*>(o)));
+        command_map.insert(std::make_pair(o->name(), static_cast<lab3::objects::Usable*>(o)));
         command_str.push_back(o->name());
         command_desc.push_back(o->description());
     }
@@ -445,7 +445,7 @@ bool lab3::input::cmd_use_item(lab3::characters::Player *player)
         return false;
     }
     // ** Actually use it
-    lab3::objects::Item *o = command_map.at(cmd);
+    lab3::objects::Usable *o = command_map.at(cmd);
     if(o != nullptr)
     {
         return player->use(*o);

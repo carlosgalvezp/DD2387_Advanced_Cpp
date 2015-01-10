@@ -117,7 +117,7 @@ bool Player::fight(Character &character)
 
 bool Player::use(Object &o)
 {
-    lab3::objects::Item* item_ptr = static_cast<lab3::objects::Item*>(&o);
+    lab3::objects::Usable* item_ptr = static_cast<lab3::objects::Usable*>(&o);
     if(item_ptr->use(*this))
     {
         // Remove from backpack if it's single use
