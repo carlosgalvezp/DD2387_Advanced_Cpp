@@ -27,7 +27,9 @@ Armory::Armory()
 
 Armory::Armory(const std::string &name, bool is_open)
     : Shop(name, is_open)
-{}
+{
+    this->place_commands_.push_back(CMD_REPAIR);
+}
 
 Armory::~Armory()
 {}
@@ -61,14 +63,29 @@ void Armory::generateObjects()
     f(protections_config, 1);
 }
 
-void Armory::repairEquipment(Character &p) const
-{
-    for(Object* o : p.objects())
+bool Armory::repairEquipment(lab3::characters::Human &p) const
+{    
+    if(p.getMoney() >= REPAIR_COST)
     {
-        lab3::objects::Equipment* o_equip = dynamic_cast<lab3::objects::Equipment*>(o);
-        if(o_equip != nullptr)    // Check for Equipment only
+        for(Object* o : p.objects())
         {
-            o_equip->repair();
+            lab3::objects::Equipment* o_equip = dynamic_cast<lab3::objects::Equipment*>(o);
+            if(o_equip != nullptr)    // Check for Equipment only
+            {
+                o_equip->repair();
+            }
         }
+        p.addMoney(-REPAIR_COST);
+        std::stringstream ss;
+        ss << "You have repaired your equipment for a cost of "<<REPAIR_COST;
+        lab3::utils_io::print_newline(ss.str());
+        return true;
+    }
+    else
+    {
+        std::stringstream ss;
+        ss << "You cannot repair your equipment since you have "<<p.getMoney()<< " of money and this costs "<<REPAIR_COST;
+        lab3::utils_io::print_newline(ss.str());
+        return false;
     }
 }

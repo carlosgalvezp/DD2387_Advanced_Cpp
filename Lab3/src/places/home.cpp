@@ -7,7 +7,9 @@ Home::Home()
 
 Home::Home(const std::string &name)
     : House(name, true)
-{}
+{
+    this->place_commands_.push_back(CMD_REST);
+}
 
 bool Home::enter(Character &character)
 {
@@ -27,18 +29,20 @@ bool Home::enter(Character &character)
 
 }
 
-void Home::rest(Character &c) const
+bool Home::rest(Character &c) const
 {
     if(c.getLifePoints() < MAX_LIFE/2.0)
     {
         c.set_life(MAX_LIFE/2.0);
         std::stringstream ss;
-        ss << "You rest at home. Now you have " << c.getLifePoints() << " life points"<<std::endl;
+        ss << "You rest at home: it's free to sleep! Now you have " << c.getLifePoints() <<std::endl;
         lab3::utils_io::print_newline(ss.str());
+        return true;
     }
     else
     {
         lab3::utils_io::print_newline("You have enough life points, it's not time to sleep!");
+        return false;
     }
 }
 

@@ -133,6 +133,7 @@ bool Character::pick_up(lab3::Object &object)
     this->current_place_->pick_up(object);
     this->objects_.push_back(&object);
 
+    lab3::utils_io::print_newline("The character "+this->name()+" has picked up a "+object.name()+" from the "+this->currentPlace()->name());
     return true;
 }
 

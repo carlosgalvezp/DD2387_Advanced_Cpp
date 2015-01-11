@@ -51,8 +51,12 @@ bool cmd_fight      (lab3::characters::Player* player);
 bool cmd_status     (lab3::characters::Player* player);
 bool cmd_exit_game  (lab3::characters::Player* player);
 bool cmd_buy        (lab3::characters::Player* player);
+bool cmd_sell       (lab3::characters::Player* player);
 bool cmd_use_item   (lab3::characters::Player* player);
 bool cmd_scape      (lab3::characters::Player* player);
+bool cmd_cure       (lab3::characters::Player* player);
+bool cmd_rest       (lab3::characters::Player* player);
+bool cmd_repair     (lab3::characters::Player* player);
 
 }
 }

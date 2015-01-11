@@ -16,7 +16,7 @@ Shop::Shop(const std::string &name, bool is_open)
             tmp.push_back(*it);
     }
     tmp.push_back(CMD_BUY);
-    tmp.push_back(CMD_SELL);
+//    tmp.push_back(CMD_SELL);
     this->place_commands_ = tmp;
 }
 

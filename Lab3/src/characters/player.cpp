@@ -39,12 +39,18 @@ std::string Player::action(bool display_info)
 
 bool Player::pick_up(Object &object)
 {
-    // ** Get the backpack (the player always has it, and it's the first element)
-    objects::Container* backpack = (objects::Container*)(this->objects_[0]);
-
     // ** Check if it's an item (put it in the backpack)
     if(dynamic_cast<lab3::objects::Usable*>(&object) != nullptr)
     {
+        // ** Get the backpack (the player always has it, and it's the first element)
+        if(this->objects().size() == 0) // Don't have a backpack!!
+        {
+            lab3::utils_io::print_newline("You don't have a backpack, so you cannot pick this object up! You better go and buy a new one");
+            lab3::utils_io::wait_for_enter();
+            return false;
+        }
+
+        objects::Container* backpack = (objects::Container*)(this->objects_[0]);
         if(backpack != nullptr)
         {
             // ** Check if we can put this object in the bag
@@ -57,30 +63,35 @@ bool Player::pick_up(Object &object)
     }
     else
     {
-        // ** Check if it's backpack
+        // ** Check if it's a backpack
         objects::Container* back_ptr = dynamic_cast<objects::Container*>(&object);
         if(back_ptr != nullptr)
         {
-            // Try to move stuff from one backpack to the other one
-            if(backpack->isMovableTo(*back_ptr))
+            if(this->objects().size() > 0) // I have a backpack, so I need to exchange contents
             {
-                // Pick new backpack
-                this->current_place_->pick_up(object);
-                lab3::utils_io::print_newline("You have picked up a "+object.name());
+                objects::Container* backpack = (objects::Container*)(this->objects_[0]);
 
-                // Move items from old to new backpack
-                backpack->moveObjectsTo(*back_ptr);
+                // Try to move stuff from one backpack to the other one
+                if(backpack->isMovableTo(*back_ptr))
+                {
+                    // Pick new backpack
+                    this->current_place_->pick_up(object);
+                    lab3::utils_io::print_newline("You have picked up a "+object.name());
 
-                // Remove old backpack
-                delete backpack;
+                    // Move items from old to new backpack
+                    backpack->moveObjectsTo(*back_ptr);
 
-                // Update backpack
-                this->objects_[0] = back_ptr;
-                return true;
+                    // Remove old backpack
+                    delete backpack;
+
+                    // Update backpack
+                    this->objects_[0] = back_ptr;
+                    return true;
+                }
             }
         }
     }
-    return false;
+    return Character::pick_up(object);
 }
 
 bool Player::drop(Object &object)
@@ -93,7 +104,7 @@ bool Player::drop(Object &object)
         {
             this->objects_.erase(it);
             this->current_place_->drop(object);
-            ss << "You have dropped a "<<object.name() << " in the " <<this->currentPlace()<<".";
+            ss << "You have dropped a "<<object.name() << " in the " <<this->currentPlace()->name()<<".";
             lab3::utils_io::print_newline(ss.str());
             return true;
         }

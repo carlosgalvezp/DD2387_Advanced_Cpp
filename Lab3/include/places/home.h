@@ -12,7 +12,7 @@ class Home : public House
 public:
     Home();
     Home(const std::string &name);
-    void rest(Character &c) const;
+    bool rest(Character &c) const;
     virtual bool enter(Character &character);
     ~Home();
 };

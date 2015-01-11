@@ -34,6 +34,6 @@
 
 #define CMD_BUY                 "buy"
 #define CMD_SELL                "sell"
-
+#define CMD_REPAIR              "repair equipment"
 #endif // NAMES
 

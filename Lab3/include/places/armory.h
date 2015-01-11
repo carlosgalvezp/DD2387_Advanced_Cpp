@@ -7,6 +7,10 @@
 #include <objects/equipment.h>
 #include <objects/protection.h>
 #include <objects/weapon.h>
+#include <characters/human.h>
+
+
+#define REPAIR_COST 20
 
 namespace lab3
 {
@@ -19,7 +23,7 @@ public:
     Armory(const std::string &name, bool is_open);
 
     void generateObjects();
-    void repairEquipment(Character &p)  const;
+    bool repairEquipment(lab3::characters::Human &p)  const;
     void restock();
     ~Armory();
 };

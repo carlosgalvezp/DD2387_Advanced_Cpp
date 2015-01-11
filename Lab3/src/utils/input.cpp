@@ -12,7 +12,10 @@ std::map<std::string, CmdFunction> cmd_map =
     {CMD_USE_ITEM,  &lab3::input::cmd_use_item},
     {CMD_EXIT_GAME, &lab3::input::cmd_exit_game},
     {CMD_BUY,       &lab3::input::cmd_buy},
-    {CMD_SCAPE,     &lab3::input::cmd_scape}
+    {CMD_SCAPE,     &lab3::input::cmd_scape},
+    {CMD_REST,      &lab3::input::cmd_rest},
+    {CMD_CURE,      &lab3::input::cmd_cure},
+    {CMD_REPAIR,    &lab3::input::cmd_repair}
 };
 
 std::string lab3::input::read_input(const std::vector<std::string> &available_commands)
@@ -406,7 +409,7 @@ bool lab3::input::cmd_buy(lab3::characters::Player *player)
     command_desc.push_back("");
 
     lab3::utils_io::print_newline("Buy what?");
-    std::string cmd = lab3::input::read_input(command_str);
+    std::string cmd = lab3::input::read_input(command_str, command_desc);
 
     if(cmd == CMD_BACK_TO_MAIN){
         lab3::utils_io::print_newline("Going back to main menu...");
@@ -420,6 +423,45 @@ bool lab3::input::cmd_buy(lab3::characters::Player *player)
     }
     return false;
 }
+
+//bool lab3::input::cmd_sell(lab3::characters::Player *player)
+//{
+//    // ** Get objects the player has
+//    if(player->objects().size() == 0)
+//    {
+//        lab3::utils_io::print_newline("You have no objects to sell!");
+//        return false;
+//    }
+//    std::map<std::string, lab3::Object*> command_map;
+//    std::vector<std::string> command_str;
+//    std::vector<std::string> command_desc;
+
+//    // ** Get objects
+//    for(lab3::Object* o : player->objects())
+//    {
+//        command_map.insert(std::make_pair(o->name(), o));
+//        command_str.push_back(o->name());
+//        command_desc.push_back(o->description());
+//    }
+
+//    command_str.push_back(CMD_BACK_TO_MAIN);
+//    command_desc.push_back("");
+
+//    lab3::utils_io::print_newline("Sell what?");
+//    std::string cmd = lab3::input::read_input(command_str);
+
+//    if(cmd == CMD_BACK_TO_MAIN){
+//        lab3::utils_io::print_newline("Going back to main menu...");
+//        return false;
+//    }
+//    // ** Actually buy
+//    lab3::Object *o = command_map.at(cmd);
+//    if(o != nullptr)
+//    {
+//        return player->sell(*o);
+//    }
+//    return false;
+//}
 
 bool lab3::input::cmd_use_item(lab3::characters::Player *player)
 {
@@ -466,3 +508,26 @@ bool lab3::input::cmd_scape(lab3::characters::Player *player)
     player->scape();
     return true;
 }
+
+bool lab3::input::cmd_rest(lab3::characters::Player *player)
+{
+    // Only available at home
+    lab3::places::Home* home = static_cast<lab3::places::Home*>(player->currentPlace());
+    return home->rest(*player);
+}
+
+bool lab3::input::cmd_cure(lab3::characters::Player *player)
+{
+    // Only available at hospital
+    lab3::places::Hospital* hospital = static_cast<lab3::places::Hospital*>(player->currentPlace());
+    return hospital->cure(*player);
+}
+
+bool lab3::input::cmd_repair(lab3::characters::Player *player)
+{
+    // Only available at armory
+    lab3::places::Armory* armory = static_cast<lab3::places::Armory*>(player->currentPlace());
+    return armory->repairEquipment(*player);
+}
+
+

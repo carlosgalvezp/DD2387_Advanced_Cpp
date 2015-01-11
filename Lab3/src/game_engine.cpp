@@ -99,7 +99,7 @@ void GameEngine::newGame()
     // ** Connect places
     lab3::places::connectPlaces(*this->places_map_.at(NAME_HOME), *this->places_map_.at(NAME_FOREST), DIRECTION_NORTH);
     lab3::places::connectPlaces(*this->places_map_.at(NAME_HOME), *this->places_map_.at(NAME_MULTI_SHOP), DIRECTION_EAST);
-    lab3::places::connectPlaces(*this->places_map_.at(NAME_MULTI_SHOP), *this->places_map_.at(NAME_ARMORY), DIRECTION_WEST);
+    lab3::places::connectPlaces(*this->places_map_.at(NAME_MULTI_SHOP), *this->places_map_.at(NAME_ARMORY), DIRECTION_EAST);
     lab3::places::connectPlaces(*this->places_map_.at(NAME_HOME), *this->places_map_.at(NAME_OLD_HOUSE), DIRECTION_WEST);
     lab3::places::connectPlaces(*this->places_map_.at(NAME_HOME), *this->places_map_.at(NAME_HOSPITAL), DIRECTION_SOUTH);
     lab3::places::connectPlaces(*this->places_map_.at(NAME_FOREST), *this->places_map_.at(NAME_CASTLE), DIRECTION_EAST);
