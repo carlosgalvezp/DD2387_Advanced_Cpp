@@ -6,25 +6,25 @@ using namespace lab3::places;
 const std::map<std::string, std::vector<int>> health_potions_config =
 {
     // Name                      Available units    Extra Points    Price       Weight      Volume
-    {"small health potion",     {5,                 10,             5,          5,          5 }},
-    {"medium health potion",    {3,                 20,             12,         10,         10}},
+    {"small health potion",     {3,                 10,             5,          5,          5 }},
+    {"medium health potion",    {2,                 20,             12,         10,         10}},
     {"big health potion",       {1,                 50,             30,         25,         25}}
 };
 
 const std::map<std::string, std::vector<int>> strength_potions_config =
 {
     // Name                      Available units    Extra Points    Price       Weight      Volume
-    {"small strength potion",     {5,                 10,             5,          5,          5 }},
-    {"medium strength potion",    {3,                 20,             12,         10,         10}},
+    {"small strength potion",     {3,                 10,             5,          5,          5 }},
+    {"medium strength potion",    {2,                 20,             12,         10,         10}},
     {"big strength potion",       {1,                 50,             30,         25,         25}}
 };
 
 const std::map<std::string, std::vector<int>> bags_config =
 {
     // Name                 Units       Price          Volume       Weight      Max volume  Max weight
-    {"small bagpack",      {1,          10,             5,          5,          5,          66 }},
-    {"medium backpack",    {1,          20,             12,         10,         10,         66}},
-    {"big backpack",       {1,          50,             30,         25,         25,         66}}
+    {"small backpack",     {1,          10,             5,          5,          10,         20}},
+    {"medium backpack",    {1,          20,             12,         10,         20,         30}},
+    {"big backpack",       {1,          50,             30,         25,         30,         50}}
 };
 
 Multi_Shop::Multi_Shop()

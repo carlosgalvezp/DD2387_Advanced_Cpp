@@ -41,9 +41,22 @@ std::string lab3::input::read_input(const std::vector<std::string> &available_co
             }
             else
             {
-                std::string s_found = tab_completion(ss.str(), available_commands);
-                if(s_found != " ")
-                    ss.str(s_found);
+                std::vector<std::string> findings = tab_completion(ss.str(), available_commands);
+                if(findings.size() == 0)
+                {
+                    ss.str(" ");
+                }
+                else if(findings.size() == 1)
+                {
+                    ss.str("");
+                    ss<< findings[0];
+                }
+                else
+                {
+                    ss.str("");
+                    ss << lab3::utils::commonString(findings);
+                    display_commands(findings);
+                }
             }
         }
         else if(c == 127) // Backspace
@@ -106,28 +119,17 @@ std::string lab3::input::read_player_input(lab3::characters::Player *player)
     return EVENT_NULL;
 }
 
-std::string lab3::input::tab_completion(const std::string &tmp_str, const std::vector<std::string> &available_commands)
+std::vector<std::string> lab3::input::tab_completion(const std::string &tmp_str, const std::vector<std::string> &available_commands)
 {
-    bool found (false);
-    std::string s_found = " ";
-    std::stringstream ss;
+    std::vector<std::string> findings;
     for(std::string s : available_commands)
     {
         if(s.substr(0,tmp_str.size()) == tmp_str) // Found
         {
-            s_found = s;
-            ss << "\r" << s << std::endl;
-            found = true;
-            break;
+            findings.push_back(s);
         }
     }
-    if(!found)
-    {
-        std::cout << ss.str();
-        s_found = " ";
-    }
-
-    return s_found;
+    return findings;
 }
 
 void lab3::input::display_commands(const std::vector<std::string> &commands)
@@ -138,6 +140,7 @@ void lab3::input::display_commands(const std::vector<std::string> &commands)
 void lab3::input::display_commands(const std::vector<std::string> &commands,
                                    const std::vector<std::string> &description)
 {
+    lab3::utils_io::clearScreen();
     lab3::utils_io::print_newline("--- Available commands ---");
     for(std::size_t i = 0; i < commands.size(); ++i)
     {

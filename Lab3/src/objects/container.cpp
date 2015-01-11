@@ -22,8 +22,11 @@ Container::~Container()
 {
     for(Object *o : objects_)
     {
-        delete o;
-        o = nullptr;
+        if(o != nullptr)
+        {
+            delete o;
+            o = nullptr;
+        }
     }
 }
 
@@ -103,18 +106,50 @@ const std::vector<lab3::Object*> &Container::objects() const{return this->object
 std::string Container::description()    const
 {
     std::stringstream ss;
-    ss << this->name()
-       << " [Container] Hold Volume: "<< this->current_hold_volume()<<"/"<<this->max_hold_volume()
+    ss << "[Container] Hold Volume: "<< this->current_hold_volume()<<"/"<<this->max_hold_volume()
                     <<" Hold Weight: "<< this->current_hold_weight()<<"/"<<this->max_hold_weight()
                                       << std::endl;
 
     // ** Display container's objects
     for(Object *item : this->objects())
     {
-        ss        << "\t * "      <<item->name()
+        ss        << "   - "      <<item->name()
                   << ". Price: " << item->price()
                   << " Volume: " << item->volume()
                   << " Weight: " << item->weight() << std::endl;
     }
     return ss.str();
+}
+
+bool Container::operator >(const Container &obj)    const
+{
+    return this->max_hold_volume() > obj.max_hold_volume() &&
+           this->max_hold_weight() > obj.max_hold_weight();
+}
+
+bool Container::isMovableTo(const Container &c) const
+{
+    return c.max_hold_volume() >= this->current_hold_volume() &&
+           c.max_hold_weight() >= this->current_hold_weight();
+}
+
+bool Container::moveObjectsTo(Container &c)
+{
+    if(this->isMovableTo(c))
+    {
+        // Move objects to the new container
+        for(Object *o : this->objects_)
+            c.add(*o);
+
+        // Clear the current container
+        this->objects_.clear();
+        lab3::utils_io::print_newline("The contents of the "+this->name()+" have been moved to the "+c.name());
+        return true;
+    }
+    else
+    {
+        lab3::utils_io::print_newline("The "+c.name()+" cannot hold all the objects in the "+this->name());
+        lab3::utils_io::wait_for_enter();
+        return false;
+    }
 }

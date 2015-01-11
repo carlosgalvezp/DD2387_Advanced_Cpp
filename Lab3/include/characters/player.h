@@ -5,6 +5,7 @@
 #include <utils/utils_io.h>
 #include <utils/input.h>
 #include <objects/container.h>
+#include <objects/usable.h>
 
 #include <characters/wolf.h>
 #include <characters/vampire.h>
@@ -16,8 +17,8 @@
 
 #define DEFAULT_BACKPACK_VOLUME 50
 #define DEFAULT_BACKPACK_WEIGHT  1
-#define DEFAULT_BACKPACK_MAX_VOLUME 50
-#define DEFAULT_BACKPACK_MAX_WEIGHT 20
+#define DEFAULT_BACKPACK_MAX_VOLUME 10
+#define DEFAULT_BACKPACK_MAX_WEIGHT 10
 
 #define MIN_EXPERIENCE 2
 #define MIN_KILL_ANIMAL 1

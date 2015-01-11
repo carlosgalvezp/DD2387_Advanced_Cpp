@@ -13,6 +13,7 @@ namespace lab3
 namespace utils
 {
 
+std::string commonString(const std::vector<std::string> &v);
 
 }
 

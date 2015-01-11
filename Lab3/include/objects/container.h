@@ -33,6 +33,13 @@ public:
 
     std::string description()     const;
 
+    bool operator > (const Container& c)    const ;
+
+    bool isMovableTo(const Container &c)    const;
+
+    bool moveObjectsTo(Container &c);
+
+
 private:
     std::vector<Object *> objects_;
     int max_hold_weight_;

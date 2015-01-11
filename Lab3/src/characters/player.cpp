@@ -45,13 +45,42 @@ bool Player::pick_up(Object &object)
     // ** Get the backpack (the player always has it, and it's the first element)
     objects::Container* backpack = (objects::Container*)(this->objects_[0]);
 
-    if(backpack != nullptr)
+    // ** Check if it's an item (put it in the backpack)
+    if(dynamic_cast<lab3::objects::Usable*>(&object) != nullptr)
     {
-        // ** Check if we can put this object in the bag
-        if(backpack->add(object))
+        if(backpack != nullptr)
         {
-            this->current_place_->pick_up(object);
-            return true;
+            // ** Check if we can put this object in the bag
+            if(backpack->add(object))
+            {
+                this->current_place_->pick_up(object);
+                return true;
+            }
+        }
+    }
+    else
+    {
+        // ** Check if it's backpack
+        objects::Container* back_ptr = dynamic_cast<objects::Container*>(&object);
+        if(back_ptr != nullptr)
+        {
+            // Try to move stuff from one backpack to the other one
+            if(backpack->isMovableTo(*back_ptr))
+            {
+                // Pick new backpack
+                this->current_place_->pick_up(object);
+                lab3::utils_io::print_newline("You have picked up a "+object.name());
+
+                // Move items from old to new backpack
+                backpack->moveObjectsTo(*back_ptr);
+
+                // Remove old backpack
+                delete backpack;
+
+                // Update backpack
+                this->objects_[0] = back_ptr;
+                return true;
+            }
         }
     }
     return false;
@@ -133,7 +162,7 @@ bool Player::use(Object &o)
 
 std::string Player::type() const
 {
-    return "Player";
+    return TYPE_PLAYER;
 }
 
 bool Player::finishedGame() const   {   return this->finished_game_;    }
@@ -161,7 +190,7 @@ void Player::status()       const
     lab3::utils_io::print_newline("----- Objects -----");
     for(Object *o : this->objects())
     {
-        std::cout << "* "<<o->name()<<" - "<<o->description()<<std::endl;
+        std::cout << "-"<<o->name()<<" - "<<o->description()<<std::endl;
     }
 }
 
@@ -172,7 +201,7 @@ std::vector<std::string> Player::getCommands()
     // ** Commands when the player is at a store
     if(dynamic_cast<places::Shop*>(this->currentPlace()) != nullptr)
     {
-        cmds.insert(cmds.end()-1, "buy");
+        cmds = {"go","buy","exit game"};
     }
 
     // ** Commands when the player is fighting

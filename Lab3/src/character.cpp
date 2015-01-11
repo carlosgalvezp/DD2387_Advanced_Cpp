@@ -38,8 +38,11 @@ Character::~Character()
 {
     for(Object *o : objects_)
     {
-        delete o;
-        o = nullptr;
+        if(o != nullptr)
+        {
+            delete o;
+            o = nullptr;
+        }
     }
 }
 
