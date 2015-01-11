@@ -62,8 +62,7 @@ public:
     const    std::vector<Object*>& objects()    const;
              std::vector<Object*>& objects();
 
-    const std::vector<std::string> & getBasicCommands()     const;
-    virtual std::vector<std::string>  getCommands()         const;
+    virtual const std::vector<std::string> &getCommands()         const;
 
     const std::vector<std::string> & getTalkMessages()      const;
 
@@ -89,26 +88,6 @@ protected:
     bool is_fighting_;
 
     std::vector<std::string> talk_msgs_;
-
-    const std::vector<std::string> fight_basic_commands_ =
-    {
-        "attack",
-        "scape"
-    };
-
-    const std::vector<std::string> basic_commands_ =
-    {
-        "go",
-        "fight",
-        "talk to",
-        "pick up",
-        "drop",
-        "exit game",
-    };
-
-    // ** Actual commands, that each character will extend
-    std::vector<std::string> commands_ = basic_commands_;
-    std::vector<std::string> fight_commands_ = fight_basic_commands_;
 
     Character* fighter_;
 

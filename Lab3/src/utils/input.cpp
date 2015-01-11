@@ -3,16 +3,16 @@
 typedef bool(*CmdFunction)(lab3::characters::Player*);
 std::map<std::string, CmdFunction> cmd_map =
 {
-    {"drop"  ,    &lab3::input::cmd_drop},
-    {"fight",     &lab3::input::cmd_fight},
-    {"go",        &lab3::input::cmd_go},
-    {"pick up",   &lab3::input::cmd_pick_up},
-    {"talk to",   &lab3::input::cmd_talk},
-    {"status",    &lab3::input::cmd_status},
-    {"use item",  &lab3::input::cmd_use_item},
-    {"exit game", &lab3::input::cmd_exit_game},
-    {"buy",       &lab3::input::cmd_buy},
-    {"scape",     &lab3::input::cmd_scape}
+    {CMD_DROP  ,    &lab3::input::cmd_drop},
+    {CMD_FIGHT,     &lab3::input::cmd_fight},
+    {CMD_GO,        &lab3::input::cmd_go},
+    {CMD_PICK_UP,   &lab3::input::cmd_pick_up},
+    {CMD_TALK,      &lab3::input::cmd_talk},
+    {CMD_STATUS,    &lab3::input::cmd_status},
+    {CMD_USE_ITEM,  &lab3::input::cmd_use_item},
+    {CMD_EXIT_GAME, &lab3::input::cmd_exit_game},
+    {CMD_BUY,       &lab3::input::cmd_buy},
+    {CMD_SCAPE,     &lab3::input::cmd_scape}
 };
 
 std::string lab3::input::read_input(const std::vector<std::string> &available_commands)
@@ -111,9 +111,13 @@ std::string lab3::input::read_player_input(lab3::characters::Player *player)
             if(!success) lab3::utils_io::wait_for_enter();
         }
         if(player->finishedGame())
+        {
             return EVENT_GAME_FINISHED;
-        else if(cmd == "exit game")
+        }
+        else if(cmd == CMD_EXIT_GAME)
+        {
             return EVENT_QUIT_GAME;
+        }
     }while(!success);
 
     return EVENT_NULL;

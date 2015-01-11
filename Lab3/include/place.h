@@ -54,6 +54,8 @@ public:
     const std::vector<Object*> &objects()             const;
     const std::vector<Character*> &characters()       const;
 
+    virtual const std::vector<std::string> &getCommands()   const;
+
     bool operator==(const Place& p) const;
 protected:
     std::string name_;
@@ -64,11 +66,7 @@ protected:
 
     void display_information(const Character &character);
 
-//    const std::vector<std::string> talk_msgs =
-//    {
-//       "Hi "
-//    };
-
+    std::vector<std::string> place_commands_;
 };
 
 namespace places

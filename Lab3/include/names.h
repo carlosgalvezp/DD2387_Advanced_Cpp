@@ -18,6 +18,22 @@
 #define NAME_CASTLE             "King's Castle"
 #define NAME_CAVE               "Dark Cave"
 
+// Commands
+#define CMD_GO                  "go"
+#define CMD_FIGHT               "fight"
+#define CMD_TALK                "talk to"
+#define CMD_PICK_UP             "pick up"
+#define CMD_DROP                "drop"
+#define CMD_EXIT_GAME           "exit game"
+
+#define CMD_USE_ITEM            "use item"
+#define CMD_STATUS              "status"
+#define CMD_REST                "rest"
+#define CMD_CURE                "get cured"
+#define CMD_SCAPE               "scape"
+
+#define CMD_BUY                 "buy"
+#define CMD_SELL                "sell"
 
 #endif // NAMES
 

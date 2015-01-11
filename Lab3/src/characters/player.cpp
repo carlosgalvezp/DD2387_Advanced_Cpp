@@ -24,9 +24,6 @@ Player::Player(const std::string &name, Place *place)
     talk_msgs_ = {"Hi, I am "+name};
 
     // ** Include additional commands
-    // Action commands
-    this->commands_.insert(this->commands_.end()-1,"use item");
-    this->commands_.insert(this->commands_.end()-1,"status");
 }
 
 Player::~Player()
@@ -196,19 +193,20 @@ void Player::status()       const
 
 std::vector<std::string> Player::getCommands()
 {
-    std::vector<std::string> cmds = this->commands_;
+    std::vector<std::string> cmds;
 
-    // ** Commands when the player is at a store
-    if(dynamic_cast<places::Shop*>(this->currentPlace()) != nullptr)
-    {
-        cmds = {"go","buy","exit game"};
-    }
-
-    // ** Commands when the player is fighting
+    // ** Get place commands
     if(this->isFighting())
     {
-        cmds = {"fight","scape","use item","exit game"};
+        cmds = {CMD_FIGHT, CMD_SCAPE};
     }
+    else
+    {
+        cmds = this->currentPlace()->getCommands();
+    }
+    cmds.push_back(CMD_USE_ITEM);
+    cmds.push_back(CMD_STATUS);
+    cmds.push_back(CMD_EXIT_GAME);
     return cmds;
 }
 

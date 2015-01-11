@@ -7,7 +7,16 @@ Place::Place()
 
 Place::Place(const std::string &name)
     : name_(name)
-{}
+{
+    place_commands_ =
+    {
+        CMD_GO,
+        CMD_FIGHT,
+        CMD_TALK,
+        CMD_PICK_UP,
+        CMD_DROP
+    };
+}
 
 Place::~Place()
 {
@@ -21,6 +30,8 @@ Place::~Place()
         }
     }
 }
+
+const std::vector<std::string>& Place::getCommands() const {    return this->place_commands_;}
 
 void Place::generateObjects()
 {

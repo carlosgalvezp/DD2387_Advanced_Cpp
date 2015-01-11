@@ -194,8 +194,11 @@ int Character::getInitiative()    const{    return this->initiative_;  }
 bool Character::isAlive()         const{    return this->getLifePoints() > 0;}
 bool Character::isFighting()      const{    return this->is_fighting_;}
 
-const std::vector<std::string>& Character::getBasicCommands() const { return this->basic_commands_;}
-std::vector<std::string> Character::getCommands()      const { return this->commands_;}
+const std::vector<std::string>& Character::getCommands()      const
+{
+    // ** Get commands from place
+    return this->currentPlace()->getCommands();
+}
 const std::vector<std::string>& Character::getTalkMessages()  const { return this->talk_msgs_;}
 
 std::string Character::name()     const{    return this->name_;        }
