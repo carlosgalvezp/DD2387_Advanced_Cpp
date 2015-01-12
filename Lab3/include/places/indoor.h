@@ -13,12 +13,13 @@ class Indoor : public Place
 public:
     Indoor();
     Indoor(const std::string &name, bool is_open);
-    bool isOpen()   const;
+    ~Indoor();
+
+    bool isOpen()               const;
     void setOpen(bool open);
 
     bool enter(Character &character);
 
-    ~Indoor();
 protected:
     bool is_open_;
 };

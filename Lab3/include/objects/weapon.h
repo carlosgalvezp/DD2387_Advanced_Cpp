@@ -25,7 +25,7 @@ public:
 
 protected:
     int attack_;
-    int hands_required_;
+    int hands_required_; // If it's two hands, the player takes one more turn to attack
 };
 
 }

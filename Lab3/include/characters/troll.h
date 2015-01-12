@@ -14,6 +14,10 @@ public:
     Troll();
     Troll(const std::string &name, Place *place);
     ~Troll();
+
+private:
+    int stupidity_;  // As we all know, Trolls are not so smart. The larger this value,
+                     // the more non-sensible actions they perform
 };
 
 }

@@ -17,9 +17,11 @@ public:
     std::string action();
     void talk_to(Character &c);
 
+    void read();                    // It increases its knowledge
     void setTellAboutWizard(bool x);
 private:
     bool will_tell_about_wizard_;
+    int knowledge_;     // The more it knows, the more hints can give the player
 };
 }
 }

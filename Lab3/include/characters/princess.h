@@ -3,6 +3,7 @@
 
 #include <characters/human.h>
 #include <utils/utils_io.h>
+#include <characters/finalmonster.h>
 
 namespace lab3
 {
@@ -17,6 +18,12 @@ public:
 
     std::string action(bool display_info);
     std::string type() const;
+
+    bool distractMonster(characters::FinalMonster& monster);
+
+private:
+    int hope_;  // Hope that she gets rescued.
+                // If it's high, she will get more ideas to distract the monster
 };
 
 }

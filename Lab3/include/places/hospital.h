@@ -14,10 +14,10 @@ class Hospital : public Indoor
 public:
     Hospital();
     Hospital(const std::string &name);
+    ~Hospital();
 
     bool cure(characters::Human &c) const;
 
-    ~Hospital();
 };
 }
 }

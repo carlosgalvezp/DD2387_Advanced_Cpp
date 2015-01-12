@@ -14,6 +14,11 @@ public:
     Warrior();
     Warrior(const std::string &name, Place* place);
     ~Warrior();
+
+    void train();
+
+private:
+    int skill_; // The more the skill, the more the final strength and defense
 };
 
 }

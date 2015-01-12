@@ -32,7 +32,8 @@ public:
     bool use(Object &o);
 
 protected:
-    int money_;
+    int money_;     // Only humans can buy stuff
+    int courage_;   // The more courage, the more it's likely to fight
 };
 
 }

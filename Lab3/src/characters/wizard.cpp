@@ -3,7 +3,7 @@
 using namespace lab3::characters;
 
 Wizard::Wizard(const std::string &name, Place *place, std::map<std::string, Place *> &world_places)
-    : Character(name, TYPE_WIZARD, place),
+    : Human(name, TYPE_WIZARD, place),
       talked_to_player_(false),
       world_places_(world_places)
 {

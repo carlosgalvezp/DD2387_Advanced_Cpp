@@ -12,9 +12,10 @@ class Home : public House
 public:
     Home();
     Home(const std::string &name);
-    bool rest(Character &c) const;
-    virtual bool enter(Character &character);
     ~Home();
+
+    virtual bool enter(Character &character);
+    bool rest(Character &c) const;
 };
 
 }
