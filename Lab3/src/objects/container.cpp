@@ -107,16 +107,14 @@ std::string Container::description()    const
 {
     std::stringstream ss;
     ss << "[Container] Hold Volume: "<< this->current_hold_volume()<<"/"<<this->max_hold_volume()
-                    <<" Hold Weight: "<< this->current_hold_weight()<<"/"<<this->max_hold_weight()
-                                      << std::endl;
-
+                    <<" Hold Weight: "<< this->current_hold_weight()<<"/"<<this->max_hold_weight();
     // ** Display container's objects
     for(Object *item : this->objects())
     {
-        ss        << "   - "      <<item->name()
-                  << ". Price: " << item->price()
-                  << " Volume: " << item->volume()
-                  << " Weight: " << item->weight() << std::endl;
+        ss   <<std::endl     << "   - "      <<item->name()
+                             << ". Price: " << item->price()
+                             << " Volume: " << item->volume()
+                             << " Weight: " << item->weight();
     }
     return ss.str();
 }

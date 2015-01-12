@@ -63,6 +63,8 @@ private:
 
     void check_event_trained(const Character &character);
     void check_event_final_monster(const Character &character);
+
+    bool pick_up_backpack(objects::Container &new_backpack);
 };
 
 }

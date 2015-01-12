@@ -17,7 +17,7 @@ void clearScreen()
 
 void wait_for_enter()
 {
-    lab3::utils_io::print_newline("Press Enter to continue...");
+    lab3::utils_io::print_newline("\nPress Enter to continue...");
     getchar();
 }
 

@@ -148,7 +148,7 @@ void lab3::input::display_commands(const std::vector<std::string> &commands,
                                    const std::vector<std::string> &description)
 {
     lab3::utils_io::clearScreen();
-    lab3::utils_io::print_newline("--- Available commands ---");
+    lab3::utils_io::print_newline("--- Available commands ---\n");
     for(std::size_t i = 0; i < commands.size(); ++i)
     {
         std::string s  = commands[i];
@@ -159,7 +159,7 @@ void lab3::input::display_commands(const std::vector<std::string> &commands,
         }
         lab3::utils_io::print_newline(s);
     }
-    lab3::utils_io::print_newline(">> Type to select the command, use tab-completion. Case-sensitive");
+    lab3::utils_io::print_newline("\n>> Type to select the command, use tab-completion. Case-sensitive");
 }
 
 
