@@ -6,7 +6,6 @@
 
 #include <object.h>
 #include <place.h>
-#include <types.h>
 #include <utils/utils_io.h>
 #include <names.h>
 #define MAX_LIFE                50

@@ -18,6 +18,27 @@
 #define NAME_FOREST             "Enchanted Forest"
 #define NAME_CASTLE             "King's Castle"
 #define NAME_CAVE               "Dark Cave"
+#define NAME_CITY_CENTER        "City Center"
+
+// TYPES
+#define TYPE_PLAYER         "Player"
+#define TYPE_PRINCESS       "Princess"
+#define TYPE_TROLL          "Troll"
+#define TYPE_WOLF           "Wolf"
+#define TYPE_HUMAN          "Human"
+#define TYPE_WIZARD         "Wizard"
+#define TYPE_VAMPIRE        "Vampire"
+#define TYPE_FINAL_MONSTER  "Final Monster"
+
+// DIRECTIONS
+#define DIRECTION_NORTH     "north"
+#define DIRECTION_SOUTH     "south"
+#define DIRECTION_EAST      "east"
+#define DIRECTION_WEST      "west"
+#define DIRECTION_NW        "north west"
+#define DIRECTION_NE        "north east"
+#define DIRECTION_SW        "south west"
+#define DIRECTION_SE        "south east"
 
 // Commands
 #define CMD_GO                  "go"

@@ -27,6 +27,7 @@
 #include <characters/wolf.h>
 #include <characters/troll.h>
 #include <characters/finalmonster.h>
+#include <characters/warrior.h>
 
 #include <place.h>
 #include <places/home.h>
@@ -37,6 +38,7 @@
 #include <places/multi_shop.h>
 #include <places/castle.h>
 #include <places/cave.h>
+#include <places/citycenter.h>
 
 #include <names.h>
 
@@ -66,7 +68,7 @@ private:
     int mainMenu();
     void newGame();
 
-    void createAnimals(std::map<std::string, Character *> &characters,
+    void createCharacters(std::map<std::string, Character *> &characters,
                              std::vector<places::Outdoor *> &animalPlaces);
     void createObjects();
 

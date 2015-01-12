@@ -100,6 +100,7 @@ void GameEngine::newGame()
     this->places_map_.insert(std::make_pair(NAME_FOREST,    new places::Forest(NAME_FOREST)));
     this->places_map_.insert(std::make_pair(NAME_CASTLE,    new places::Castle(NAME_CASTLE, false)));
     this->places_map_.insert(std::make_pair(NAME_CAVE,      new places::Cave(NAME_CAVE)));
+    this->places_map_.insert(std::make_pair(NAME_CITY_CENTER,new places::CityCenter(NAME_CITY_CENTER)));
 
     // ** Create main characters
     this->characters_map_.insert(std::make_pair(NAME_PLAYER,       new characters::Player(NAME_PLAYER,this->places_map_.at(NAME_HOME))));
@@ -107,23 +108,24 @@ void GameEngine::newGame()
     this->characters_map_.insert(std::make_pair(NAME_WISE_MAN,     new characters::Wise_Man(NAME_WISE_MAN,this->places_map_.at(NAME_OLD_HOUSE))));
     this->characters_map_.insert(std::make_pair(NAME_FINAL_MONSTER,new characters::FinalMonster(NAME_FINAL_MONSTER, this->places_map_.at(NAME_CASTLE))));
 
-
     // ** Create random animals in forest and cave
-    std::vector<places::Outdoor*> animal_places = {static_cast<places::Outdoor*>(this->places_map_.at(NAME_FOREST)),
-                                                   static_cast<places::Outdoor*>(this->places_map_.at(NAME_CAVE))};
-    this->createAnimals(this->characters_map_, animal_places);
+    std::vector<places::Outdoor*> character_places = {static_cast<places::Outdoor*>(this->places_map_.at(NAME_FOREST)),
+                                                      static_cast<places::Outdoor*>(this->places_map_.at(NAME_CAVE)),
+                                                      static_cast<places::Outdoor*>(this->places_map_.at(NAME_CITY_CENTER))};
+    this->createCharacters(this->characters_map_, character_places);
 
     // ** Create random objects
     this->createObjects();
 
     // ** Connect places
-    lab3::places::connectPlaces(*this->places_map_.at(NAME_HOME), *this->places_map_.at(NAME_FOREST), DIRECTION_NORTH);
-    lab3::places::connectPlaces(*this->places_map_.at(NAME_HOME), *this->places_map_.at(NAME_MULTI_SHOP), DIRECTION_EAST);
-    lab3::places::connectPlaces(*this->places_map_.at(NAME_MULTI_SHOP), *this->places_map_.at(NAME_ARMORY), DIRECTION_EAST);
-    lab3::places::connectPlaces(*this->places_map_.at(NAME_HOME), *this->places_map_.at(NAME_OLD_HOUSE), DIRECTION_WEST);
-    lab3::places::connectPlaces(*this->places_map_.at(NAME_HOME), *this->places_map_.at(NAME_HOSPITAL), DIRECTION_SOUTH);
-    lab3::places::connectPlaces(*this->places_map_.at(NAME_FOREST), *this->places_map_.at(NAME_CASTLE), DIRECTION_EAST);
-    lab3::places::connectPlaces(*this->places_map_.at(NAME_FOREST), *this->places_map_.at(NAME_CAVE), DIRECTION_WEST);
+    lab3::places::connectPlaces(*this->places_map_.at(NAME_CITY_CENTER),    *this->places_map_.at(NAME_HOME),       DIRECTION_SOUTH);
+    lab3::places::connectPlaces(*this->places_map_.at(NAME_CITY_CENTER),    *this->places_map_.at(NAME_OLD_HOUSE),  DIRECTION_NE);
+    lab3::places::connectPlaces(*this->places_map_.at(NAME_CITY_CENTER),    *this->places_map_.at(NAME_MULTI_SHOP), DIRECTION_NW);
+    lab3::places::connectPlaces(*this->places_map_.at(NAME_CITY_CENTER),    *this->places_map_.at(NAME_ARMORY),     DIRECTION_WEST);
+    lab3::places::connectPlaces(*this->places_map_.at(NAME_CITY_CENTER),    *this->places_map_.at(NAME_HOSPITAL),   DIRECTION_EAST);
+    lab3::places::connectPlaces(*this->places_map_.at(NAME_CITY_CENTER),    *this->places_map_.at(NAME_FOREST),     DIRECTION_NORTH);
+    lab3::places::connectPlaces(*this->places_map_.at(NAME_FOREST),         *this->places_map_.at(NAME_CASTLE),     DIRECTION_NORTH);
+    lab3::places::connectPlaces(*this->places_map_.at(NAME_FOREST),         *this->places_map_.at(NAME_CAVE),       DIRECTION_WEST);
 }
 
 
@@ -201,12 +203,12 @@ void GameEngine::run()
     lab3::utils_io::print_newline("Thanks for playing!");
 }
 
-void GameEngine::createAnimals(std::map<std::string,Character *> &characters,
-                               std::vector<places::Outdoor *> &animalPlaces)
+void GameEngine::createCharacters(std::map<std::string,Character *> &characters,
+                               std::vector<places::Outdoor *> &characterPlaces)
 {
-    for(places::Outdoor* place : animalPlaces)
+    for(places::Outdoor* place : characterPlaces)
     {
-        place->generateAnimals();
+        place->createCharacters();
         for(Character* c: place->characters())
             characters.insert(std::make_pair(c->name(),c));
     }

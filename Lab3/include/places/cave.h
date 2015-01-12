@@ -16,7 +16,7 @@ public:
     Cave(const std::string &name);
 
     void generateObjects();
-    void generateAnimals();
+    void createCharacters();
 
     ~Cave();
 };

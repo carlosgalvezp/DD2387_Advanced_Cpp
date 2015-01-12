@@ -1,4 +1,4 @@
-#include "place.h"
+#include <place.h>
 using namespace lab3;
 
 Place::Place()
@@ -194,19 +194,7 @@ void Place::killCharacter(Character &character)
 
 void lab3::places::connectPlaces(Place &p1, Place &p2, const std::string &d12)
 {
-    auto oppositeDir = [&]() ->std::string
-    {
-        if(d12 == DIRECTION_EAST)
-            return DIRECTION_WEST;
-        else if(d12 == DIRECTION_NORTH)
-            return DIRECTION_SOUTH;
-        else if(d12 == DIRECTION_SOUTH)
-            return DIRECTION_NORTH;
-        else
-            return DIRECTION_EAST;
-    };
-
     p1.addDirection(d12, &p2);
-    p2.addDirection(oppositeDir(), &p1);
+    p2.addDirection(lab3::utils::oppositeDirection(d12), &p1);
 }
 

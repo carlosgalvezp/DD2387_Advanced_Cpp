@@ -34,6 +34,21 @@ std::string commonString(const std::vector<std::string> &v)
     return ss.str();
 }
 
+std::map<std::string, std::string> direction_pairs =
+{
+    {DIRECTION_NORTH, DIRECTION_SOUTH},
+    {DIRECTION_SOUTH, DIRECTION_NORTH},
+    {DIRECTION_EAST,  DIRECTION_WEST},
+    {DIRECTION_WEST,  DIRECTION_EAST},
+    {DIRECTION_NW,    DIRECTION_SE},
+    {DIRECTION_NE,    DIRECTION_SW},
+    {DIRECTION_SW,    DIRECTION_NE},
+    {DIRECTION_SE,    DIRECTION_NW}
+};
+std::string oppositeDirection(const std::string &dir)
+{
+    return direction_pairs.at(dir);
+}
 }
 }
 

@@ -15,7 +15,7 @@
 #include <object.h>
 #include <character.h>
 #include <utils/utils_io.h>
-
+#include <utils/utils.h>
 namespace lab3
 {
 class Character;

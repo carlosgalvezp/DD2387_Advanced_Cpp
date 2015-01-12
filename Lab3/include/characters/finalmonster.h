@@ -2,7 +2,6 @@
 #define FINALMONSTER_H
 
 #include <character.h>
-#include <types.h>
 namespace lab3
 {
 namespace characters

@@ -58,6 +58,6 @@ bool Human::sell(Object &o)
 
 bool Human::use(Object &o)
 {
-    std::cout << "[Human::use] TO DO" << std::endl;
+    std::cout << "[Human::use]" << std::endl;
     return true;
 }
