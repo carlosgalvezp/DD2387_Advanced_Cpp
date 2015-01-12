@@ -25,6 +25,7 @@
 #include <characters/wise_man.h>
 #include <characters/wizard.h>
 #include <characters/wolf.h>
+#include <characters/troll.h>
 #include <characters/finalmonster.h>
 
 #include <place.h>
@@ -37,7 +38,6 @@
 #include <places/castle.h>
 #include <places/cave.h>
 
-#include <events_def.h>
 #include <names.h>
 
 #include <utils/utils.h>

@@ -7,6 +7,7 @@
 #define NAME_WISE_MAN           "Wise Man"
 #define NAME_FINAL_MONSTER      "Dark Monster"
 #define NAME_WIZARD             "Misterious Wizard"
+#define NAME_TROLL              "Furious Troll"
 
 // Places
 #define NAME_HOME               "Player's Home"
@@ -25,15 +26,24 @@
 #define CMD_PICK_UP             "pick up"
 #define CMD_DROP                "drop"
 #define CMD_EXIT_GAME           "exit game"
-
 #define CMD_USE_ITEM            "use item"
 #define CMD_STATUS              "status"
 #define CMD_REST                "rest"
 #define CMD_CURE                "get cured"
 #define CMD_SCAPE               "scape"
-
 #define CMD_BUY                 "buy"
 #define CMD_SELL                "sell"
 #define CMD_REPAIR              "repair equipment"
+
+//Events
+#define EVENT_ENOUGH_TRAIN          "enough train"
+#define EVENT_MENTIONED_KEY         "mentioned key"
+#define EVENT_TORCH_ON              "torch on"
+#define EVENT_TRIED_MONSTER         "tried monster"
+#define EVENT_MENTIONED_WIZARD      "mentioned wizard"
+#define EVENT_GAME_FINISHED         "princess rescued"
+#define EVENT_QUIT_GAME             "quit game"
+#define EVENT_NULL                  ""
+
 #endif // NAMES
 

@@ -8,7 +8,7 @@
 #include <place.h>
 #include <types.h>
 #include <utils/utils_io.h>
-#include <events_def.h>
+#include <names.h>
 #define MAX_LIFE                50
 #define MAX_STRENGTH            50
 #define DEFAULT_INITIATIVE      10

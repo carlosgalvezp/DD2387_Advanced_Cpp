@@ -31,19 +31,39 @@ GameEngine::~GameEngine()
         delete p;
     }
 
-//    // ** Destroy objects
-//    for(std::size_t i = 0; i < this->objects_.size(); ++i)
-//    {
-//        Object* o = this->objects_[i];
-//        delete o;
-//    }
-
     // ** Destroy characters
     for(auto it = this->characters_map_.begin(); it != this->characters_map_.end(); ++it)
     {
         Character *c = it->second;
         delete c;
     }
+
+    // The objects are destroyed by the place or the character that hold them
+}
+
+int GameEngine::mainMenu()
+{
+    // ** Create options
+    std::vector<std::string> menu_options = {"new game", "quit"};
+
+    // ** Display and choose option
+    int option = -1;
+    do
+    {
+        // ** Clear screen
+        lab3::utils_io::clearScreen();
+
+        // ** Display menu
+        std::string s = lab3::input::read_input(menu_options);
+        auto it = std::find(menu_options.begin(), menu_options.end(), s);
+        if(it != menu_options.end())
+        {
+            option = it - menu_options.begin();
+        }
+    }
+    while (option < 0);
+
+    return option;
 }
 
 void GameEngine::initGame()
@@ -104,43 +124,20 @@ void GameEngine::newGame()
     lab3::places::connectPlaces(*this->places_map_.at(NAME_HOME), *this->places_map_.at(NAME_HOSPITAL), DIRECTION_SOUTH);
     lab3::places::connectPlaces(*this->places_map_.at(NAME_FOREST), *this->places_map_.at(NAME_CASTLE), DIRECTION_EAST);
     lab3::places::connectPlaces(*this->places_map_.at(NAME_FOREST), *this->places_map_.at(NAME_CAVE), DIRECTION_WEST);
-
 }
 
-int GameEngine::mainMenu()
-{
-    // ** Create options
-    std::vector<std::string> menu_options = {"new game", "quit"};
 
-    // ** Display and choose option
-    int option = -1;
-    do
-    {
-        // ** Clear screen
-        lab3::utils_io::clearScreen();
-
-        // ** Display menu
-        std::string s = lab3::input::read_input(menu_options);
-        auto it = std::find(menu_options.begin(), menu_options.end(), s);
-        if(it != menu_options.end())
-        {
-            option = it - menu_options.begin();
-        }
-    }
-    while (option < 0);
-
-    return option;
-}
 
 
 
 void GameEngine::run()
 {
     lab3::utils_io::clearScreen();
-    Character* player =characters_map_.at(NAME_PLAYER);
     int round(1);
     while(!this->is_finished_)
     {
+        Character* player =characters_map_.at(NAME_PLAYER);
+
         lab3::utils_io::clearScreen();
 
         std::cout << "Round "<<round++<<std::endl;
@@ -255,8 +252,11 @@ void GameEngine::event_EnoughTrain()
 void GameEngine::event_TorchOn()
 {
     lab3::utils_io::print_newline(">>> You have turned on the torch. You should see new things now... <<<");
+    lab3::utils_io::print_newline(">>> The light has waken up a Furious Troll!!<<<");
+    // ** Now the key is visible, and the Troll has been waken up
     Place *cave = this->places_map_.at(NAME_CAVE);
-    cave->addObject(*(new objects::Usable("key","The key to open the King's Castle",1000,0,0, false)));
+    cave->addObject(*(new objects::Key("Key to the King's Castle",places_map_.at(NAME_CASTLE))));
+    characters_map_.insert(std::make_pair(NAME_TROLL, new characters::Troll(NAME_TROLL, cave)));
 }
 
 void GameEngine::event_TriedMonster()
