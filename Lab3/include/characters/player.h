@@ -5,6 +5,9 @@
 #include <utils/utils_io.h>
 #include <utils/input.h>
 #include <objects/container.h>
+#include <objects/weapon.h>
+#include <objects/protection.h>
+
 #include <objects/usable.h>
 
 #include <characters/wolf.h>
@@ -50,7 +53,9 @@ public:
 
     std::vector<std::string> getCommands();
 
-    objects::Container *getBackpack();
+    objects::Container      *getBackpack();
+    objects::Weapon         *getWeapon();
+    objects::Protection     *getProtection();
 
     bool use(Object &o);
 private:

@@ -14,11 +14,14 @@ Player::Player(const std::string &name, Place *place)
       event_trained_(false),
       home_(place)
 {
+    // ** The player has 3 objects: backpack, protection and weapon
+    this->objects_ = std::vector<Object*>(3, nullptr);
+
     // ** The player always starts with a small backpack
-    this->objects_.push_back((Object*)new objects::Container("small backpack",5,DEFAULT_BACKPACK_VOLUME,
-                                                                                DEFAULT_BACKPACK_WEIGHT,
-                                                                                DEFAULT_BACKPACK_MAX_WEIGHT,
-                                                                                DEFAULT_BACKPACK_VOLUME));
+    this->objects_.at(0) = new objects::Container("small backpack",5,DEFAULT_BACKPACK_VOLUME,
+                                                                     DEFAULT_BACKPACK_WEIGHT,
+                                                                     DEFAULT_BACKPACK_MAX_WEIGHT,
+                                                                     DEFAULT_BACKPACK_VOLUME);
     this->money_ = INITIAL_MONEY;
     // ** Initialize talk messages
     talk_msgs_ = {"Hi, I am "+name};
@@ -31,6 +34,8 @@ Player::~Player()
 }
 
 lab3::objects::Container* Player::getBackpack(){return static_cast<lab3::objects::Container*>(this->objects_[0]);}
+lab3::objects::Weapon*    Player::getWeapon()  {return static_cast<lab3::objects::Weapon*>(this->objects_[1]);}
+lab3::objects::Protection*Player::getProtection(){return static_cast<lab3::objects::Protection*>(this->objects_[2]);}
 
 std::string Player::action(bool display_info)
 {
@@ -46,9 +51,32 @@ bool Player::pick_up(Object &object)
         return pick_up_backpack(*back_ptr);
     }
 
-//    // ** Check if it's equipment
-//    else if()
-//    {}
+    // ** Check if it's weapon
+    else if(dynamic_cast<objects::Weapon*>(&object) != nullptr)
+    {
+        std::cout << "PICKING UP WEAPON"<<std::endl;
+        if(this->getWeapon() != nullptr)
+        {
+            this->drop(*this->getWeapon());
+        }
+        this->currentPlace()->pick_up(object);
+        this->objects_[1] = &object;
+        lab3::utils_io::print_newline("You have picked up a "+object.name());
+        return true;
+    }
+
+    // ** Check if it's protection
+    else if(dynamic_cast<objects::Protection*>(&object) != nullptr)
+    {
+        if(this->getProtection() != nullptr)
+        {
+            this->drop(*this->getProtection());
+        }
+        this->currentPlace()->pick_up(object);
+        this->objects_[2] = &object;
+        lab3::utils_io::print_newline("You have picked up a "+object.name());
+        return true;
+    }
 
     // ** Otherwise just try to put it in the backpack
     else
@@ -59,6 +87,7 @@ bool Player::pick_up(Object &object)
             // ** Check if we can put this object in the bag
             if(backpack->add(object))
             {
+                lab3::utils_io::print_newline("You have picked up a "+object.name());
                 return this->current_place_->pick_up(object);
             }
         }
@@ -106,18 +135,11 @@ bool Player::drop(Object &object)
 {
     std::stringstream ss;
     // ** Check if it's any of the objects we already have
-    for(auto it = this->objects_.begin(); it < this->objects_.end(); ++it)
+    for(Object* o : objects_)
     {
-        if(**it == object)
+        if(*o == object)
         {
-            if(object == *this->getBackpack()) // It's the backpack -> set it to nullptr
-            {
-                this->objects_[0] = nullptr; // Set it to nullptr instead of erasing it, so that this position is reserved
-            }
-            else
-            {
-                this->objects_.erase(it);
-            }
+            o = nullptr;
             this->current_place_->drop(object);
             ss << "You have dropped a "<<object.name() << " in the " <<this->currentPlace()->name()<<".";
             lab3::utils_io::print_newline(ss.str());
