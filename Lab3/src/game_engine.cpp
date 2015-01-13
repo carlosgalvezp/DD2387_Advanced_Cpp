@@ -27,7 +27,7 @@ GameEngine::~GameEngine()
     // ** Destroy places
     for(auto it = this->places_map_.begin(); it != this->places_map_.end(); ++it)
     {
-        Place*p = it->second;
+        Place *p = it->second;
         delete p;
     }
 
@@ -39,6 +39,26 @@ GameEngine::~GameEngine()
     }
 
     // The objects are destroyed by the place or the character that hold them
+}
+
+void GameEngine::initGame()
+{
+    // ** Set seed for rand
+    srand(time(NULL));
+
+    // ** Display main menu and choose option
+    int option  = mainMenu();
+
+    switch(option)
+    {
+    case 0:             // New game
+        newGame();
+        break;
+
+    default:
+        is_finished_ = true;
+        break;
+    }
 }
 
 int GameEngine::mainMenu()
@@ -66,25 +86,7 @@ int GameEngine::mainMenu()
     return option;
 }
 
-void GameEngine::initGame()
-{
-    // ** Set seed for rand
-    srand(time(NULL));
 
-    // ** Display main menu and choose option
-    int option  = mainMenu();
-
-    switch(option)
-    {
-    case 0:             // New game
-        newGame();
-        break;
-
-    case 1:
-        is_finished_ = true;
-        break;
-    }
-}
 void GameEngine::newGame()
 {
     lab3::utils_io::clearScreen();
@@ -108,7 +110,7 @@ void GameEngine::newGame()
     this->characters_map_.insert(std::make_pair(NAME_WISE_MAN,     new characters::Wise_Man(NAME_WISE_MAN,this->places_map_.at(NAME_OLD_HOUSE))));
     this->characters_map_.insert(std::make_pair(NAME_FINAL_MONSTER,new characters::FinalMonster(NAME_FINAL_MONSTER, this->places_map_.at(NAME_CASTLE))));
 
-    // ** Create random animals in forest and cave
+    // ** Create secondary characters
     std::vector<places::Outdoor*> character_places = {static_cast<places::Outdoor*>(this->places_map_.at(NAME_FOREST)),
                                                       static_cast<places::Outdoor*>(this->places_map_.at(NAME_CAVE)),
                                                       static_cast<places::Outdoor*>(this->places_map_.at(NAME_CITY_CENTER))};
@@ -162,7 +164,7 @@ void GameEngine::run()
                 GameEngineFptr fptr = this->event_callbacks_.at(event);
                 (this->*fptr)();
 
-                if(is_finished_)
+                if(this->is_finished_)
                     break;
                 lab3::utils_io::wait_for_enter();
             }

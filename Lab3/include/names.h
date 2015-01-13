@@ -66,5 +66,9 @@
 #define EVENT_QUIT_GAME             "quit game"
 #define EVENT_NULL                  ""
 
+// Constant damages
+#define CONSTANT_DAMAGE_POISON      "poisoned"
+#define CONSTANT_DAMAGE_BLEED       "bleeding"
+
 #endif // NAMES
 

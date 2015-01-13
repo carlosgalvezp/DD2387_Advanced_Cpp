@@ -23,7 +23,9 @@ Character::Character(const std::string &name, const std::string &type, Place *pl
       type_(type),
       current_place_(place),
       is_fighting_(false),
-      n_msg_talk_(0)
+      n_msg_talk_(0),
+      constant_damage_points_(0),
+      constant_damage_type_("")
 {
     // ** Set attributes
     this->life_points_ = attributes.at(type)[0];
@@ -47,6 +49,8 @@ Character::~Character()
 }
 
 std::string Character::type() const { return this->type_;}
+
+bool Character::isConstantlyDamaged() const{ return this->constant_damage_points_ > 0;}
 
 bool Character::go(const std::string& direction)
 {
@@ -174,16 +178,32 @@ void Character::set_life(int life)
 void Character::add_life(int life)
 {
     this->life_points_ = std::min(this->life_points_ + life, MAX_LIFE); // XXX CHANGE so that every player has its own
+    std::stringstream ss;
+    ss << "The character "<<this->name()<<" gains "<<life<<" life points, so it now has "<<this->life_points_<<" life points";
+    lab3::utils_io::print_newline(ss.str());
 }
 
-void Character::add_strength(int stregth)
+void Character::add_strength(int strength)
 {
-    this->life_points_ = std::min(this->strength_ + stregth, MAX_STRENGTH); // XXX CHANGE so that every player has its own
+    this->life_points_ = std::min(this->strength_ + strength, MAX_STRENGTH); // XXX CHANGE so that every player has its own
+    std::stringstream ss;
+    ss << "The character "<<this->name()<<" gains "<<strength<<" strength points, so it now has "<<this->strength_<<" strength points";
+    lab3::utils_io::print_newline(ss.str());
 }
 
 void Character::set_talk_msgs(const std::vector<std::string> &msgs)
 {
     this->talk_msgs_ = msgs;
+}
+
+void Character::set_constantly_damaged(const std::string &type, int points)
+{
+    std::stringstream ss;
+    ss << "The character "<<this->name()<< "is now "<<type<<"! It will lose "<<points<<" after each turn";
+    lab3::utils_io::print_newline(ss.str());
+
+    this->constant_damage_type_ = type;
+    this->constant_damage_points_ = 0;
 }
 
 // ** Accessors

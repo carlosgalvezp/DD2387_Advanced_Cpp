@@ -13,6 +13,9 @@ class Troll : public Animal
 public:
     Troll();
     Troll(const std::string &name, Place *place);
+
+    std::string action(bool display_info); // == 0
+
     ~Troll();
 
 private:

@@ -1,14 +1,12 @@
-// STL
-#include <iostream>
-#include <vector>
-
 // Own
 #include <game_engine.h>
+
+using namespace lab3;
 
 int main()
 {
     // ** Create Game Engine
-    lab3::GameEngine game_engine;
+    GameEngine game_engine;
 
     // ** Init game
     game_engine.initGame();

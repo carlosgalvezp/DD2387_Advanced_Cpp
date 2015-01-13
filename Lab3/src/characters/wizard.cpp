@@ -13,6 +13,11 @@ Wizard::Wizard(const std::string &name, Place *place, std::map<std::string, Plac
                         "in order to weaken it. I will come with you and together we will destroy the monster"};
 }
 
+Wizard::~Wizard()
+{}
+
+int Wizard::getMagicPoints()    const   {return this->magic_points_;}
+
 std::string Wizard::action(bool display_info)
 {
     std::cout << "[Wizard::action] TO DO" << std::endl;
@@ -40,6 +45,11 @@ bool Wizard::teleport(const std::string &place)
     return false;
 }
 
-Wizard::~Wizard()
-{}
+void Wizard::recover_magic()
+{
+    std::stringstream ss;
+    this->magic_points_ = std::min(this->magic_points_ + WIZARD_RECOVER_MAGIC_POINTS, WIZARD_MAX_MAGIC_POINTS);
+    ss << "The "<<this->name()<<" recovers magic up to "<<this->magic_points_<<" points";
 
+    lab3::utils_io::print_newline(ss.str());
+}

@@ -5,6 +5,8 @@
 #include <utils/utils_io.h>
 #include <characters/finalmonster.h>
 
+#define HOPE_MAX        10
+
 namespace lab3
 {
 namespace characters
@@ -17,13 +19,15 @@ public:
     ~Princess();
 
     std::string action(bool display_info);
-    std::string type() const;
 
-    bool distractMonster(characters::FinalMonster& monster);
+    void addHope(int hope);
+    int getHope()   const;
 
 private:
     int hope_;  // Hope that she gets rescued.
                 // If it's high, she will get more ideas to distract the monster
+
+    bool distractMonster(characters::FinalMonster& monster) const;
 };
 
 }

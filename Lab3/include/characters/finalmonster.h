@@ -1,6 +1,9 @@
 #ifndef FINALMONSTER_H
 #define FINALMONSTER_H
 
+#define DISTRACTION_MAX     0
+#define DISTRACTION_MIN     50
+
 #include <character.h>
 namespace lab3
 {
@@ -14,10 +17,12 @@ public:
     FinalMonster(const std::string &name, Place* place);
     ~FinalMonster();
 
-    bool fight(Character &character);
+    bool fight(Character &character); // = 0
 
-    std::string action(bool display_info);
-    std::string type() const;
+    std::string action(bool display_info); // = 0
+
+    void addDistraction(int distraction);
+    int getDistraction()    const;
 
 private:
     bool defeated_player_;  // After the monster defeats the player, the wizard appears

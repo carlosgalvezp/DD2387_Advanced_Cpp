@@ -3,8 +3,10 @@
 
 #include <character.h>
 
-#define PARAM_ANIMAL_STRENGTH   10
-#define PARAM_ANIMAL_DEFENSE    5
+#define PROB_FOOD_IN        0.8
+#define PROB_FOOD_OUT       0.3
+
+#define LIFE_FOOD           5
 
 namespace lab3
 {
@@ -17,13 +19,14 @@ public:
     Animal();
     Animal(const std::string &name, const std::string &type, Place *place);
 
-    std::string action(bool display_info);
-    bool lookForFood();                     // Gives life points
+    std::string action(bool display_info)=0;
     ~Animal();
 
 protected:
     Place *natural_habitat_;        // If the animal is not here, its chances to find food are smaller
     int age_;                   // Animals get old and therefore fight worse. Eventually they die
+
+    bool lookForFood();                     // Gives life points
 };
 
 }

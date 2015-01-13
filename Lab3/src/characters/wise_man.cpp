@@ -22,7 +22,7 @@ Wise_Man::Wise_Man(const std::string &name, Place *place)
 Wise_Man::~Wise_Man()
 {}
 
-std::string Wise_Man::action()
+std::string Wise_Man::action(bool display_info)
 {
     try
     {
@@ -57,3 +57,13 @@ void Wise_Man::setTellAboutWizard(bool x)
 {
     will_tell_about_wizard_ = x;
 }
+
+void Wise_Man::read()
+{
+    this->knowledge_ += WISE_MAN_READ_POINTS;
+    std::stringstream ss;
+    ss << "The "<<this->name() << " reads an ancient book. His knowledge is increased up to "<<this->knowledge_<<" points";
+    lab3::utils_io::print_newline(ss.str());
+}
+
+int Wise_Man::getKnowledgePoints()  const   { return this->knowledge_;}

@@ -7,7 +7,9 @@
 #include <object.h>
 #include <place.h>
 #include <utils/utils_io.h>
+#include <utils/utils.h>
 #include <names.h>
+
 #define MAX_LIFE                50
 #define MAX_STRENGTH            50
 #define DEFAULT_INITIATIVE      10
@@ -43,6 +45,7 @@ public:
     void set_life(int life);
     void add_strength(int stregth);
     void set_talk_msgs(const std::vector<std::string> &msgs);
+    void set_constantly_damaged(const std::string& type, int points);
 
     // Accessors
     int getLifePoints()             const;
@@ -62,11 +65,12 @@ public:
              std::vector<Object*>& objects();
 
     virtual const std::vector<std::string> &getCommands()         const;
+    const std::vector<std::string> & getTalkMessages()            const;
 
-    const std::vector<std::string> & getTalkMessages()      const;
+    std::string type()                      const;
+    std::string name()                      const;
 
-    std::string type()              const;
-    std::string name()              const;
+    bool isConstantlyDamaged()              const;
 
     bool operator==(const Character &ch)    const;
     bool operator!=(const Character &ch)    const;
@@ -82,16 +86,19 @@ protected:
     int defense_;
     int initiative_;
 
+    bool is_fighting_;
+    int n_msg_talk_;
+
+    int constant_damage_points_;
+    std::string constant_damage_type_;
+
     std::vector<Object*> objects_;
 
-    bool is_fighting_;
 
     std::vector<std::string> talk_msgs_;
 
     Character* fighter_;
 
-private:
-    int n_msg_talk_;
 };
 
 int computeDamage(const Character &attacker, const Character &defender);

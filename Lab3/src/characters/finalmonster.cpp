@@ -16,7 +16,7 @@ FinalMonster::~FinalMonster()
 
 std::string FinalMonster::action(bool display_info)
 {
-
+    std::cout <<"[FinalMonster::action]"<<std::endl;
     if(this->isFighting())
     {
         try
@@ -31,11 +31,6 @@ std::string FinalMonster::action(bool display_info)
     return EVENT_NULL;
 }
 
-std::string FinalMonster::type() const
-{
-    return TYPE_FINAL_MONSTER;
-}
-
 bool FinalMonster::fight(Character &character)
 {
     bool finished = Character::fight(character);
@@ -48,3 +43,10 @@ bool FinalMonster::fight(Character &character)
     }
     return finished;
 }
+
+void FinalMonster::addDistraction(int distraction)
+{
+    this->distraction_ = std::max(std::min(this->distraction_ + distraction, DISTRACTION_MAX), DISTRACTION_MIN);
+}
+
+int FinalMonster::getDistraction()  const   {return this->distraction_; }

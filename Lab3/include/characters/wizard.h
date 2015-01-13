@@ -3,6 +3,9 @@
 
 #include <characters/human.h>
 
+#define WIZARD_RECOVER_MAGIC_POINTS     20
+#define WIZARD_MAX_MAGIC_POINTS         50
+
 namespace lab3
 {
 namespace characters
@@ -11,18 +14,22 @@ class Wizard : public Human
 {
 public:
     Wizard(const std::string &name, Place* place,std::map<std::string, Place*>& world_places);
-
-    std::string action(bool display_info);
-    void talk_to(Character &character);
-
-    void recover_magic();
-    bool teleport(const std::string& place); // the "go" version, but to anywhere
     ~Wizard();
+
+    std::string action(bool display_info); // == 0
+
+    void talk_to(Character &character);
+    bool teleport(const std::string& place); // the "go" version, but to anywhere
+
+    int getMagicPoints()    const;
+
 
 private:
     bool talked_to_player_;
     std::map<std::string, Place*>& world_places_;
     int magic_points_;      //Available points to use his magic
+
+    void recover_magic();
 };
 }
 }

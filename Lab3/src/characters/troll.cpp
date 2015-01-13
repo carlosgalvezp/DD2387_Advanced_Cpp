@@ -12,3 +12,8 @@ Troll::Troll(const std::string &name, Place *place)
 Troll::~Troll()
 {}
 
+std::string Troll::action(bool display_info)
+{
+    std::cout << "[Troll::action]"<<std::endl;
+    return EVENT_NULL;
+}
