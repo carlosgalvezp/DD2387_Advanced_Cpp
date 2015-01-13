@@ -1,9 +1,7 @@
 #include <characters/wolf.h>
 
-namespace lab3
-{
-namespace characters
-{
+using namespace lab3::characters;
+using namespace lab3;
 
 Wolf::Wolf()
 {}
@@ -17,7 +15,32 @@ Wolf::~Wolf()
 
 std::string Wolf::action(bool display_info)
 {
-    std::cout << "[Wolf::action]"<<std::endl;
+    // ** Fight first
+    if(this->isFighting())
+    {
+        // Decide whether normal fight or bleeding bite
+        if(lab3::utils::eventHappens(BLEED_HURT_PROB))
+            this->bleedingBite(*this->fighter_);
+        else
+            this->fight(*this->fighter_);
+    }
+    else
+    {
+        // ** Decide whether fight or look for food
+        Character* enemy = this->lookForEnemies();
+        if(enemy != nullptr)
+        {
+            double food_prob = 1 - this->life_points_ / MAX_LIFE;
+            if(lab3::utils::eventHappens(food_prob))
+            {
+                this->lookForFood();
+            }
+            else
+            {
+                this->fight(*enemy);
+            }
+        }
+    }
     return EVENT_NULL;
 }
 
@@ -47,7 +70,9 @@ bool Wolf::bleedingBite(Character &c)
     }
 }
 
-}
+bool Wolf::isEnemy(const Character &ch) const
+{
+    return ch.type() != TYPE_WOLF;
 }
 
 

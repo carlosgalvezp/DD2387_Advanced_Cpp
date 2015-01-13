@@ -25,6 +25,8 @@ public:
     int getMoney()              const;
     void addMoney(int money);
 
+    bool isEnemy(const Character &ch) const;
+
     bool buy(Object &o);
     bool sell(Object &o);
     bool use(Object &o);

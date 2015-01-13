@@ -1,6 +1,7 @@
 #include <characters/vampire.h>
 
 using namespace lab3::characters;
+using namespace lab3;
 
 Vampire::Vampire()
 {}
@@ -14,7 +15,32 @@ Vampire::~Vampire()
 
 std::string Vampire::action(bool display_info)
 {
-    std::cout << "[Vampire::action]"<<std::endl;
+    // ** Fight first
+    if(this->isFighting())
+    {
+        // Decide whether normal fight or bleeding bite
+        if(lab3::utils::eventHappens(POISON_PROB))
+            this->poison(*this->fighter_);
+        else
+            this->fight(*this->fighter_);
+    }
+    else
+    {
+        // ** Decide whether fight or look for food
+        Character* enemy = this->lookForEnemies();
+        if(enemy != nullptr)
+        {
+            double food_prob = 1 - this->life_points_ / MAX_LIFE;
+            if(lab3::utils::eventHappens(food_prob))
+            {
+                this->lookForFood();
+            }
+            else
+            {
+                this->fight(*enemy);
+            }
+        }
+    }
     return EVENT_NULL;
 }
 
@@ -47,3 +73,8 @@ bool Vampire::poison(Character &c)
 }
 
 double Vampire::getPoisonConcentration()    const{  return this->poison_concentration_;}
+
+bool Vampire::isEnemy(const Character &ch) const
+{
+    return ch.type() != TYPE_VAMPIRE && ch.type() != TYPE_TROLL; // They don't attack vampires or trolls (they are afraid of them)
+}

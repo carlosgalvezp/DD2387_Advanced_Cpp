@@ -6,7 +6,7 @@ Player::Player()
 {}
 
 Player::Player(const std::string &name, Place *place)
-    : Human(name, TYPE_PLAYER, place),
+    : Human(name, TYPE_HUMAN, place),
       finished_game_(false),
       experience_(0),
       kills_wolf_(0),

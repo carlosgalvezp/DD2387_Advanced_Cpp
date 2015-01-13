@@ -6,7 +6,7 @@ Princess::Princess()
 {}
 
 Princess::Princess(const std::string &name, Place *place)
-    : Human(name, TYPE_PRINCESS, place), hope_(0)
+    : Human(name, TYPE_HUMAN, place), hope_(0)
 {
     this->talk_msgs_ =
     {

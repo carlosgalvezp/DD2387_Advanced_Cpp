@@ -211,6 +211,18 @@ int Character::getInitiative()    const{    return this->initiative_;  }
 bool Character::isAlive()         const{    return this->getLifePoints() > 0;}
 bool Character::isFighting()      const{    return this->is_fighting_;}
 
+//bool Character::isEnemy(const Character &ch) const  {return false;} // Not by default
+
+Character* Character::lookForEnemies()  const
+{
+    for(Character*c : this->currentPlace()->characters())
+    {
+        if(this->isEnemy(*c))
+            return c;
+    }
+    return nullptr;
+}
+
 const std::vector<std::string>& Character::getCommands()      const
 {
     // ** Get commands from place

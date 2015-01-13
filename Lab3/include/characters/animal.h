@@ -24,9 +24,9 @@ public:
 
 protected:
     Place *natural_habitat_;        // If the animal is not here, its chances to find food are smaller
-    int age_;                   // Animals get old and therefore fight worse. Eventually they die
+    int age_;                       // Animals get old and therefore fight worse. Eventually they die
 
-    bool lookForFood();                     // Gives life points
+    bool lookForFood();               // Gives life points
 };
 
 }

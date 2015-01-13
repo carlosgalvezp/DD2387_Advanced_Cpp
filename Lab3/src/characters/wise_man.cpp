@@ -26,17 +26,10 @@ std::string Wise_Man::action(bool display_info)
 {
     try
     {
-        if(this->currentPlace()->characters().size() != 0)
+        Character* player = this->currentPlace()->getCharacter(NAME_PLAYER);
+        if(player != nullptr)
         {
-            // Only talk to player
-            for(Character* c : this->currentPlace()->characters())
-            {
-                if(c->type() == TYPE_PLAYER)
-                {
-                    talk_to(*c);
-                    break;
-                }
-            }
+            talk_to(*player);
         }
     }
     catch (std::runtime_error &e)   {return e.what();}

@@ -5,6 +5,7 @@
 
 #define WOLF_MAX_TEETH_SIZE      10
 #define BLEED_HURT_POINTS        5
+#define BLEED_HURT_PROB          0.3
 
 namespace lab3
 {
@@ -23,6 +24,7 @@ private:
     int teeth_size_;    // The bigger, the more likely the bite works and the character bleeds forever.
                         // The teeth grow with age
 
+    bool isEnemy(const Character &ch) const;
     bool bleedingBite(Character& c);        //The character bleeds until it dies if it doesn't get cured
 };
 }

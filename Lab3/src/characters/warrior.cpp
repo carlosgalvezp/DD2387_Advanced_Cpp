@@ -31,7 +31,7 @@ int Warrior::getDefense()   const
 
 std::string Warrior::action(bool display_info)
 {
-    Character*c = lookForAnimals();
+    Character*c = lookForEnemies();
     if(c != nullptr)            // ** Fight to animals if they appear in the place
     {
         this->fight(*c);
@@ -61,14 +61,3 @@ void Warrior::train()
 }
 
 int Warrior::getSkillPoints()   const   {return this->skill_;}
-
-Character* Warrior::lookForAnimals() const
-{
-    for(Character *c : this->currentPlace()->characters())
-    {
-        characters::Human* c_human = dynamic_cast<characters::Human*>(c);
-        if(c_human == nullptr) // Not a human -> should not be in the city!!
-            return c;
-    }
-    return nullptr; // No animals -> nullptr
-}

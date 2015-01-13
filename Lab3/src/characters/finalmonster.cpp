@@ -50,3 +50,4 @@ void FinalMonster::addDistraction(int distraction)
 }
 
 int FinalMonster::getDistraction()  const   {return this->distraction_; }
+bool FinalMonster::isEnemy(const Character &ch) const   {  return true;}    // Everyone is an enemy

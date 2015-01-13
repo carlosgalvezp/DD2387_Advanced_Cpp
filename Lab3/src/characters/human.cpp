@@ -57,3 +57,8 @@ bool Human::use(Object &o)
     std::cout << "[Human::use]" << std::endl;
     return true;
 }
+
+bool Human::isEnemy(const Character &ch) const
+{
+    return ch.type() != TYPE_HUMAN && ch.type() != TYPE_WIZARD;
+}

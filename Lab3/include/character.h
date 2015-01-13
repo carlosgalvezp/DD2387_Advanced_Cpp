@@ -75,6 +75,8 @@ public:
     bool operator==(const Character &ch)    const;
     bool operator!=(const Character &ch)    const;
 
+    virtual bool isEnemy(const Character &ch)       const =0;
+    virtual Character* lookForEnemies()             const;
 protected:
     std::string name_;
     std::string type_;
