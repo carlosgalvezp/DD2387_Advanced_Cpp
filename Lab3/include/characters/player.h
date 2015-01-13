@@ -54,10 +54,13 @@ public:
     std::vector<std::string> getCommands();
 
     objects::Container      *getBackpack();
-    objects::Weapon         *getWeapon();
-    objects::Protection     *getProtection();
+    objects::Weapon         *getWeapon()            const;
+    objects::Protection     *getProtection()        const;
 
     bool use(Object &o);
+
+    int getStrength()   const;
+    int getDefense()    const;
 private:
     bool finished_game_;
     int experience_;

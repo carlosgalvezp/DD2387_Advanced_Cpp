@@ -21,6 +21,7 @@ bool Potion::use(Character &c)
     return true;
 }
 
+
 Potion::~Potion()
 {}
 

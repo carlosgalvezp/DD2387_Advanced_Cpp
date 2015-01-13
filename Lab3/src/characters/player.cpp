@@ -33,9 +33,9 @@ Player::~Player()
 {
 }
 
-lab3::objects::Container* Player::getBackpack(){return static_cast<lab3::objects::Container*>(this->objects_[0]);}
-lab3::objects::Weapon*    Player::getWeapon()  {return static_cast<lab3::objects::Weapon*>(this->objects_[1]);}
-lab3::objects::Protection*Player::getProtection(){return static_cast<lab3::objects::Protection*>(this->objects_[2]);}
+lab3::objects::Container* Player::getBackpack() {return static_cast<lab3::objects::Container*>(this->objects_[0]);}
+lab3::objects::Weapon*    Player::getWeapon()       const{return static_cast<lab3::objects::Weapon*>(this->objects_[1]);}
+lab3::objects::Protection*Player::getProtection()   const{return static_cast<lab3::objects::Protection*>(this->objects_[2]);}
 
 std::string Player::action(bool display_info)
 {
@@ -212,6 +212,25 @@ std::string Player::type() const
 
 bool Player::finishedGame() const   {   return this->finished_game_;    }
 
+int Player::getStrength() const
+{
+    int strength = Character::getStrength();
+    if(this->getWeapon() != nullptr)
+    {
+        strength += this->getWeapon()->attackPoints();
+    }
+    return strength;
+}
+
+int Player::getDefense()    const
+{
+    int defense = Character::getDefense();
+    if(this->getProtection() != nullptr)
+    {
+        defense += this->getProtection()->defensePoints();
+    }
+    return defense;
+}
 
 void Player::status()       const
 {
@@ -261,16 +280,20 @@ std::vector<std::string> Player::getCommands()
 
 void Player::check_event_trained(const Character &character)
 {
-    if(character.type() == TYPE_WOLF)  // it's a wolf
-        ++this->kills_wolf_;
-    else if(character.type() == TYPE_VAMPIRE) // it's a vampire
-        ++this->kills_vampire_;
-
-    if(this->experience_ >= MIN_EXPERIENCE &&
-       this->kills_vampire_ >= MIN_KILL_ANIMAL &&
-       this->kills_wolf_  >= MIN_KILL_ANIMAL)
+    if(!event_trained_)
     {
-        throw std::runtime_error(EVENT_ENOUGH_TRAIN);
+        if(character.type() == TYPE_WOLF)  // it's a wolf
+            ++this->kills_wolf_;
+        else if(character.type() == TYPE_VAMPIRE) // it's a vampire
+            ++this->kills_vampire_;
+
+        if(this->experience_ >= MIN_EXPERIENCE &&
+           this->kills_vampire_ >= MIN_KILL_ANIMAL &&
+           this->kills_wolf_  >= MIN_KILL_ANIMAL)
+        {
+            event_trained_ = true;
+            throw std::runtime_error(EVENT_ENOUGH_TRAIN);
+        }
     }
 }
 
@@ -281,3 +304,4 @@ void Player::check_event_final_monster(const Character &character)
         throw std::runtime_error(EVENT_GAME_FINISHED);
     }
 }
+

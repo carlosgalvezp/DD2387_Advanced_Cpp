@@ -18,15 +18,6 @@ Animal::Animal(const std::string &name, const std::string &type, Place* place)
 Animal::~Animal()
 {}
 
-std::string Animal::action(bool display_info)
-{
-    if(this->isFighting())
-    {
-        fight(*this->fighter_);
-    }
-    return EVENT_NULL;
-}
-
 bool Animal::lookForFood()
 {
     std::stringstream ss,ss2;

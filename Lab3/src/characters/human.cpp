@@ -13,10 +13,6 @@ Human::Human(const std::string &name, const std::string &type, Place *place)
 Human::~Human()
 {}
 
-std::string Human::action(bool display_info)
-{
-    return EVENT_NULL;
-}
 int Human::getMoney()   const   {return this->money_; }
 
 void Human::addMoney(int money)

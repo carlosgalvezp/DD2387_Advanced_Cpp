@@ -56,6 +56,8 @@
 #define CMD_SELL                "sell"
 #define CMD_REPAIR              "repair equipment"
 
+#define CMD_DISTRACT_MONSTER    "distract"
+
 //Events
 #define EVENT_ENOUGH_TRAIN          "enough train"
 #define EVENT_MENTIONED_KEY         "mentioned key"

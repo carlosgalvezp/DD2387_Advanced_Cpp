@@ -49,9 +49,9 @@ public:
 
     // Accessors
     int getLifePoints()             const;
-    int getStrength()               const;
-    int getDefense()                const;
-    int getInitiative()             const;
+    virtual int getStrength()               const;
+    virtual int getDefense()                const;
+    virtual int getInitiative()             const;
     bool isAlive()                  const;
     bool isFighting()               const;
 
@@ -96,6 +96,7 @@ protected:
 
 
     std::vector<std::string> talk_msgs_;
+    std::vector<std::string> action_commands_;
 
     Character* fighter_;
 

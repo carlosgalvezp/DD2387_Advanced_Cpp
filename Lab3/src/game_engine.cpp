@@ -255,7 +255,7 @@ void GameEngine::event_TorchOn()
     lab3::utils_io::print_newline(">>> The light has waken up a Furious Troll!!<<<");
     // ** Now the key is visible, and the Troll has been waken up
     Place *cave = this->places_map_.at(NAME_CAVE);
-    cave->addObject(*(new objects::Key("Key to the King's Castle",places_map_.at(NAME_CASTLE))));
+    cave->addObject(*(new objects::Key("key to the King's Castle",places_map_.at(NAME_CASTLE))));
     characters_map_.insert(std::make_pair(NAME_TROLL, new characters::Troll(NAME_TROLL, cave)));
 }
 

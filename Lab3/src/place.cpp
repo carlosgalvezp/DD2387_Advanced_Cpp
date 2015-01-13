@@ -192,6 +192,27 @@ void Place::killCharacter(Character &character)
     c = nullptr;
 }
 
+bool Place::containsCharacter(const std::string &character_name) const
+{
+    for(Character *c : this->characters_)
+    {
+        if(c->name() == character_name)
+            return true;
+    }
+    return false;
+}
+
+Character* Place::getCharacter(const std::string &name)
+{
+    for(Character *c : this->characters_)
+    {
+        if(c->name() == name)
+            return c;
+    }
+    return nullptr;
+}
+
+
 void lab3::places::connectPlaces(Place &p1, Place &p2, const std::string &d12)
 {
     p1.addDirection(d12, &p2);

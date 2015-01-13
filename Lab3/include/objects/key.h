@@ -16,6 +16,8 @@ public:
     Key(const std::string &name, lab3::Place* place);
 
     bool use(Character &c);
+
+    Place* getPlace()   const;
     ~Key();
 
 private:

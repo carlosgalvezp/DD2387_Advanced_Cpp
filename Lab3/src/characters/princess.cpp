@@ -10,9 +10,12 @@ Princess::Princess(const std::string &name, Place *place)
 {
     this->talk_msgs_ =
     {
-        "Please help me, I am trapped here!",
-        "You need to defeat the final monster in order to free me!"
+        "Let me out, please!",
+        "Someone will come and save me, I can tell you!",
+        "You will get destroyed soon!"
     };
+
+    this->action_commands_ = {CMD_TALK, CMD_DISTRACT_MONSTER};
 }
 
 Princess::~Princess()
@@ -20,7 +23,40 @@ Princess::~Princess()
 
 std::string Princess::action(bool display_info)
 {
-    lab3::utils_io::print_newline("[Princess::action] ");
+    Character *player = this->currentPlace()->getCharacter(NAME_PLAYER);
+    Character *monster = this->currentPlace()->getCharacter(NAME_FINAL_MONSTER);
+    if(player == nullptr)   // The player is not here
+    {
+        // Just beg the monster for liberation
+        talk_to(*monster);
+    }
+    else
+    {
+        // Try to help the player by giving advice or distracting the monster
+        this->talk_msgs_ =
+        {
+            "Attack this monster! I will try to distract him meanwhile!",
+            "His skin is too thick for a normal weapon. Some kind of magic is required to remove that protection!",
+            "Remember to use potions when you are low on life points!"
+        };
+
+        std::vector<int> command_points = {5,this->hope_};
+        std::string cmd = lab3::utils::getRandomCommandPoints(this->action_commands_, command_points);
+        if(cmd == CMD_TALK)
+        {
+            talk_to(*this->currentPlace()->getCharacter(NAME_PLAYER));
+        }
+        else if(cmd == CMD_DISTRACT_MONSTER)
+        {
+            this->distractMonster(*static_cast<characters::FinalMonster*>(monster));
+        }
+
+        this->addHope(1); // The hope increases when she sees the Player
+        std::stringstream ss;
+        ss << "The "<<this->name()<<" increases her hope up to " << this->hope_<<" when seeing the "<<player->name()<<" <3";
+        lab3::utils_io::print_newline(ss.str());
+    }
+
     return EVENT_NULL;
 }
 

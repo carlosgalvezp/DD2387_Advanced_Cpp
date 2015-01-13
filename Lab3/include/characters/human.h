@@ -20,9 +20,9 @@ public:
     Human(const std::string &name, const std::string &type, Place *p);
     ~Human();
 
-    std::string action(bool display_info);
+    std::string action(bool display_info) = 0;
 
-    int getMoney()      const;
+    int getMoney()              const;
     void addMoney(int money);
 
     bool buy(Object &o);

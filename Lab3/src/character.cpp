@@ -48,7 +48,8 @@ Character::~Character()
     }
 }
 
-std::string Character::type() const { return this->type_;}
+std::string Character::type()     const { return this->type_;           }
+std::string Character::name()     const {    return this->name_;        }
 
 bool Character::isConstantlyDamaged() const{ return this->constant_damage_points_ > 0;}
 
@@ -59,17 +60,12 @@ bool Character::go(const std::string& direction)
 
     // ** Check if the given direction is available
     Place *new_place;
-    try
+    if(directions.find(direction) != directions.end())
     {
         new_place = directions.at(direction);
+        return new_place->enter(*this);
     }
-    catch(std::out_of_range &e)
-    {
-        return false;
-    }
-
-    // ** Enter the place
-    return new_place->enter(*this);
+    return false;
 }
 
 bool Character::fight(Character &character)
@@ -156,8 +152,8 @@ bool Character::drop(lab3::Object &object)
 
 void Character::talk_to(Character &character)
 {
-    std::string msg = "[" + this->name()+"] "
-            + this->getTalkMessages()[n_msg_talk_++%this->getTalkMessages().size()];
+    std::string msg = "[" + this->name()+"] talks to " + character.name()+":\n"
+            + "\""+this->getTalkMessages()[n_msg_talk_++%this->getTalkMessages().size()]+"\"";
     lab3::utils_io::print_newline(msg);
 }
 
@@ -222,7 +218,6 @@ const std::vector<std::string>& Character::getCommands()      const
 }
 const std::vector<std::string>& Character::getTalkMessages()  const { return this->talk_msgs_;}
 
-std::string Character::name()     const{    return this->name_;        }
 
 const Place* Character::currentPlace()      const           {    return this->current_place_;    }
       Place* Character::currentPlace()                      {    return this->current_place_;    }

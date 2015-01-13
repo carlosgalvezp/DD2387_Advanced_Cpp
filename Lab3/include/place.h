@@ -47,6 +47,9 @@ public:
     void addCharacter(Character &character);
     void addObject(Object &o);
 
+    bool containsCharacter(const std::string& character_name)  const;
+    Character* getCharacter(const std::string& name);
+
     // Accessors
     std::string name()        const;
     std::string description() const;

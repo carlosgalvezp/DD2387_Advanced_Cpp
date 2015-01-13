@@ -1,5 +1,6 @@
 #include <places/castle.h>
 #include <objects/container.h>
+#include <objects/key.h>
 
 using namespace lab3::places;
 using namespace lab3;
@@ -27,10 +28,12 @@ bool Castle::enter(Character &character)
             {
                 for(Object *item : o_container->objects())
                 {
-                    if(item->name() == "key" )
+                    // Try to cast to key
+                    objects::Key* key = dynamic_cast<objects::Key*>(item);
+                    if(key != nullptr && *key->getPlace() == *this )
                     {
                         this->is_open_ = true;
-                        lab3::utils_io::print_newline("The King's Castle is closed, but you open it with the key...");
+                        lab3::utils_io::print_newline("The King's Castle was closed, but you open it with the key...");
                         return Indoor::enter(character);
                     }
                 }

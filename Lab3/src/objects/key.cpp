@@ -1,6 +1,7 @@
 #include <objects/key.h>
 
 using namespace lab3::objects;
+using namespace lab3;
 
 Key::Key()
 {}
@@ -32,10 +33,11 @@ bool Key::use(Character &c)
     }
     else
     {
-        lab3::utils_io::print_newline("Can't use the key here");
+        lab3::utils_io::print_newline("Can't use a key here");
     }
     return false;
 }
 
+Place* Key::getPlace() const{   return this->place_;}
 
 

@@ -6,8 +6,8 @@ Weapon::Weapon()
 {}
 
 Weapon::Weapon(const std::string &name,
-               int attack_points,
                int hands_required,
+               int attack_points,
                int price,
                int volume,
                int weight)
