@@ -4,6 +4,8 @@
 #include <characters/human.h>
 
 #define WARRIOR_TRAIN_INCREASE_SKILL    5
+#define WARRIOR_INITIAL_SKILL           5
+#define TRAIN_PROB           0.6
 
 namespace lab3
 {
@@ -21,9 +23,13 @@ public:
 
     int getSkillPoints()    const;
 
+    int getStrength()   const;
+    int getDefense()    const;
+
 private:
     int skill_; // The more the skill, the more the final strength and defense
 
+    Character *lookForAnimals()   const;
     void train();
 };
 
