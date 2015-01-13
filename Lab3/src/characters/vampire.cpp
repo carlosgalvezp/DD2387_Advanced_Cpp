@@ -6,8 +6,8 @@ using namespace lab3;
 Vampire::Vampire()
 {}
 
-Vampire::Vampire(const std::string &name, Place* place)
-    : Animal (name, TYPE_VAMPIRE, place)
+Vampire::Vampire(const std::string &name, Place* place, Place* natural_habitat)
+    : Animal (name, TYPE_VAMPIRE, place, natural_habitat)
 {}
 
 Vampire::~Vampire()
@@ -23,6 +23,7 @@ std::string Vampire::action(bool display_info)
             this->poison(*this->fighter_);
         else
             this->fight(*this->fighter_);
+        return EVENT_NULL;
     }
     else
     {
@@ -39,8 +40,10 @@ std::string Vampire::action(bool display_info)
             {
                 this->fight(*enemy);
             }
+            return EVENT_NULL;
         }
     }
+    lab3::utils_io::print_newline(this->name() + " is sleeping...");
     return EVENT_NULL;
 }
 

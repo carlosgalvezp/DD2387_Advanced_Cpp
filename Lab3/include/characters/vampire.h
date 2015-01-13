@@ -18,7 +18,7 @@ class Vampire : Animal
 {
 public:
     Vampire();
-    Vampire(const std::string &name, Place *place);
+    Vampire(const std::string &name, Place* place, Place* natural_habitat);
 
     std::string action(bool display_info); //  = 0;
 

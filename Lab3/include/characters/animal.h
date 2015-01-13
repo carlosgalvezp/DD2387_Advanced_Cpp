@@ -17,7 +17,7 @@ class Animal : public Character
 {
 public:
     Animal();
-    Animal(const std::string &name, const std::string &type, Place *place);
+    Animal(const std::string &name, const std::string &type, Place *place, Place *natural_habitat);
 
     std::string action(bool display_info)=0;
     ~Animal();

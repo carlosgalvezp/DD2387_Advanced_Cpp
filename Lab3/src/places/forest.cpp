@@ -22,6 +22,6 @@ void Forest::generateObjects()
 
 void Forest::createCharacters()
 {
-    new characters::Wolf("wolf 1", this);
-    new characters::Wolf("wolf 2", this);
+    new characters::Wolf("wolf 1", this, this);
+    new characters::Wolf("wolf 2", this, this);
 }

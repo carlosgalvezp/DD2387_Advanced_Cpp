@@ -7,7 +7,8 @@ Wise_Man::Wise_Man()
 
 Wise_Man::Wise_Man(const std::string &name, Place *place)
     : Human(name, TYPE_HUMAN, place),
-      will_tell_about_wizard_(false)
+      will_tell_about_wizard_(false),
+      knowledge_(0)
 {
     this->talk_msgs_ =
     {
@@ -24,15 +25,19 @@ Wise_Man::~Wise_Man()
 
 std::string Wise_Man::action(bool display_info)
 {
-    try
+
+    Character* player = this->currentPlace()->getCharacter(NAME_PLAYER);
+    if(player != nullptr)
     {
-        Character* player = this->currentPlace()->getCharacter(NAME_PLAYER);
-        if(player != nullptr)
+        try
         {
             talk_to(*player);
-        }
+        }catch (std::runtime_error &e)   {return e.what();}
     }
-    catch (std::runtime_error &e)   {return e.what();}
+    else
+    {
+        this->read();
+    }
     return EVENT_NULL;
 }
 

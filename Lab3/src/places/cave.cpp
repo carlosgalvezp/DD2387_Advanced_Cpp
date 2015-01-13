@@ -20,6 +20,6 @@ void Cave::generateObjects()
 
 void Cave::createCharacters()
 {
-    new characters::Vampire("vampire 1", this);
-    new characters::Vampire("vampire 2", this);
+    new characters::Vampire("vampire 1", this, this);
+    new characters::Vampire("vampire 2", this, this);
 }

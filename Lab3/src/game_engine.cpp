@@ -157,6 +157,8 @@ void GameEngine::run()
         {
             if(c!= nullptr && c->isAlive())
             {
+                lab3::utils_io::print_newline("--------------------------------------------------------------------");
+                lab3::utils_io::print_newline(c->name() + "'s turn");
                 // ** Execute action
                 std::string event = c->action(c->currentPlace() == player->currentPlace()); // Switch to true to see all messages
 
@@ -256,7 +258,7 @@ void GameEngine::event_TorchOn()
     // ** Now the key is visible, and the Troll has been waken up
     Place *cave = this->places_map_.at(NAME_CAVE);
     cave->addObject(*(new objects::Key("key to the King's Castle",places_map_.at(NAME_CASTLE))));
-    characters_map_.insert(std::make_pair(NAME_TROLL, new characters::Troll(NAME_TROLL, cave)));
+    characters_map_.insert(std::make_pair(NAME_TROLL, new characters::Troll(NAME_TROLL, cave, cave)));
 }
 
 void GameEngine::event_TriedMonster()

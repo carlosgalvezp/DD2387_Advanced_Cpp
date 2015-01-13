@@ -6,8 +6,8 @@ Animal::Animal()
 {
 
 }
-Animal::Animal(const std::string &name, const std::string &type, Place* place)
-    : Character(name,type, place)
+Animal::Animal(const std::string &name, const std::string &type, Place* place, Place* natural_habitat)
+    : Character(name,type, place), natural_habitat_(natural_habitat)
 {
     this->talk_msgs_ =
     {
@@ -20,7 +20,7 @@ Animal::~Animal()
 
 bool Animal::lookForFood()
 {
-    std::stringstream ss,ss2;
+    std::stringstream ss;
     ss << this->name() <<" is looking for food...";
     lab3::utils_io::print_newline(ss.str());
 

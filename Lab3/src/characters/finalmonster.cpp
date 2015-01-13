@@ -9,14 +9,18 @@ FinalMonster::FinalMonster()
 FinalMonster::FinalMonster(const std::string &name, Place *place)
     : Character(name, TYPE_FINAL_MONSTER, place),
       defeated_player_(false)
-{}
+{
+    this->talk_msgs_ = {"You will never get out of that jail dear Princess",
+                        "Soon the entire city will be mine muahaha...",
+                        "Your friends cannot defeat me!"};
+
+}
 
 FinalMonster::~FinalMonster()
 {}
 
 std::string FinalMonster::action(bool display_info)
 {
-    std::cout <<"[FinalMonster::action]"<<std::endl;
     if(this->isFighting())
     {
         try
@@ -27,6 +31,10 @@ std::string FinalMonster::action(bool display_info)
         {
             return e.what();
         }
+    }
+    else
+    {
+        this->talk_to(*this->currentPlace()->getCharacter(NAME_PRINCESS));
     }
     return EVENT_NULL;
 }

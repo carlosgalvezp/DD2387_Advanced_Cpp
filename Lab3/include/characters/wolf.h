@@ -15,7 +15,7 @@ class Wolf : public Animal
 {
 public:
     Wolf();
-    Wolf(const std::string &name, Place *place);
+    Wolf(const std::string &name, Place *place, Place *natural_habitat);
 
     std::string action(bool display_info); // == 0
     ~Wolf();

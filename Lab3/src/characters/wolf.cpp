@@ -6,8 +6,9 @@ using namespace lab3;
 Wolf::Wolf()
 {}
 
-Wolf::Wolf(const std::string &name, Place *place)
-    : Animal(name, TYPE_WOLF, place)
+Wolf::Wolf(const std::string &name, Place *place, Place *natural_habitat)
+    : Animal(name, TYPE_WOLF, place, natural_habitat),
+      teeth_size_(0)
 {}
 
 Wolf::~Wolf()
@@ -23,6 +24,7 @@ std::string Wolf::action(bool display_info)
             this->bleedingBite(*this->fighter_);
         else
             this->fight(*this->fighter_);
+        return EVENT_NULL;
     }
     else
     {
@@ -37,8 +39,15 @@ std::string Wolf::action(bool display_info)
             }
             else
             {
-                this->fight(*enemy);
+                if(!enemy->isFighting())
+                {
+                    this->fight(*enemy);
+                }
             }
+        }
+        else
+        {
+            this->lookForFood();
         }
     }
     return EVENT_NULL;
