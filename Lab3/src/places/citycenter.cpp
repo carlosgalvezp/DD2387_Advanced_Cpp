@@ -15,6 +15,6 @@ CityCenter::~CityCenter()
 void CityCenter::createCharacters()
 {
     new characters::Warrior("warrior 1", this);
-    new characters::Warrior("warrior 2", this);
+//    new characters::Warrior("warrior 2", this);
 }
 

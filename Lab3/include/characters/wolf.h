@@ -4,7 +4,7 @@
 #include <characters/animal.h>
 
 #define WOLF_MAX_TEETH_SIZE      10
-#define BLEED_HURT_POINTS        5
+#define BLEED_HURT_POINTS        20
 #define BLEED_HURT_PROB          0.3
 
 #define WOLF_REPRODUCTION_FREQUENCY     10 // in days

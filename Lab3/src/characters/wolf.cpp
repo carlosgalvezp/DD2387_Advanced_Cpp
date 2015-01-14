@@ -43,10 +43,10 @@ bool Wolf::bleedingBite(Character &c)
     if(lab3::utils::eventHappens((double)this->teeth_size_/WOLF_MAX_TEETH_SIZE))
     {
         std::stringstream ss2;
-        ss2 << this->name() <<" has successfully bitten "<<c.name()<<", who is now bleeding";
+        ss2 << this->name() <<" has successfully bitten "<<c.name()<<", who is now bleeding and loses "<< BLEED_HURT_POINTS;
         lab3::utils_io::print_newline(ss2.str());
 
-        c.set_constantly_damaged(CONSTANT_DAMAGE_BLEED, BLEED_HURT_POINTS);
+        c.add_life(-BLEED_HURT_POINTS);
         return true;
     }
     else

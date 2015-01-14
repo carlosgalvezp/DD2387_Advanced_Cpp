@@ -25,6 +25,7 @@ bool Hospital::cure(characters::Human &c) const
     else if(c.getMoney() >= CURE_PRICE)
     {
         c.set_life(MAX_LIFE);
+        c.remove_constantly_damaged();
         c.addMoney(-CURE_PRICE);
         ss << "You have been cured at the Hospital with a cost of "<<CURE_PRICE
            <<". Now you have "<<c.getLifePoints()<<" life points";

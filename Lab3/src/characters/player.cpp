@@ -177,6 +177,7 @@ ActionResult Player::fight(Character &character)
         if(this->isAlive())                 // Won -> increase experience
         {
             ++this->experience_;
+            this->money_ += 5;
 
             ActionResult result = check_event_trained(character);
             if(result.success_)  return result;

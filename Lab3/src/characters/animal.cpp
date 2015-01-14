@@ -5,7 +5,7 @@ using namespace lab3::characters;
 
 Animal::Animal(const std::string &name, const std::string &type, Place *place, Place *natural_habitat, int reproduction_frequency)
     : Character(name,type, place), natural_habitat_(natural_habitat),
-      p_food_(0.8), p_go_(0.01),p_fight_(0.3),
+      p_food_(0.5), p_go_(0.01),p_fight_(0.2),
       reproduction_frequency_(reproduction_frequency),
       days_since_last_reproduced_(0)
 {

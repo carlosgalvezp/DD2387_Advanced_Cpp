@@ -94,7 +94,6 @@ ActionResult Character::fight(Character &character)
     character.set_damage(damage);
 
     std::cout << this->name() <<" attacks "<<character.name()<<", who is injured and loses "<<damage<<" life points"<<std::endl;
-    lab3::utils_io::wait_for_enter();
 
     if(!character.isAlive())             // The oponent died
     {
@@ -121,10 +120,14 @@ ActionResult Character::fight(Character &character)
 ActionResult Character::scape()
 {
     lab3::utils_io::print_newline(this->name_ + " has scaped the fight");
-    this->is_fighting_ = false;
-    this->fighter_->is_fighting_ = false;
-    this->fighter_->fighter_ = nullptr;
-    this->fighter_ = nullptr;
+    this->fighter_->endFight();
+    this->endFight();
+    // Go to a random place
+    for(std::pair<std::string, Place*> d : this->currentPlace()->directions())
+    {
+        if(this->go(d.first).success_)
+            return true;
+    }
     return true;
 }
 
@@ -210,6 +213,12 @@ void Character::set_constantly_damaged(const std::string &type, int points)
     lab3::utils_io::print_newline(ss.str());
 
     this->constant_damage_type_ = type;
+    this->constant_damage_points_ = points;
+}
+
+void Character::remove_constantly_damaged()
+{
+    this->constant_damage_type_ = "";
     this->constant_damage_points_ = 0;
 }
 

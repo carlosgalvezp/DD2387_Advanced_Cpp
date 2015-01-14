@@ -298,7 +298,6 @@ void GameEngine::event_TriedMonster()
     ss2 << ">>> You should probably talk to the "<<NAME_WISE_MAN<<". He will give you advice on how to defeat the "<<NAME_FINAL_MONSTER<<" <<<";
 
     lab3::utils_io::print_newline(ss2.str());
-    lab3::utils_io::wait_for_enter();
 }
 void GameEngine::event_MentionedWizard()
 {

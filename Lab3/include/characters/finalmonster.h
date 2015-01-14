@@ -24,6 +24,9 @@ public:
 
     bool isEnemy(const Character &ch) const;
 
+    bool getDefeatedPlayer()    const;
+    void setDefeatedPlayer(bool x);
+
 private:
     bool defeated_player_;  // After the monster defeats the player, the wizard appears
     int distraction_;       // It gets easily distracted by the Princess. Therefore it is more likely to fail an attack

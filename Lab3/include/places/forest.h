@@ -5,7 +5,9 @@
 
 #include <objects/usable.h>
 
-#define N_ANIMALS_FOREST    2
+#define N_ANIMALS_FOREST    1
+#define FOREST_MAX_POPULATION 2
+
 namespace lab3
 {
 namespace places

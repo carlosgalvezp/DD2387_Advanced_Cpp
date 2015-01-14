@@ -1,5 +1,5 @@
 #include <places/indoor.h>
-
+#include <characters/human.h>
 using namespace lab3::places;
 using namespace lab3;
 
@@ -27,6 +27,12 @@ bool Indoor::enter(Character &character)
     }
     else
     {
+        characters::Human* c_human = dynamic_cast<characters::Human*>(&character);
+        if(c_human == nullptr) // Not a human
+        {
+            return false;
+        }
+
         // ** See if you have the key to the place
         for(Object*o : character.objects())
         {

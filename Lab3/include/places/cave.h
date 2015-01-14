@@ -3,7 +3,8 @@
 
 #include <places/outdoor.h>
 #include <characters/vampire.h>
-
+#define N_ANIMALS_CAVE      1
+#define CAVE_MAX_POPULATION 2
 
 namespace lab3
 {

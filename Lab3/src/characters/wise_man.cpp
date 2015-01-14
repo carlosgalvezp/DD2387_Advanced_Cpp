@@ -42,6 +42,7 @@ ActionResult Wise_Man::talk_to(Character &c)
     if(will_tell_about_wizard_)
     {
         lab3::utils_io::wait_for_enter();
+        will_tell_about_wizard_ = false;
         return ActionResult(true,EVENT_MENTIONED_WIZARD);
     }
     return true;

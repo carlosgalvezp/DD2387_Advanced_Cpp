@@ -491,7 +491,17 @@ ActionResult lab3::input::cmd_use_item(lab3::characters::Player &player)
 
 ActionResult lab3::input::cmd_scape(lab3::characters::Player &player)
 {
+    Character* fighter = player.fighter();
     player.scape();
+    if(fighter->name() == NAME_FINAL_MONSTER)
+    {
+        characters::FinalMonster* monster = dynamic_cast<characters::FinalMonster*>(fighter);
+        if(!monster->getDefeatedPlayer())
+        {
+            monster->setDefeatedPlayer(true);
+            return ActionResult(true, EVENT_TRIED_MONSTER);
+        }
+    }
     return true;
 }
 

@@ -3,10 +3,10 @@
 
 #include <character.h>
 
-#define PROB_FOOD_IN        0.8
-#define PROB_FOOD_OUT       0.3
+#define PROB_FOOD_IN        0.5
+#define PROB_FOOD_OUT       0.2
 
-#define LIFE_FOOD           5
+#define LIFE_FOOD           2
 
 namespace lab3
 {

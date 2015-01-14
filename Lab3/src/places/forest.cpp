@@ -2,7 +2,6 @@
 #include <characters/wolf.h>
 #include <objects/torch.h>
 
-#define FOREST_MAX_POPULATION 5
 
 using namespace lab3::places;
 
@@ -19,7 +18,6 @@ Forest::~Forest()
 
 void Forest::generateObjects()
 {
-    std::cout << "[Forest::generateObjects] TO DO" << std::endl;
 }
 
 void Forest::createCharacters()

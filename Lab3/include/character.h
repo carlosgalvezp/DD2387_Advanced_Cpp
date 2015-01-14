@@ -50,6 +50,7 @@ public:
     void add_defense(int defense);
     void set_talk_msgs(const std::vector<std::string> &msgs);
     void set_constantly_damaged(const std::string& type, int points);
+    void remove_constantly_damaged();
 
     void applyConstantDamage();
 

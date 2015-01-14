@@ -5,7 +5,8 @@ using namespace lab3::characters;
 
 FinalMonster::FinalMonster(const std::string &name, Place *place)
     : Character(name, TYPE_FINAL_MONSTER, place),
-      defeated_player_(false)
+      defeated_player_(false),
+      distraction_(0)
 {
     this->talk_msgs_ = {"You will never get out of that jail dear Princess",
                         "Soon the entire city will be mine muahaha...",
@@ -49,3 +50,6 @@ void FinalMonster::addDistraction(int distraction)
 
 int FinalMonster::getDistraction()  const   {return this->distraction_; }
 bool FinalMonster::isEnemy(const Character &ch) const   {  return true;}    // Everyone is an enemy
+
+bool FinalMonster::getDefeatedPlayer()  const   {return this->defeated_player_;}
+void FinalMonster::setDefeatedPlayer(bool x)    {this->defeated_player_ = x;}

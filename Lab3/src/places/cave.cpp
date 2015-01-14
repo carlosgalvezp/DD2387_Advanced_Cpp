@@ -1,7 +1,6 @@
 #include <places/cave.h>
 
-#define N_ANIMALS_CAVE      2
-#define CAVE_MAX_POPULATION 5
+
 
 using namespace lab3;
 using namespace lab3::places;
