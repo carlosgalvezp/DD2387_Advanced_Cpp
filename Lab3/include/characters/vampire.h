@@ -20,7 +20,7 @@ public:
     Vampire();
     Vampire(const std::string &name, Place* place, Place* natural_habitat);
 
-    std::string action(bool display_info); //  = 0;
+    ActionResult action(bool display_info); //  = 0;
 
     double getPoisonConcentration() const;
 
@@ -30,7 +30,7 @@ private:
     double poison_concentration_;    // The larger, the more likely it is to poison it's prey
 
 
-    bool poison(Character &c);
+    ActionResult poison(Character &c);
     bool isEnemy(const Character &ch) const;
 };
 

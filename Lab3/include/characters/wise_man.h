@@ -16,8 +16,8 @@ public:
     Wise_Man(const std::string &name, Place *place);
     ~Wise_Man();
 
-    std::string action(bool display_info);
-    void talk_to(Character &c);
+    ActionResult action(bool display_info);
+    ActionResult talk_to(Character &c);
 
     void setTellAboutWizard(bool x);
 
@@ -27,7 +27,7 @@ private:
     bool will_tell_about_wizard_;
     int knowledge_;     // The more it knows, the more hints can give the player
 
-    void read();                    // It increases its knowledge
+    ActionResult read();                    // It increases its knowledge
 };
 }
 }

@@ -20,7 +20,7 @@ Usable::~Usable()
 
 bool Usable::isSingleUse() const  {   return this->is_single_use_;}
 
-bool Usable::use(Character &c)
+ActionResult Usable::use(Character &c)
 {
     std::cout<< "[Usable::use]"<<std::endl;
     return true;

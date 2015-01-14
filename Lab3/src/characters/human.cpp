@@ -20,11 +20,11 @@ void Human::addMoney(int money)
     this->money_ += money;
 }
 
-bool Human::buy(Object &o)
+ActionResult Human::buy(Object &o)
 {
     if(this->getMoney() > o.price())
     {
-        if(this->pick_up(o))
+        if(this->pick_up(o).success_)
         {
             this->money_ -= o.price();
             std::cout << this->name() <<" has bought a "<<o.name()<<", which costs "<<o.price()
@@ -40,7 +40,7 @@ bool Human::buy(Object &o)
     return false;
 }
 
-bool Human::sell(Object &o)
+ActionResult Human::sell(Object &o)
 {
     this->drop(o);
     int newPrice = o.price()/2;
@@ -52,7 +52,7 @@ bool Human::sell(Object &o)
     return true;
 }
 
-bool Human::use(Object &o)
+ActionResult Human::use(Object &o)
 {
     std::cout << "[Human::use]" << std::endl;
     return true;
@@ -60,5 +60,5 @@ bool Human::use(Object &o)
 
 bool Human::isEnemy(const Character &ch) const
 {
-    return ch.type() != TYPE_HUMAN && ch.type() != TYPE_WIZARD;
+    return ch.type() != TYPE_HUMAN && ch.type() != TYPE_WIZARD && ch.type() != TYPE_PLAYER;
 }

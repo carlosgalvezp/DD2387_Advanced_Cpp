@@ -160,7 +160,8 @@ void GameEngine::run()
                 lab3::utils_io::print_newline("--------------------------------------------------------------------");
                 lab3::utils_io::print_newline(c->name() + "'s turn");
                 // ** Execute action
-                std::string event = c->action(c->currentPlace() == player->currentPlace()); // Switch to true to see all messages
+                ActionResult result = c->action(c->currentPlace() == player->currentPlace()); // Switch to true to see all messages
+                std::string event = result.event_;
 
                 // ** Process event
                 GameEngineFptr fptr = this->event_callbacks_.at(event);
@@ -274,7 +275,7 @@ void GameEngine::event_TriedMonster()
                               "his help."});
     wise_man->setTellAboutWizard(true);
 
-    ss2 << ">>> You should probably talk to the "<<NAME_WISE_MAN<<". He will give you advice on how to defeat the "<<NAME_FINAL_MONSTER;
+    ss2 << ">>> You should probably talk to the "<<NAME_WISE_MAN<<". He will give you advice on how to defeat the "<<NAME_FINAL_MONSTER<<" <<<";
 
     lab3::utils_io::print_newline(ss2.str());
     lab3::utils_io::wait_for_enter();

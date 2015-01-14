@@ -6,7 +6,7 @@ Player::Player()
 {}
 
 Player::Player(const std::string &name, Place *place)
-    : Human(name, TYPE_HUMAN, place),
+    : Human(name, TYPE_PLAYER, place),
       finished_game_(false),
       experience_(0),
       kills_wolf_(0),
@@ -37,12 +37,12 @@ lab3::objects::Container* Player::getBackpack() {return static_cast<lab3::object
 lab3::objects::Weapon*    Player::getWeapon()       const{return static_cast<lab3::objects::Weapon*>(this->objects_[1]);}
 lab3::objects::Protection*Player::getProtection()   const{return static_cast<lab3::objects::Protection*>(this->objects_[2]);}
 
-std::string Player::action(bool display_info)
+ActionResult Player::action(bool display_info)
 {
     return lab3::input::read_player_input(this);
 }
 
-bool Player::pick_up(Object &object)
+ActionResult Player::pick_up(Object &object)
 {
     // ** Check if it's a backpack
     objects::Container* back_ptr = dynamic_cast<objects::Container*>(&object);
@@ -54,7 +54,6 @@ bool Player::pick_up(Object &object)
     // ** Check if it's weapon
     else if(dynamic_cast<objects::Weapon*>(&object) != nullptr)
     {
-        std::cout << "PICKING UP WEAPON"<<std::endl;
         if(this->getWeapon() != nullptr)
         {
             this->drop(*this->getWeapon());
@@ -101,7 +100,7 @@ bool Player::pick_up(Object &object)
     return false;
 }
 
-bool Player::pick_up_backpack(objects::Container &new_backpack)
+ActionResult Player::pick_up_backpack(objects::Container &new_backpack)
 {
     if(this->getBackpack() != nullptr) // I already have a backpack, so I need to exchange contents
     {
@@ -131,7 +130,7 @@ bool Player::pick_up_backpack(objects::Container &new_backpack)
     return false;
 }
 
-bool Player::drop(Object &object)
+ActionResult Player::drop(Object &object)
 {
     std::stringstream ss;
     // ** Check if it's any of the objects we already have
@@ -160,7 +159,7 @@ bool Player::drop(Object &object)
     return false;
 }
 
-void Player::talk_to(Character *character)
+ActionResult Player::talk_to(Character *character)
 {
     // ** I talk first
     std::string msg = "[Player] " + this->getTalkMessages()[0];
@@ -168,30 +167,35 @@ void Player::talk_to(Character *character)
 
     // Let the other talk
     character->talk_to(*this);
+    return true;
 }
 
-bool Player::fight(Character &character)
+ActionResult Player::fight(Character &character)
 {
-    bool finished = Character::fight(character);
+    bool finished = Character::fight(character).success_;
 
     if(finished) // Increase experience and check if we have killed all the monsters
     {
+        this->is_fighting_ = false;
         if(this->isAlive())                 // Won -> increase experience
         {
             ++this->experience_;
-            check_event_trained(character);
-            check_event_final_monster(character);
-        }
-        this->is_fighting_ = false;
 
+            ActionResult result = check_event_trained(character);
+            if(result.success_)  return result;
+
+            result = check_event_final_monster(character);
+            if(result.success_)  return result;
+        }
     }
     return finished;
 }
 
-bool Player::use(Object &o)
+ActionResult Player::use(Object &o)
 {
     lab3::objects::Usable* item_ptr = static_cast<lab3::objects::Usable*>(&o);
-    if(item_ptr->use(*this))
+    ActionResult result = item_ptr->use(*this);
+    if(result.success_)
     {
         // Remove from backpack if it's single use
         if(item_ptr->isSingleUse())
@@ -200,7 +204,7 @@ bool Player::use(Object &o)
             // Delete object
             delete item_ptr;
         }
-        return true;
+        return result;
     }
     return false;
 }
@@ -278,7 +282,7 @@ std::vector<std::string> Player::getCommands()
     return cmds;
 }
 
-void Player::check_event_trained(const Character &character)
+ActionResult Player::check_event_trained(const Character &character)
 {
     if(!event_trained_)
     {
@@ -292,16 +296,18 @@ void Player::check_event_trained(const Character &character)
            this->kills_wolf_  >= MIN_KILL_ANIMAL)
         {
             event_trained_ = true;
-            throw std::runtime_error(EVENT_ENOUGH_TRAIN);
+            return ActionResult(true, EVENT_ENOUGH_TRAIN);
         }
     }
+    return false;
 }
 
-void Player::check_event_final_monster(const Character &character)
+ActionResult Player::check_event_final_monster(const Character &character)
 {
     if(character.type() == TYPE_FINAL_MONSTER && !character.isAlive())
     {
-        throw std::runtime_error(EVENT_GAME_FINISHED);
+        return ActionResult(true,EVENT_GAME_FINISHED);
     }
+    return false;
 }
 

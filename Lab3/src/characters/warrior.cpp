@@ -29,7 +29,7 @@ int Warrior::getDefense()   const
     return Character::getDefense() + this->skill_;
 }
 
-std::string Warrior::action(bool display_info)
+ActionResult Warrior::action(bool display_info)
 {
     Character*c = lookForEnemies();
     if(c != nullptr)            // ** Fight to animals if they appear in the place
@@ -52,12 +52,13 @@ std::string Warrior::action(bool display_info)
     return EVENT_NULL;
 }
 
-void Warrior::train()
+ActionResult Warrior::train()
 {
     this->skill_ = std::min(this->skill_ + WARRIOR_TRAIN_INCREASE_SKILL, MAX_STRENGTH);
     std::stringstream ss;
     ss << this->name()<<" trains to gain experience. Now his skill level is "<<this->skill_<<" points";
     lab3::utils_io::print_newline(ss.str());
+    return true;
 }
 
 int Warrior::getSkillPoints()   const   {return this->skill_;}

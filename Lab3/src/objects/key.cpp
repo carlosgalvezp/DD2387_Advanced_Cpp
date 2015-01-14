@@ -13,7 +13,7 @@ Key::Key(const std::string &name, Place *place)
 Key::~Key()
 {}
 
-bool Key::use(Character &c)
+ActionResult Key::use(Character &c)
 {
     // ** Check if the current place is an indoor place
     lab3::places::Indoor* place_ptr = dynamic_cast<lab3::places::Indoor*>(c.currentPlace());

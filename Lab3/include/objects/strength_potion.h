@@ -18,7 +18,7 @@ public:
                     int volume,
                     int weight);
 
-    bool use(Character &c);
+    ActionResult use(Character &c);
     ~Strength_Potion();
 };
 

@@ -20,16 +20,16 @@ public:
     Human(const std::string &name, const std::string &type, Place *p);
     ~Human();
 
-    std::string action(bool display_info) = 0;
+    ActionResult action(bool display_info) = 0;
+    ActionResult buy(Object &o);
+    ActionResult sell(Object &o);
+    ActionResult use(Object &o);
 
     int getMoney()              const;
     void addMoney(int money);
 
     bool isEnemy(const Character &ch) const;
 
-    bool buy(Object &o);
-    bool sell(Object &o);
-    bool use(Object &o);
 
 protected:
     int money_;     // Only humans can buy stuff

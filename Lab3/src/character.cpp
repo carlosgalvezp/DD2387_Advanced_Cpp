@@ -53,7 +53,9 @@ std::string Character::name()     const {    return this->name_;        }
 
 bool Character::isConstantlyDamaged() const{ return this->constant_damage_points_ > 0;}
 
-bool Character::go(const std::string& direction)
+// ============================ Base actions ===================================================
+
+ActionResult Character::go(const std::string& direction)
 {
     // ** Get available directions
     std::map<std::string, Place*> directions = this->current_place_->directions();
@@ -68,7 +70,7 @@ bool Character::go(const std::string& direction)
     return false;
 }
 
-bool Character::fight(Character &character)
+ActionResult Character::fight(Character &character)
 {
     if(!this->isFighting())
     {
@@ -117,7 +119,7 @@ bool Character::fight(Character &character)
     return false;
 }
 
-bool Character::scape()
+ActionResult Character::scape()
 {
     lab3::utils_io::print_newline(this->name_ + " has scaped the fight");
     this->is_fighting_ = false;
@@ -127,7 +129,7 @@ bool Character::scape()
     return true;
 }
 
-bool Character::pick_up(lab3::Object &object)
+ActionResult Character::pick_up(lab3::Object &object)
 {
     // ** Find it in the objects vector
     this->current_place_->pick_up(object);
@@ -137,7 +139,7 @@ bool Character::pick_up(lab3::Object &object)
     return true;
 }
 
-bool Character::drop(lab3::Object &object)
+ActionResult Character::drop(lab3::Object &object)
 {
     // ** Find it in the objects vector
     auto it = std::find(objects_.begin(), objects_.end(), &object);
@@ -150,13 +152,15 @@ bool Character::drop(lab3::Object &object)
     return true;
 }
 
-void Character::talk_to(Character &character)
+ActionResult Character::talk_to(Character &character)
 {
     std::string msg = "[" + this->name()+"] talks to " + character.name()+":\n"
             + "\""+this->getTalkMessages()[n_msg_talk_++%this->getTalkMessages().size()]+"\"";
     lab3::utils_io::print_newline(msg);
+    return true;
 }
 
+// ============================================================================================
 
 // ** Setters
 void Character::set_place(Place *p)         {    this->current_place_ = p;}

@@ -14,7 +14,7 @@ public:
     Torch();
     ~Torch();
 
-    bool use(Character &c);
+    ActionResult use(Character &c);
 };
 
 }

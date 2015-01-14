@@ -17,9 +17,8 @@ public:
     FinalMonster(const std::string &name, Place* place);
     ~FinalMonster();
 
-    bool fight(Character &character); // = 0
-
-    std::string action(bool display_info); // = 0
+    ActionResult fight(Character &character);
+    ActionResult action(bool display_info);
 
     void addDistraction(int distraction);
     int getDistraction()    const;

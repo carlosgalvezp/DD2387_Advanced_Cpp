@@ -17,7 +17,7 @@ public:
     Wolf();
     Wolf(const std::string &name, Place *place, Place *natural_habitat);
 
-    std::string action(bool display_info); // == 0
+    ActionResult action(bool display_info);
     ~Wolf();
 
 private:

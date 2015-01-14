@@ -18,31 +18,29 @@ Wizard::~Wizard()
 
 int Wizard::getMagicPoints()    const   {return this->magic_points_;}
 
-std::string Wizard::action(bool display_info)
+ActionResult Wizard::action(bool display_info)
 {
     std::cout << "[Wizard::action] TO DO" << std::endl;
     return EVENT_NULL;
 }
 
-void Wizard::talk_to(Character &character)
+ActionResult Wizard::talk_to(Character &character)
 {
     Character::talk_to(character);
 
     if(character.type() == TYPE_PLAYER && this->currentPlace()->name() != NAME_CASTLE) // The wizard will be moved to the Castle
     {
-        this->teleport(NAME_CASTLE);
+        this->teleport(*this->world_places_.at(NAME_CASTLE));
     }
+    return true;
 }
 
-bool Wizard::teleport(const std::string &place)
+ActionResult Wizard::teleport(Place &place)
 {
-    try
-    {
-        this->world_places_.at(place)->enter(*this);
-        return true;
-    }
-    catch(std::exception &e){}
-    return false;
+    std::stringstream ss;
+    ss << "The "<<NAME_WIZARD<<" teleports to "<<place.name();
+    lab3::utils_io::print_newline(ss.str());
+    return place.enter(*this);
 }
 
 void Wizard::recover_magic()

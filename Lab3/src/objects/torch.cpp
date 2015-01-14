@@ -9,11 +9,11 @@ Torch::Torch()
 Torch::~Torch()
 {}
 
-bool Torch::use(Character &c)
+ActionResult Torch::use(Character &c)
 {
     if(c.currentPlace()->name() == NAME_CAVE)
     {
-        throw std::runtime_error(EVENT_TORCH_ON);
+        return ActionResult(true, EVENT_TORCH_ON);
     }
     else
     {

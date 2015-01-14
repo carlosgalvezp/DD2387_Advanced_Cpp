@@ -17,15 +17,14 @@ public:
     Troll();
     Troll(const std::string &name, Place *place, Place* natural_habitat);
 
-    std::string action(bool display_info); // == 0
-
-    bool fight(Character &character);
+    ActionResult action(bool display_info);
+    ActionResult fight(Character &character);
     ~Troll();
 
 private:
     int tiredness_;  // Trolls are likely to fall asleep if they are tired
     bool isEnemy(const Character &ch) const;
-    void sleep();
+    ActionResult sleep();
 };
 
 }

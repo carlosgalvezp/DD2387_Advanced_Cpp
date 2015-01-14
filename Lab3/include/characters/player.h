@@ -41,11 +41,11 @@ public:
     Player(const std::string &name, Place *place);
     ~Player();
 
-    std::string action(bool display_info);
-    bool pick_up(Object &object);
-    bool drop(Object &object);
-    void talk_to(Character* character);
-    bool fight(Character &character);
+    ActionResult action(bool display_info);
+    ActionResult pick_up(Object &object);
+    ActionResult drop(Object &object);
+    ActionResult talk_to(Character* character);
+    ActionResult fight(Character &character);
 
     void status()                   const;
     std::string type()              const;
@@ -57,7 +57,7 @@ public:
     objects::Weapon         *getWeapon()            const;
     objects::Protection     *getProtection()        const;
 
-    bool use(Object &o);
+    ActionResult use(Object &o);
 
     int getStrength()   const;
     int getDefense()    const;
@@ -69,10 +69,10 @@ private:
     bool event_trained_;
     Place* home_;
 
-    void check_event_trained(const Character &character);
-    void check_event_final_monster(const Character &character);
+    ActionResult check_event_trained(const Character &character);
+    ActionResult check_event_final_monster(const Character &character);
 
-    bool pick_up_backpack(objects::Container &new_backpack);
+    ActionResult pick_up_backpack(objects::Container &new_backpack);
 };
 
 }

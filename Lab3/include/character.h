@@ -10,6 +10,8 @@
 #include <utils/utils.h>
 #include <names.h>
 
+#include <actionresult.h>
+
 #define MAX_LIFE                50
 #define MAX_STRENGTH            50
 #define DEFAULT_INITIATIVE      10
@@ -28,14 +30,15 @@ public:
     Character(const std::string &name, const std::string &type, Place *place);
     virtual ~Character();
 
-    virtual std::string action(bool display_info) = 0;
-    virtual bool fight(Character &character);
-    virtual bool scape();
+    // Base functions
+    virtual ActionResult action(bool display_info) = 0;
+    virtual ActionResult fight(Character &character);
+    virtual ActionResult scape();
 
-    virtual bool go(const std::string &direction);
-    virtual bool pick_up(lab3::Object &object);
-    virtual bool drop(lab3::Object &object);
-    virtual void talk_to(Character& character);
+    virtual ActionResult go(const std::string &direction);
+    virtual ActionResult pick_up(lab3::Object &object);
+    virtual ActionResult drop(lab3::Object &object);
+    virtual ActionResult talk_to(Character& character);
 
     // Setters
     void set_place(Place* p);

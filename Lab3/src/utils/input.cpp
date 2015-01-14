@@ -1,6 +1,6 @@
 #include <utils/input.h>
 
-typedef bool(*CmdFunction)(lab3::characters::Player*);
+typedef ActionResult(*CmdFunction)(lab3::characters::Player*);
 std::map<std::string, CmdFunction> cmd_map =
 {
     {CMD_DROP  ,    &lab3::input::cmd_drop},
@@ -92,7 +92,7 @@ std::string lab3::input::read_input(const std::vector<std::string> &available_co
     return ss.str();
 }
 
-std::string lab3::input::read_player_input(lab3::characters::Player *player)
+ActionResult lab3::input::read_player_input(lab3::characters::Player *player)
 {
     // ** Update commands depending on the current place
     bool success(false);
@@ -102,24 +102,14 @@ std::string lab3::input::read_player_input(lab3::characters::Player *player)
         std::string cmd = lab3::input::read_input(player->getCommands());
         if(cmd_map.find(cmd) != cmd_map.end())
         {
-            try
+            ActionResult result = (*cmd_map.at(cmd))(player); // Using a map of function pointers with key = cmd
+            success = result.success_;
+            if(success && result.event_ != EVENT_NULL)
             {
-                 success = (*cmd_map.at(cmd))(player); // Using a map of function pointers with key = cmd
-            }
-            catch(std::exception &e)   // Events are thrown as exceptions
-            {
-                return e.what();
+                return result;
             }
 
             if(!success) lab3::utils_io::wait_for_enter();
-        }
-        if(player->finishedGame())
-        {
-            return EVENT_GAME_FINISHED;
-        }
-        else if(cmd == CMD_EXIT_GAME)
-        {
-            return EVENT_QUIT_GAME;
         }
     }while(!success);
 
@@ -166,7 +156,7 @@ void lab3::input::display_commands(const std::vector<std::string> &commands,
 
 // =============================================================================
 // =============================================================================
-bool lab3::input::cmd_go(lab3::characters::Player *player)
+ActionResult lab3::input::cmd_go(lab3::characters::Player *player)
 {
     const std::map<std::string, lab3::Place*> &directions = player->currentPlace()->directions();
     std::vector<std::string> command_str;
@@ -187,15 +177,10 @@ bool lab3::input::cmd_go(lab3::characters::Player *player)
     }
 
     // ** Actually go
-    if(!player->go(cmd))
-    {
-        lab3::utils_io::print_newline("You cannot go "+cmd);
-        return false;
-    }
-    return true;
+    return player->go(cmd);
 }
 
-bool lab3::input::cmd_pick_up(lab3::characters::Player *player)
+ActionResult lab3::input::cmd_pick_up(lab3::characters::Player *player)
 {
     if(player->currentPlace()->objects().size() == 0)
     {
@@ -227,16 +212,12 @@ bool lab3::input::cmd_pick_up(lab3::characters::Player *player)
     lab3::Object *o = command_map.at(cmd);
     if(o != nullptr)
     {
-        if(!player->pick_up(*o))
-        {
-            lab3::utils_io::print_newline("You cannot pick up "+cmd);
-            return false;
-        }
+        return player->pick_up(*o);
     }
     return false;
 }
 
-bool lab3::input::cmd_drop(lab3::characters::Player *player)
+ActionResult lab3::input::cmd_drop(lab3::characters::Player *player)
 {
     if(player->objects().size() == 0)
     {
@@ -277,13 +258,12 @@ bool lab3::input::cmd_drop(lab3::characters::Player *player)
     lab3::Object *o = command_map.at(cmd);
     if(o != nullptr)
     {
-        player->drop(*o);
-        return true;
+        return player->drop(*o);
     }
     return false;
 }
 
-bool lab3::input::cmd_talk(lab3::characters::Player *player)
+ActionResult lab3::input::cmd_talk(lab3::characters::Player *player)
 {
     // ** Get other characters
     if(player->currentPlace()->characters().size() > 1) // The player will always be here
@@ -312,8 +292,7 @@ bool lab3::input::cmd_talk(lab3::characters::Player *player)
         lab3::Character *c = command_map.at(cmd);
         if(c != nullptr)
         {
-            player->talk_to(c);
-            return true;
+            return player->talk_to(c);
         }
     }
     else
@@ -323,13 +302,12 @@ bool lab3::input::cmd_talk(lab3::characters::Player *player)
     return false;
 }
 
-bool lab3::input::cmd_fight(lab3::characters::Player *player)
+ActionResult lab3::input::cmd_fight(lab3::characters::Player *player)
 {
     // ** Check if already fighting
     if(player->isFighting())
     {
-        player->fight(*player->fighter());
-        return true;
+        return ActionResult(true, (player->fight(*player->fighter()).event_));
     }
     // ** Get other characters
     if(player->currentPlace()->characters().size() > 1) // There are other characters appart from myself
@@ -358,8 +336,7 @@ bool lab3::input::cmd_fight(lab3::characters::Player *player)
         lab3::Character *c = command_map.at(cmd);
         if(c != nullptr)
         {
-            player->fight(*c);
-            return true;
+            return player->fight(*c);
         }
     }
     else
@@ -369,19 +346,19 @@ bool lab3::input::cmd_fight(lab3::characters::Player *player)
     return false;
 }
 
-bool lab3::input::cmd_status(lab3::characters::Player *player)
+ActionResult lab3::input::cmd_status(lab3::characters::Player *player)
 {
     player->status();
     return false;
 }
 
-bool lab3::input::cmd_exit_game(lab3::characters::Player *player)
+ActionResult lab3::input::cmd_exit_game(lab3::characters::Player *player)
 {
     lab3::utils_io::print_newline("Exiting game...");
-    return true;
+    return ActionResult(true, EVENT_QUIT_GAME);
 }
 
-bool lab3::input::cmd_buy(lab3::characters::Player *player)
+ActionResult lab3::input::cmd_buy(lab3::characters::Player *player)
 {
     // ** Get objects in the store
     if(player->currentPlace()->objects().size() == 0)
@@ -463,7 +440,7 @@ bool lab3::input::cmd_buy(lab3::characters::Player *player)
 //    return false;
 //}
 
-bool lab3::input::cmd_use_item(lab3::characters::Player *player)
+ActionResult lab3::input::cmd_use_item(lab3::characters::Player *player)
 {
     // ** Get objects in the backpack
     if(player->getBackpack()->objects().size() == 0)
@@ -503,27 +480,27 @@ bool lab3::input::cmd_use_item(lab3::characters::Player *player)
     return false;
 }
 
-bool lab3::input::cmd_scape(lab3::characters::Player *player)
+ActionResult lab3::input::cmd_scape(lab3::characters::Player *player)
 {
     player->scape();
     return true;
 }
 
-bool lab3::input::cmd_rest(lab3::characters::Player *player)
+ActionResult lab3::input::cmd_rest(lab3::characters::Player *player)
 {
     // Only available at home
     lab3::places::Home* home = static_cast<lab3::places::Home*>(player->currentPlace());
     return home->rest(*player);
 }
 
-bool lab3::input::cmd_cure(lab3::characters::Player *player)
+ActionResult lab3::input::cmd_cure(lab3::characters::Player *player)
 {
     // Only available at hospital
     lab3::places::Hospital* hospital = static_cast<lab3::places::Hospital*>(player->currentPlace());
     return hospital->cure(*player);
 }
 
-bool lab3::input::cmd_repair(lab3::characters::Player *player)
+ActionResult lab3::input::cmd_repair(lab3::characters::Player *player)
 {
     // Only available at armory
     lab3::places::Armory* armory = static_cast<lab3::places::Armory*>(player->currentPlace());

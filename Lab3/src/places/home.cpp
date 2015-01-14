@@ -14,7 +14,7 @@ Home::Home(const std::string &name)
 bool Home::enter(Character &character)
 {
     lab3::utils_io::wait_for_enter();
-    if(character.type() == TYPE_PLAYER)
+    if(character.name() == NAME_PLAYER)
     {
         if(!character.isAlive()) // The case in which the player is seriously injured
         {

@@ -7,13 +7,14 @@ Vampire::Vampire()
 {}
 
 Vampire::Vampire(const std::string &name, Place* place, Place* natural_habitat)
-    : Animal (name, TYPE_VAMPIRE, place, natural_habitat)
+    : Animal (name, TYPE_VAMPIRE, place, natural_habitat),
+      poison_concentration_(0)
 {}
 
 Vampire::~Vampire()
 {}
 
-std::string Vampire::action(bool display_info)
+ActionResult Vampire::action(bool display_info)
 {
     // ** Fight first
     if(this->isFighting())
@@ -31,7 +32,7 @@ std::string Vampire::action(bool display_info)
         Character* enemy = this->lookForEnemies();
         if(enemy != nullptr)
         {
-            double food_prob = 1 - this->life_points_ / MAX_LIFE;
+            double food_prob = 1;// - this->life_points_ / MAX_LIFE;
             if(lab3::utils::eventHappens(food_prob))
             {
                 this->lookForFood();
@@ -47,7 +48,7 @@ std::string Vampire::action(bool display_info)
     return EVENT_NULL;
 }
 
-bool Vampire::poison(Character &c)
+ActionResult Vampire::poison(Character &c)
 {
     std::stringstream ss;
     ss << this->name()<<" tries to poison "<<c.name()<<". The poison concentration is "<<this->poison_concentration_;

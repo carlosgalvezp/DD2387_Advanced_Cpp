@@ -12,7 +12,7 @@ Health_Potion::Health_Potion(const std::string &name, int extra_points, int pric
 Health_Potion::~Health_Potion()
 {}
 
-bool Health_Potion::use(Character &c)
+ActionResult Health_Potion::use(Character &c)
 {
     c.add_life(this->extra_points_);
     std::stringstream ss;

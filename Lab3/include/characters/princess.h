@@ -18,7 +18,7 @@ public:
     Princess(const std::string& name, Place *place);
     ~Princess();
 
-    std::string action(bool display_info);
+    ActionResult action(bool display_info);
 
     void addHope(int hope);
     int getHope()   const;
@@ -27,7 +27,7 @@ private:
     int hope_;  // Hope that she gets rescued.
                 // If it's high, she will get more ideas to distract the monster
 
-    bool distractMonster(characters::FinalMonster& monster) const;
+    ActionResult distractMonster(characters::FinalMonster& monster) const;
 };
 
 }

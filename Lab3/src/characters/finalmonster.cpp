@@ -19,35 +19,28 @@ FinalMonster::FinalMonster(const std::string &name, Place *place)
 FinalMonster::~FinalMonster()
 {}
 
-std::string FinalMonster::action(bool display_info)
+ActionResult FinalMonster::action(bool display_info)
 {
     if(this->isFighting())
     {
-        try
-        {
-            fight(*this->fighter_);
-        }
-        catch(std::runtime_error &e)
-        {
-            return e.what();
-        }
+        return fight(*this->fighter_);
     }
     else
     {
-        this->talk_to(*this->currentPlace()->getCharacter(NAME_PRINCESS));
+        return this->talk_to(*this->currentPlace()->getCharacter(NAME_PRINCESS));
     }
     return EVENT_NULL;
 }
 
-bool FinalMonster::fight(Character &character)
+ActionResult FinalMonster::fight(Character &character)
 {
-    bool finished = Character::fight(character);
+    bool finished = Character::fight(character).success_;
 
     // Throw event when defeating the player for the first time
-    if(finished && !defeated_player_ && character.type() == TYPE_PLAYER)
+    if(finished && !defeated_player_ && character.name() == NAME_PLAYER)
     {
         defeated_player_ = true;
-        throw std::runtime_error(EVENT_TRIED_MONSTER);
+        return ActionResult(true,EVENT_TRIED_MONSTER);
     }
     return finished;
 }

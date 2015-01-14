@@ -21,7 +21,7 @@ Princess::Princess(const std::string &name, Place *place)
 Princess::~Princess()
 {}
 
-std::string Princess::action(bool display_info)
+ActionResult Princess::action(bool display_info)
 {
     Character *player = this->currentPlace()->getCharacter(NAME_PLAYER);
     Character *monster = this->currentPlace()->getCharacter(NAME_FINAL_MONSTER);
@@ -67,7 +67,7 @@ void Princess::addHope(int hope)
 
 int Princess::getHope() const   {return this->hope_;}
 
-bool Princess::distractMonster(characters::FinalMonster &monster)   const
+ActionResult Princess::distractMonster(characters::FinalMonster &monster)   const
 {
     std::stringstream ss;
     ss << this->name() << " is trying to distract "<<monster.name();

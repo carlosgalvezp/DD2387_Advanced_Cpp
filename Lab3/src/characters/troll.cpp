@@ -14,7 +14,7 @@ Troll::Troll(const std::string &name, Place *place, Place *natural_habitat)
 Troll::~Troll()
 {}
 
-std::string Troll::action(bool display_info)
+ActionResult Troll::action(bool display_info)
 {
     // ** Fight first
     if(this->isFighting())
@@ -50,7 +50,7 @@ bool Troll::isEnemy(const Character &ch) const
     return ch.type() != TYPE_TROLL;
 }
 
-bool Troll::fight(Character &character)
+ActionResult Troll::fight(Character &character)
 {
     this->tiredness_ += 2*TIREDNESS_STEP;
     std::stringstream ss;
@@ -59,7 +59,7 @@ bool Troll::fight(Character &character)
     return Character::fight(character);
 }
 
-void Troll::sleep()
+ActionResult Troll::sleep()
 {
     this->tiredness_ -= TIREDNESS_STEP;
     this->life_points_ += 2*TIREDNESS_STEP;
@@ -67,4 +67,6 @@ void Troll::sleep()
     std::stringstream ss;
     ss << this->name()+" is sleeping since it's too tired. New tiredness: "<<this->tiredness_<<"; new life: "<<this->life_points_;
     lab3::utils_io::print_newline(ss.str());
+
+    return true;
 }

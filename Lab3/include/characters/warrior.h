@@ -19,7 +19,7 @@ public:
     Warrior(const std::string &name, Place* place);
     ~Warrior();
 
-    std::string action(bool display_info); // = 0;
+    ActionResult action(bool display_info); // = 0;
 
     int getSkillPoints()    const;
 
@@ -30,7 +30,7 @@ private:
     int skill_; // The more the skill, the more the final strength and defense
 
     Character *lookForAnimals()   const;
-    void train();
+    ActionResult train();
 };
 
 }

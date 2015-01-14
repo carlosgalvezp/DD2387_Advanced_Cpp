@@ -23,32 +23,31 @@ Wise_Man::Wise_Man(const std::string &name, Place *place)
 Wise_Man::~Wise_Man()
 {}
 
-std::string Wise_Man::action(bool display_info)
+ActionResult Wise_Man::action(bool display_info)
 {
 
     Character* player = this->currentPlace()->getCharacter(NAME_PLAYER);
     if(player != nullptr)
     {
-        try
-        {
-            talk_to(*player);
-        }catch (std::runtime_error &e)   {return e.what();}
+        return talk_to(*player);
     }
     else
     {
-        this->read();
+        return this->read();
     }
     return EVENT_NULL;
 }
 
-void Wise_Man::talk_to(Character &c)
+ActionResult Wise_Man::talk_to(Character &c)
 {
     Character::talk_to(c);
 
     if(will_tell_about_wizard_)
     {
-        throw std::runtime_error(EVENT_MENTIONED_WIZARD);
+        lab3::utils_io::wait_for_enter();
+        return ActionResult(true,EVENT_MENTIONED_WIZARD);
     }
+    return true;
 }
 
 void Wise_Man::setTellAboutWizard(bool x)
@@ -56,12 +55,14 @@ void Wise_Man::setTellAboutWizard(bool x)
     will_tell_about_wizard_ = x;
 }
 
-void Wise_Man::read()
+ActionResult Wise_Man::read()
 {
     this->knowledge_ += WISE_MAN_READ_POINTS;
     std::stringstream ss;
     ss << "The "<<this->name() << " reads an ancient book. His knowledge is increased up to "<<this->knowledge_<<" points";
     lab3::utils_io::print_newline(ss.str());
+
+    return true;
 }
 
 int Wise_Man::getKnowledgePoints()  const   { return this->knowledge_;}

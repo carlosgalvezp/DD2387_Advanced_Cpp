@@ -16,10 +16,10 @@ public:
     Wizard(const std::string &name, Place* place,std::map<std::string, Place*>& world_places);
     ~Wizard();
 
-    std::string action(bool display_info); // == 0
+    ActionResult action(bool display_info); // == 0
+    ActionResult talk_to(Character &character);
 
-    void talk_to(Character &character);
-    bool teleport(const std::string& place); // the "go" version, but to anywhere
+    ActionResult teleport(Place &place); // the "go" version, but to anywhere
 
     int getMagicPoints()    const;
 
