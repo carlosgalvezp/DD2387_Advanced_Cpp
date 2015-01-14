@@ -310,7 +310,11 @@ void GameEngine::event_MentionedWizard()
 void GameEngine::event_GameFinished()
 {
     this->is_finished_ = true;
+    lab3::utils_io::print_newline("=========================================================================");
+    lab3::utils_io::print_newline("=========================================================================");
     lab3::utils_io::print_newline(this->ending_);
+    lab3::utils_io::print_newline("=========================================================================");
+    lab3::utils_io::print_newline("=========================================================================");
     lab3::utils_io::wait_for_enter();
 }
 void GameEngine::event_QuitGame()

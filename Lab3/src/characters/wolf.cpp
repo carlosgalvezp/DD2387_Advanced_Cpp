@@ -61,7 +61,7 @@ bool Wolf::bleedingBite(Character &c)   const
 
 bool Wolf::isEnemy(const Character &ch) const
 {
-    return ch.type() != TYPE_WOLF;
+    return ch.type() != TYPE_WOLF && ch.type() != TYPE_WIZARD;  // The Forest is enchanted by the wizard and therefore they don't attack him
 }
 
 Character* Wolf::reproduce()

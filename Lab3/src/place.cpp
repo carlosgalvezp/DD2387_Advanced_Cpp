@@ -42,6 +42,10 @@ void Place::addCharacter(Character &character)
 
 bool Place::enter(Character &character)
 {
+    // ** End any fight
+    character.fighter()->endFight();
+    character.endFight();
+
     // ** Remove player from previous place
     Place* old_place = character.currentPlace();
     if(old_place != nullptr)

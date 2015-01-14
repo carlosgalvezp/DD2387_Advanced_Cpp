@@ -81,7 +81,7 @@ ActionResult Character::fight(Character &character)
     }
 
     // XXXX Include randomnesss
-    lab3::utils_io::print_newline("-------- Fight between "+this->name() +" and "+character.name());
+    lab3::utils_io::print_newline("-------- Fight between "+this->name() +" and "+character.name()+"--------");
     lab3::utils_io::wait_for_enter();
     std::stringstream ss;
     ss<< "["<<this->name()<<"] Life: "<<this->getLifePoints()<<"; Strength: "<<this->getStrength()<<"; Defense: "<< this->getDefense()<<std::endl;
