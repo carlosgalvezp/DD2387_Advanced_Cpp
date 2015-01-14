@@ -15,8 +15,8 @@ public:
               int price,
               int volume,
               int weight);
-    int wear () const;
 
+    int wear () const;
     void repair();
 
     ~Equipment();

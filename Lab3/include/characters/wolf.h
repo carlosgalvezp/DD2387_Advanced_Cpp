@@ -30,7 +30,7 @@ private:
     static int id_;
 
     bool isEnemy(const Character &ch) const;
-    bool bleedingBite(Character& c);        //The character bleeds until it dies if it doesn't get cured
+    bool bleedingBite(Character& c)   const;     //The character bleeds until it dies if it doesn't get cured
 };
 }
 }

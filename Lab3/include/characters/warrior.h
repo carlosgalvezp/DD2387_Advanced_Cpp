@@ -22,8 +22,8 @@ public:
 
     int getSkillPoints()    const;
 
-    int getStrength()   const;
-    int getDefense()    const;
+    int getStrength()       const;
+    int getDefense()        const;
 
 private:
     int skill_; // The more the skill, the more the final strength and defense

@@ -30,7 +30,7 @@ Player::~Player()
 {
 }
 
-lab3::objects::Container* Player::getBackpack() {return static_cast<lab3::objects::Container*>(this->objects_[0]);}
+lab3::objects::Container* Player::getBackpack()     const{return static_cast<lab3::objects::Container*>(this->objects_[0]);}
 lab3::objects::Weapon*    Player::getWeapon()       const{return static_cast<lab3::objects::Weapon*>(this->objects_[1]);}
 lab3::objects::Protection*Player::getProtection()   const{return static_cast<lab3::objects::Protection*>(this->objects_[2]);}
 
@@ -261,7 +261,7 @@ void Player::status()       const
     }
 }
 
-std::vector<std::string> Player::getCommands()
+std::vector<std::string> Player::getCommands()          const
 {
     std::vector<std::string> cmds;
 

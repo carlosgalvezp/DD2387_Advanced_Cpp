@@ -24,10 +24,10 @@ public:
     ActionResult sell(Object &o);
     ActionResult use(Object &o);
 
-    int getMoney()              const;
+    int getMoney()                      const;
     void addMoney(int money);
 
-    bool isEnemy(const Character &ch) const;
+    bool isEnemy(const Character &ch)   const;
 
 
 protected:

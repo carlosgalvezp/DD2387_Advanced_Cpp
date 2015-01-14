@@ -258,7 +258,7 @@ Character* Character::lookForEnemies()  const
     return nullptr;
 }
 
-const std::vector<std::string>& Character::getCommands()      const
+std::vector<std::string> Character::getCommands()      const
 {
     // ** Get commands from place
     return this->currentPlace()->getCommands();

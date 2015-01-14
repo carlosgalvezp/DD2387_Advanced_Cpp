@@ -102,7 +102,7 @@ void Place::addObject(Object &o)
     this->objects_.push_back(&o);
 }
 
-Place &Place::neighbour(const std::string &direction)
+Place &Place::neighbour(const std::string &direction) const
 {
     return *this->directions_.at(direction);
 }
@@ -198,7 +198,7 @@ bool Place::containsCharacter(const std::string &character_name) const
     return false;
 }
 
-Character* Place::getCharacter(const std::string &name)
+Character* Place::getCharacter(const std::string &name) const
 {
     for(Character *c : this->characters_)
     {

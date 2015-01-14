@@ -20,11 +20,11 @@ public:
     ActionResult action(bool display_info);
 
     void addDistraction(int distraction);
-    int getDistraction()    const;
 
-    bool isEnemy(const Character &ch) const;
+    int getDistraction()                        const;
+    bool isEnemy(const Character &ch)           const;
+    bool getDefeatedPlayer()                    const;
 
-    bool getDefeatedPlayer()    const;
     void setDefeatedPlayer(bool x);
 
 private:

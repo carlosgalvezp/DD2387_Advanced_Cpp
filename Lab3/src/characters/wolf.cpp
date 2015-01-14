@@ -33,7 +33,7 @@ ActionResult Wolf::action(bool display_info)
     return EVENT_NULL;
 }
 
-bool Wolf::bleedingBite(Character &c)
+bool Wolf::bleedingBite(Character &c)   const
 {
     std::stringstream ss;
     ss << this->name()<<" tries a bleeding bite against "<<c.name()<<". The teeth size is "<<this->teeth_size_;

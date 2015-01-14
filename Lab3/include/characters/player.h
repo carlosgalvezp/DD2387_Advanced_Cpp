@@ -49,9 +49,9 @@ public:
     std::string type()              const;
     bool finishedGame()             const;
 
-    std::vector<std::string> getCommands();
+    std::vector<std::string> getCommands() const;       //Not ref, since it creates a local copy internally
 
-    objects::Container      *getBackpack();
+    objects::Container      *getBackpack()          const;
     objects::Weapon         *getWeapon()            const;
     objects::Protection     *getProtection()        const;
 

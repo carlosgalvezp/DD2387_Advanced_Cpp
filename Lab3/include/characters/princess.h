@@ -20,7 +20,7 @@ public:
     ActionResult action(bool display_info);
 
     void addHope(int hope);
-    int getHope()   const;
+    int getHope()                   const;
 
 private:
     int hope_;  // Hope that she gets rescued.

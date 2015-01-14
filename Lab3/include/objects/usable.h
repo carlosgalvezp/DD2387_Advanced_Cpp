@@ -20,7 +20,7 @@ public:
            bool is_single_use);
     ~Usable();
 
-    virtual ActionResult use(Character &c);
+    virtual ActionResult use(Character &c) = 0;
 
     bool isSingleUse()   const;
 

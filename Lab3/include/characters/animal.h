@@ -20,18 +20,18 @@ public:
 
     ActionResult action(bool display_info)=0;
 
-    virtual Character* reproduce() = 0;
+    virtual Character* reproduce() = 0; // Non-const since it modifies internal counters
     ~Animal();
 
 protected:
     Place *natural_habitat_;        // If the animal is not here, its chances to find food are smaller
     int age_;                       // Animals get old and therefore fight worse. Eventually they die
 
-    bool lookForFood();               // Gives life points
-
     double p_food_, p_go_, p_fight_;
     int reproduction_frequency_;
     int days_since_last_reproduced_;
+
+    bool lookForFood();               // Gives life points
 };
 
 }

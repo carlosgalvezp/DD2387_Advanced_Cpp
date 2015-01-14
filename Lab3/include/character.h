@@ -75,7 +75,7 @@ public:
     const    std::vector<Object*>& objects()    const;
              std::vector<Object*>& objects();
 
-    virtual const std::vector<std::string> &getCommands()         const;
+    virtual       std::vector<std::string>  getCommands()         const;
             const std::vector<std::string> &getTalkMessages()     const;
 
 

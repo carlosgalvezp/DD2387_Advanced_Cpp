@@ -27,26 +27,24 @@ class Character;
 class Place
 {
 public:
-    Place(const std::string &name);
     virtual ~Place();
 
-    Place& neighbour(const std::string &direction);
+    Place& neighbour(const std::string &direction)      const;
 
     virtual bool enter(Character &character);
     virtual bool leave(Character &character);
     virtual bool pick_up(Object &object);
     virtual void drop(Object &object);
-
-    void addDirection(const std::string &d, Place* p);
     virtual void generateObjects();
 
+    void addDirection(const std::string &d, Place* p);
     void killCharacter(Character &character);
 
     void addCharacter(Character &character);
     void addObject(Object &o);
 
     bool containsCharacter(const std::string& character_name)  const;
-    Character* getCharacter(const std::string& name);
+    Character *getCharacter(const std::string& name)           const;
 
     // Accessors
     std::string name()        const;
@@ -59,6 +57,8 @@ public:
 
     bool operator==(const Place& p) const;
 protected:
+    Place(const std::string &name); // One cannot create an abstract place!
+
     std::string name_;
 
     std::vector<Object*> objects_;

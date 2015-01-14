@@ -28,11 +28,11 @@ public:
     bool add(Object &object);
     bool remove(const Object& object);
 
-    const std::vector<Object*> & objects() const;
+    const std::vector<Object*> & objects()  const;
 
-    std::string description()     const;
+    std::string description()               const;
 
-    bool operator > (const Container& c)    const ;
+    bool operator > (const Container& c)    const;
 
     bool isMovableTo(const Container &c)    const;
 
