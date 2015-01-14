@@ -10,7 +10,7 @@
 #define POISON_PROB             0.2
 #define POISON_HURT_POINTS      5       // The poisoned character loses this amount every turn it's poisoned
 
-#define VAMPIRE_REPRODUCTION_FREQUENCY  5
+#define VAMPIRE_REPRODUCTION_FREQUENCY  1
 
 namespace lab3
 {

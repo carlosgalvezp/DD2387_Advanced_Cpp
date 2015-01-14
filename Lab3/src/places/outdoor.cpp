@@ -17,7 +17,7 @@ void Outdoor::createCharacters(){}
 
 std::size_t Outdoor::getNumberOfAnimals()   const
 {
-    std::size_t result;
+    std::size_t result = 0;
     for(Character *c : this->characters())
     {
         if(dynamic_cast<characters::Animal*>(c) != nullptr)
@@ -27,11 +27,12 @@ std::size_t Outdoor::getNumberOfAnimals()   const
 }
 
 
-void Outdoor::reproduceCharacters(std::map<std::string, Character *> new_characters)
+void Outdoor::reproduceCharacters(std::map<std::string, Character *>& new_characters)
 {
     if(this->getNumberOfAnimals() < max_animal_population_)
     {
-        for(Character *c : this->characters())
+        std::vector<Character*> characters0 = this->characters();
+        for(Character *c : characters0)
         {
             characters::Animal* c_animal = dynamic_cast<characters::Animal*>(c);
             if(c_animal != nullptr)

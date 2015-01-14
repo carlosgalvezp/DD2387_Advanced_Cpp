@@ -17,14 +17,12 @@ public:
     Outdoor(const std::string &name, int max_animal_population = DEFAULT_ANIMAL_MAX_POPULATION);
 
     virtual void createCharacters();
-    virtual void reproduceCharacters(std::map<std::string, Character*> new_characters);
+    virtual void reproduceCharacters(std::map<std::string, Character *> &new_characters);
 
     std::size_t getNumberOfAnimals()    const;
     ~Outdoor();
 protected:
     std::size_t max_animal_population_;
-
-
 };
 
 }

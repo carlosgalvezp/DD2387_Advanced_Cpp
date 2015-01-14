@@ -20,7 +20,7 @@ public:
     ~Shop();
 
 protected:
-    int days_to_restock_;
+    int days_since_last_restock_;
 };
 }
 }

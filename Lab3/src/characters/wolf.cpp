@@ -67,9 +67,11 @@ bool Wolf::isEnemy(const Character &ch) const
 Character* Wolf::reproduce()
 {
     if(this->current_place_ == this->natural_habitat_ &&
-       this->days_since_last_reproduced_ > this->reproduction_frequency_)
+       this->days_since_last_reproduced_++ > this->reproduction_frequency_)
     {
-        lab3::utils_io::print_newline(">>>> " + this->name()+ " has reproduced! <<<<");
+        lab3::utils_io::print_newline("============ " + this->name()+ " has reproduced! ============");
+        lab3::utils_io::wait_for_enter();
+        this->days_since_last_reproduced_ = 0;
         return new Wolf(this->currentPlace(), this->currentPlace());
     }
     return nullptr;

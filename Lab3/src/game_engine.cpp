@@ -174,6 +174,9 @@ void GameEngine::run()
                 lab3::utils_io::wait_for_enter();
             }
         }
+        if(this->is_finished_) // Don't run anything else if we are finished!
+            break;
+
         // ** Put player in hospital if dead
         if(!player->isAlive())
         {
@@ -249,8 +252,8 @@ void GameEngine::regenerateStuff(std::map<std::string, Character *> &characters)
         }
     }
     // Animals
-    places::Outdoor* cave_ptr   = static_cast<places::Outdoor*>(places_map_.at("NAME_CAVE"));
-    places::Outdoor* forest_ptr = static_cast<places::Outdoor*>(places_map_.at("NAME_FOREST"));
+    places::Outdoor* cave_ptr   = static_cast<places::Outdoor*>(places_map_.at(NAME_CAVE));
+    places::Outdoor* forest_ptr = static_cast<places::Outdoor*>(places_map_.at(NAME_FOREST));
 
     cave_ptr->reproduceCharacters(characters);
     forest_ptr->reproduceCharacters(characters);

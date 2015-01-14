@@ -7,7 +7,7 @@ Shop::Shop()
 
 Shop::Shop(const std::string &name, bool is_open)
     : Indoor(name, is_open),
-      days_to_restock_(DAYS_TO_RESTOCK)
+      days_since_last_restock_(DAYS_TO_RESTOCK)
 {
     std::vector<std::string> tmp;
     for(auto it = this->place_commands_.begin(); it != this->place_commands_.end();++it)
@@ -26,10 +26,10 @@ Shop::~Shop()
 
 void Shop::restock()
 {
-    --days_to_restock_;
-    if(days_to_restock_ == 0)
+    if(days_since_last_restock_++ > DAYS_TO_RESTOCK)
     {
-        lab3::utils_io::print_newline("The shop "+this->name()+" has restocked all of its items");
-        days_to_restock_ = 0;
+        lab3::utils_io::print_newline("============ The shop "+this->name()+" has restocked all of its items ============");
+        lab3::utils_io::wait_for_enter();
+        days_since_last_restock_ = 0;
     }
 }
