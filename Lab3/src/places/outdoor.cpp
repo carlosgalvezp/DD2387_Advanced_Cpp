@@ -34,6 +34,9 @@ void Outdoor::reproduceCharacters(std::map<std::string, Character *>& new_charac
         std::vector<Character*> characters0 = this->characters();
         for(Character *c : characters0)
         {
+            if(this->getNumberOfAnimals() >= max_animal_population_)
+                break;
+
             characters::Animal* c_animal = dynamic_cast<characters::Animal*>(c);
             if(c_animal != nullptr)
             {

@@ -4,7 +4,7 @@
 #include <place.h>
 #include <characters/animal.h>
 
-#define DEFAULT_ANIMAL_MAX_POPULATION   5
+#define DEFAULT_ANIMAL_MAX_POPULATION   3
 namespace lab3
 {
 namespace places
