@@ -185,7 +185,7 @@ ActionResult Player::fight(Character &character)
             if(result.success_)  return result;
         }
     }
-    return finished;
+    return true;
 }
 
 ActionResult Player::use(Object &o)
