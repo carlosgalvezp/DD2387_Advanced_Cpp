@@ -13,7 +13,5 @@ Outdoor::~Outdoor()
 {
 }
 
-void Outdoor::createCharacters()
-{
-    std::cout << "[Outdoor::generateAnimals]"<<std::endl;
-}
+void Outdoor::createCharacters(){}
+void Outdoor::reproduceCharacters(){}

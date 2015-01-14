@@ -6,8 +6,9 @@ Animal::Animal()
 {
 
 }
-Animal::Animal(const std::string &name, const std::string &type, Place* place, Place* natural_habitat)
-    : Character(name,type, place), natural_habitat_(natural_habitat)
+Animal::Animal(const std::string &name, const std::string &type, Place* place, Place* natural_habitat, int reproduction_frequency)
+    : Character(name,type, place), natural_habitat_(natural_habitat),
+      p_food_(0.8), p_go_(0.2)
 {
     this->talk_msgs_ =
     {
@@ -24,7 +25,7 @@ ActionResult Animal::action(bool display_info)
     Character* enemy = this->lookForEnemies();
     double p_fight = (enemy != nullptr && !enemy->isFighting()) ? this->p_fight_ : 0;
 
-    std::vector<double> probabilities = {p_fight, this->p_food_, this->p_go};
+    std::vector<double> probabilities = {p_fight, this->p_food_, this->p_go_};
     std::vector<std::string> commands = {CMD_FIGHT, CMD_LOOK_FOOD, CMD_GO};
     lab3::utils::normalizeProbabilities(probabilities);
 
@@ -73,4 +74,9 @@ bool Animal::lookForFood()
     }
     lab3::utils_io::print_newline("It did not find food");
     return false;
+}
+
+void Animal::reproduce() const
+{
+
 }

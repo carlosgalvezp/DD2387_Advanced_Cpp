@@ -7,7 +7,7 @@ Troll::Troll()
 {}
 
 Troll::Troll(const std::string &name, Place *place, Place *natural_habitat)
-    : Animal(name, TYPE_TROLL, place, natural_habitat),
+    : Animal(name, TYPE_TROLL, place, natural_habitat, 10000000),
       tiredness_(TIREDNESS_MAX/2.0)
 {}
 

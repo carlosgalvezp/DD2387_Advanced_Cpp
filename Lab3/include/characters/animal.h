@@ -17,9 +17,11 @@ class Animal : public Character
 {
 public:
     Animal();
-    Animal(const std::string &name, const std::string &type, Place *place, Place *natural_habitat);
+    Animal(const std::string &name, const std::string &type, Place *place, Place *natural_habitat, int reproduction_frequency);
 
     ActionResult action(bool display_info)=0;
+
+    virtual void reproduce()    const;
     ~Animal();
 
 protected:
@@ -28,7 +30,7 @@ protected:
 
     bool lookForFood();               // Gives life points
 
-    double p_food_, p_go, p_fight_;
+    double p_food_, p_go_, p_fight_;
 };
 
 }

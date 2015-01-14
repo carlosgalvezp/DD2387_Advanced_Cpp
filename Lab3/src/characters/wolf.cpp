@@ -3,11 +3,14 @@
 using namespace lab3::characters;
 using namespace lab3;
 
+int Wolf::id_ = 1;
+
 Wolf::Wolf()
 {}
 
-Wolf::Wolf(const std::string &name, Place *place, Place *natural_habitat)
-    : Animal(name, TYPE_WOLF, place, natural_habitat),
+Wolf::Wolf(Place *place, Place *natural_habitat)
+    : Animal(std::string(TYPE_WOLF) + std::string(" ")+std::to_string(Wolf::id_++),
+             TYPE_WOLF, place, natural_habitat, WOLF_REPRODUCTION_FREQUENCY),
       teeth_size_(0)
 {}
 

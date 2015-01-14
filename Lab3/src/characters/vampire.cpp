@@ -3,11 +3,14 @@
 using namespace lab3::characters;
 using namespace lab3;
 
+int Vampire::id_ = 1;
+
 Vampire::Vampire()
 {}
 
-Vampire::Vampire(const std::string &name, Place* place, Place* natural_habitat)
-    : Animal (name, TYPE_VAMPIRE, place, natural_habitat),
+Vampire::Vampire(Place* place, Place* natural_habitat)
+    : Animal (std::string(TYPE_VAMPIRE) + std::string(" ")+std::to_string(Vampire::id_++),
+              TYPE_VAMPIRE, place, natural_habitat, VAMPIRE_REPRODUCTION_FREQUENCY),
       poison_concentration_(0)
 {}
 

@@ -128,6 +128,8 @@ void GameEngine::newGame()
     lab3::places::connectPlaces(*this->places_map_.at(NAME_CITY_CENTER),    *this->places_map_.at(NAME_FOREST),     DIRECTION_NORTH);
     lab3::places::connectPlaces(*this->places_map_.at(NAME_CITY_CENTER),    *this->places_map_.at(NAME_CAVE),       DIRECTION_NW);
     lab3::places::connectPlaces(*this->places_map_.at(NAME_FOREST),         *this->places_map_.at(NAME_CASTLE),     DIRECTION_NORTH);
+
+
 }
 
 void GameEngine::run()
@@ -237,9 +239,9 @@ void GameEngine::createObjects()
 void GameEngine::regenerateStuff()
 {
     // Stock in the Multi_Shop
-    for(auto it = this->places_map_.begin(); it != this->places_map_.end(); ++it)
+    for(std::pair<std::string, Place*> pair : places_map_)
     {
-        Place* p = it->second;
+        Place* p = pair.second;
         places::Shop *p_shop = dynamic_cast<places::Shop*>(p);
         if(p_shop != nullptr)
         {
@@ -247,6 +249,11 @@ void GameEngine::regenerateStuff()
         }
     }
     // Animals
+    places::Outdoor* cave_ptr   = static_cast<places::Outdoor*>(places_map_.at("NAME_CAVE"));
+    places::Outdoor* forest_ptr = static_cast<places::Outdoor*>(places_map_.at("NAME_FOREST"));
+
+    cave_ptr->reproduceCharacters();
+    forest_ptr->reproduceCharacters();
 }
 
 // ======================= Event callback functions ==========================

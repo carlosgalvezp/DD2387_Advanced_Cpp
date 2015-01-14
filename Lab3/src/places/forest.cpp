@@ -22,6 +22,13 @@ void Forest::generateObjects()
 
 void Forest::createCharacters()
 {
-    new characters::Wolf("wolf 1", this, this);
-    new characters::Wolf("wolf 2", this, this);
+    for(int i = 0; i < N_ANIMALS_FOREST; ++i)
+    {
+        new characters::Wolf(this, this);
+    }
+}
+
+void Forest::reproduceCharacters()
+{
+    // Get Wolf
 }

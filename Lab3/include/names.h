@@ -23,11 +23,11 @@
 // TYPES
 #define TYPE_PLAYER         "Player"
 #define TYPE_PRINCESS       "Princess"
-#define TYPE_TROLL          "Troll"
-#define TYPE_WOLF           "Wolf"
-#define TYPE_HUMAN          "Human"
+#define TYPE_TROLL          "rroll"
+#define TYPE_WOLF           "wolf"
+#define TYPE_HUMAN          "human"
 #define TYPE_WIZARD         "Wizard"
-#define TYPE_VAMPIRE        "Vampire"
+#define TYPE_VAMPIRE        "vampire"
 #define TYPE_FINAL_MONSTER  "Final Monster"
 
 // DIRECTIONS

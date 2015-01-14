@@ -16,6 +16,8 @@ public:
     Outdoor(const std::string &name);
 
     virtual void createCharacters();
+    virtual void reproduceCharacters();
+
     ~Outdoor();
 protected:
 //    std::vector<characters::Animal> animals_;

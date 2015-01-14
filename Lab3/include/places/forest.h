@@ -5,6 +5,8 @@
 
 #include <objects/usable.h>
 
+#define N_ANIMALS_FOREST    3
+
 namespace lab3
 {
 namespace places
@@ -16,11 +18,14 @@ class Forest : public Outdoor
 public:
     Forest();
     Forest(const std::string &name);
+    ~Forest();
 
     void generateObjects();
     void createCharacters();
 
-    ~Forest();
+    void reproduceCharacters();
+private:
+    int n_days_since_last_reproduction_;
 };
 
 }
