@@ -26,8 +26,8 @@ public:
 
 private:
     bool talked_to_player_;
-    std::map<std::string, Place*>& world_places_;
     int magic_points_;      //Available points to use his magic
+    std::map<std::string, Place*>& world_places_;
 
     void recover_magic();
 };

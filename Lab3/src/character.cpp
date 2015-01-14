@@ -12,7 +12,7 @@ const std::map<std::string, std::vector<int>> attributes =
     {TYPE_TROLL,            {50,        20,         15,         10}},
     {TYPE_WOLF,             {50,        20,          5,         10}},
     {TYPE_VAMPIRE,          {50,        15,          5,         10}},
-    {TYPE_FINAL_MONSTER,    {100,       50,         0,         10}}
+    {TYPE_FINAL_MONSTER,    {100,       50,         100,        10}}
 };
 
 Character::Character()
@@ -101,19 +101,21 @@ ActionResult Character::fight(Character &character)
 
     if(!character.isAlive())             // The oponent died
     {
-        if(character.type() != TYPE_PLAYER)
+        if(character.name() != NAME_PLAYER)
             lab3::utils_io::print_newline(character.name() + " has died");
         else
             lab3::utils_io::print_newline(character.name() + " has been seriously injured");
-        this->is_fighting_ = false;
-        character.is_fighting_ = false;
+
+        this->endFight();
+        character.endFight();
         return true;
     }
     else if(!character.isFighting())    // The oponent scaped
     {
         lab3::utils_io::print_newline(character.name() + " has scaped the fight");
-        this->is_fighting_ = false;
-        character.is_fighting_ = false;
+
+        this->endFight();
+        character.endFight();
         return true;
     }
     return false;
@@ -124,8 +126,8 @@ ActionResult Character::scape()
     lab3::utils_io::print_newline(this->name_ + " has scaped the fight");
     this->is_fighting_ = false;
     this->fighter_->is_fighting_ = false;
-//    this->fighter_->fighter_ = nullptr;
-//    this->fighter_ = nullptr;
+    this->fighter_->fighter_ = nullptr;
+    this->fighter_ = nullptr;
     return true;
 }
 
@@ -185,9 +187,17 @@ void Character::add_life(int life)
 
 void Character::add_strength(int strength)
 {
-    this->life_points_ = std::min(this->strength_ + strength, MAX_STRENGTH); // XXX CHANGE so that every player has its own
+    this->strength_ = std::min(this->strength_ + strength, MAX_STRENGTH); // XXX CHANGE so that every player has its own
     std::stringstream ss;
     ss << "The character "<<this->name()<<" gains "<<strength<<" strength points, so it now has "<<this->strength_<<" strength points";
+    lab3::utils_io::print_newline(ss.str());
+}
+
+void Character::add_defense(int defense)
+{
+    this->defense_ = std::max(0, this->defense_ + defense);
+    std::stringstream ss;
+    ss << "The character "<<this->name()<<" gains "<<defense<<" defense points, so it now has "<<this->defense_<<" defense points";
     lab3::utils_io::print_newline(ss.str());
 }
 
@@ -204,6 +214,21 @@ void Character::set_constantly_damaged(const std::string &type, int points)
 
     this->constant_damage_type_ = type;
     this->constant_damage_points_ = 0;
+}
+
+void Character::applyConstantDamage()
+{
+    this->life_points_ = std::max(0, this->life_points_ - this->constant_damage_points_);
+    std::stringstream ss;
+    ss << "The "<<this->name() <<" is still "<<this->constant_damage_type_
+       <<", so his life points are reduced by "<<this->constant_damage_points_<<". Current life: "<<this->life_points_;
+    lab3::utils_io::print_newline(ss.str());
+}
+
+void Character::endFight()
+{
+    this->is_fighting_ = false;
+    this->fighter_ = nullptr;
 }
 
 // ** Accessors

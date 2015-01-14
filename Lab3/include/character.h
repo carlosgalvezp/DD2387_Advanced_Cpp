@@ -47,8 +47,14 @@ public:
     void add_life(int life);
     void set_life(int life);
     void add_strength(int stregth);
+    void add_defense(int defense);
     void set_talk_msgs(const std::vector<std::string> &msgs);
     void set_constantly_damaged(const std::string& type, int points);
+
+    void applyConstantDamage();
+
+    void endFight();
+
 
     // Accessors
     int getLifePoints()             const;

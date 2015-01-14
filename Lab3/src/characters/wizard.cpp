@@ -5,7 +5,9 @@ using namespace lab3::characters;
 Wizard::Wizard(const std::string &name, Place *place, std::map<std::string, Place *> &world_places)
     : Human(name, TYPE_WIZARD, place),
       talked_to_player_(false),
+      magic_points_(50),
       world_places_(world_places)
+
 {
     this->talk_msgs_ = {"I am the "+name+". I only appear in crucial moments, and only the right person can see me "
                         "The Princess needs to be saved, for which the monster inside the King's Castle needs to be killed... "
@@ -20,7 +22,25 @@ int Wizard::getMagicPoints()    const   {return this->magic_points_;}
 
 ActionResult Wizard::action(bool display_info)
 {
-    std::cout << "[Wizard::action] TO DO" << std::endl;
+    if(magic_points_ > 40)
+    {
+        if(this->currentPlace()->name() == NAME_CASTLE && this->currentPlace()->containsCharacter(NAME_PLAYER))
+        {
+            Character* monster = this->currentPlace()->getCharacter(NAME_FINAL_MONSTER);
+            monster->add_defense(-monster->getDefense());
+            std::stringstream ss;
+            ss<< "The "<<this->name()<<" uses a powerful magic which totally destroys the "<<monster->name()
+                 <<" defense. Now it is easier to fight with! ";
+            lab3::utils_io::print_newline(ss.str());
+            magic_points_ = 0;
+        }
+    }
+    else
+    {
+        std::stringstream ss;
+        ss << "The "<<this->name()<< " recently used a powerful magic, so now he needs to recover"<<std::endl;
+        this->recover_magic();
+    }
     return EVENT_NULL;
 }
 

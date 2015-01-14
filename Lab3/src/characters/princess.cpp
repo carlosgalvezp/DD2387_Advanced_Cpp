@@ -8,12 +8,7 @@ Princess::Princess()
 Princess::Princess(const std::string &name, Place *place)
     : Human(name, TYPE_HUMAN, place), hope_(0)
 {
-    this->talk_msgs_ =
-    {
-        "Let me out, please!",
-        "Someone will come and save me, I can tell you!",
-        "You will get destroyed soon!"
-    };
+
 
     this->action_commands_ = {CMD_TALK, CMD_DISTRACT_MONSTER};
 }
@@ -27,6 +22,12 @@ ActionResult Princess::action(bool display_info)
     Character *monster = this->currentPlace()->getCharacter(NAME_FINAL_MONSTER);
     if(player == nullptr)   // The player is not here
     {
+        this->talk_msgs_ =
+        {
+            "Let me out, please!",
+            "Someone will come and save me, I can tell you!",
+            "You will get destroyed soon!"
+        };
         // Just beg the monster for liberation
         talk_to(*monster);
     }
@@ -36,9 +37,17 @@ ActionResult Princess::action(bool display_info)
         this->talk_msgs_ =
         {
             "Attack this monster! I will try to distract him meanwhile!",
-            "His skin is too thick for a normal weapon. Some kind of magic is required to remove that protection!",
             "Remember to use potions when you are low on life points!"
         };
+
+        if(monster->getDefense() == 0)
+        {
+            talk_msgs_.push_back("Its thick skin has been weakened a lot!! Now it's the perfect time to destroy the "+monster->name()+"!!");
+        }
+        else
+        {
+            talk_msgs_.push_back("His skin is too thick for a normal weapon. Some kind of magic is required to remove that protection!");
+        }
 
         std::vector<int> command_points = {5,this->hope_};
         std::string cmd = lab3::utils::getRandomCommandPoints(this->action_commands_, command_points);

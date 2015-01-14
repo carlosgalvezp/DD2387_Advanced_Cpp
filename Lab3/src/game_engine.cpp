@@ -181,21 +181,27 @@ void GameEngine::run()
             places_map_.at(NAME_HOME)->enter(*player);
         }
 
-        // ** Remove dead characters
+        // ** Remove dead characters and apply poison/bleeding
         std::map<std::string, Character*> tmp;
-        for(auto it = characters_map_.begin(); it != characters_map_.end(); ++it)
+        std::for_each(characters_map_.begin(), characters_map_.end(),
+                      [&tmp](std::pair<std::string, Character*> it) -> void
         {
-            Character *c = it->second;
+            Character *c = it.second;
             if (!c->isAlive())
             {
                 // Remove from place
                 c->currentPlace()->leave(*c);
+                // Delete it
                 delete c;
                 c = nullptr;
-                continue;
             }
-            tmp.insert(*it);
-        }
+            else    // Apply constant damage, if applicable
+            {
+                if(c->isConstantlyDamaged())     {  c->applyConstantDamage();      }
+                tmp.insert(it);
+            }
+        });
+
         characters_map_= tmp;
 
         // ** Create more dynamic objects (restock potions, animals etc)

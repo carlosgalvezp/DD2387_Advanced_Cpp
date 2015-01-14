@@ -2,9 +2,15 @@
 #define INDOOR_H
 
 #include <place.h>
-
+#include <objects/container.h>
+#include <objects/key.h>
 namespace lab3
 {
+namespace objects
+{
+class Key;
+}
+
 namespace places
 {
 
@@ -22,6 +28,8 @@ public:
 
 protected:
     bool is_open_;
+
+    bool isValidKey(const lab3::objects::Key& key)       const;
 };
 
 }
