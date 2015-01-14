@@ -13,7 +13,6 @@ namespace places
 class Outdoor : public Place
 {
 public:
-    Outdoor();
     Outdoor(const std::string &name, int max_animal_population = DEFAULT_ANIMAL_MAX_POPULATION);
 
     virtual void createCharacters();

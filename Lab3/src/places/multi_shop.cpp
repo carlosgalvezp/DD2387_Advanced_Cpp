@@ -27,9 +27,6 @@ const std::map<std::string, std::vector<int>> bags_config =
     {"big backpack",       {1,          50,             30,         25,         30,         50}}
 };
 
-Multi_Shop::Multi_Shop()
-{}
-
 Multi_Shop::Multi_Shop(const std::string &name, bool is_open)
     : Shop(name, is_open)
 {}

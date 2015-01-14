@@ -17,7 +17,6 @@ namespace places
 class Forest : public Outdoor
 {
 public:
-    Forest();
     Forest(const std::string &name);
     ~Forest();
 

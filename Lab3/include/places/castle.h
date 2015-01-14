@@ -10,7 +10,6 @@ namespace places
 class Castle : public Indoor
 {
 public:
-    Castle();
     Castle(const std::string &name, bool is_open);
     ~Castle();
 

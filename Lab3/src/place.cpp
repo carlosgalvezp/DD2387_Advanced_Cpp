@@ -1,10 +1,6 @@
 #include <place.h>
 using namespace lab3;
 
-Place::Place()
-{
-}
-
 Place::Place(const std::string &name)
     : name_(name)
 {

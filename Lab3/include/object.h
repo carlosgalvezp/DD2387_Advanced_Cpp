@@ -20,13 +20,15 @@ public:
 
     virtual ~Object();
 
-    int weight()         const;
-    int volume()         const;
-    int price()          const;
-
     virtual std::string name()          const;
     virtual std::string description()   const;
+
+    int weight()                        const;
+    int volume()                        const;
+    int price()                         const;
+
     bool operator==(const Object& o)    const;
+
 private:
     std::string name_;
     std::string description_;

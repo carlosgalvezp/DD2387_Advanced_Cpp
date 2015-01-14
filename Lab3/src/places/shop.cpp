@@ -2,9 +2,6 @@
 
 using namespace lab3::places;
 
-Shop::Shop()
-{}
-
 Shop::Shop(const std::string &name, bool is_open)
     : Indoor(name, is_open),
       days_since_last_restock_(DAYS_TO_RESTOCK)

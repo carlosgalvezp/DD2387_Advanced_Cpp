@@ -22,9 +22,6 @@ const std::map<std::string, std::vector<int>> protections_config =
 };
 
 
-Armory::Armory()
-{}
-
 Armory::Armory(const std::string &name, bool is_open)
     : Shop(name, is_open)
 {

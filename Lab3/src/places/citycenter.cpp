@@ -2,9 +2,6 @@
 
 using namespace lab3::places;
 
-CityCenter::CityCenter()
-{}
-
 CityCenter::CityCenter(const std::string &name)
     : Outdoor(name)
 {}

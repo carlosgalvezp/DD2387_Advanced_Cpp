@@ -14,7 +14,6 @@ namespace places
 class Cave : public Outdoor
 {
 public:
-    Cave();
     Cave(const std::string &name);
 
     void generateObjects();

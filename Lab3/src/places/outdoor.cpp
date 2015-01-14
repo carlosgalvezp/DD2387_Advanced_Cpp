@@ -2,9 +2,6 @@
 
 using namespace lab3::places;
 
-Outdoor::Outdoor()
-{}
-
 Outdoor::Outdoor(const std::string &name, int max_animal_population)
     : Place(name), max_animal_population_(max_animal_population)
 {}

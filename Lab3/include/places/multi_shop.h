@@ -18,7 +18,6 @@ namespace places
 class Multi_Shop : public Shop
 {
 public:
-    Multi_Shop();
     Multi_Shop(const std::string &name, bool is_open);
     ~Multi_Shop();
 

@@ -12,7 +12,6 @@ namespace places
 class CityCenter : public Outdoor
 {
 public:
-    CityCenter();
     CityCenter(const std::string& name);
 
     void createCharacters();

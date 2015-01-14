@@ -3,9 +3,6 @@
 using namespace lab3::places;
 using namespace lab3;
 
-Indoor::Indoor()
-{}
-
 Indoor::Indoor(const std::string &name, bool is_open)
     : Place(name), is_open_(is_open)
 {}

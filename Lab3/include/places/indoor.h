@@ -17,7 +17,6 @@ namespace places
 class Indoor : public Place
 {
 public:
-    Indoor();
     Indoor(const std::string &name, bool is_open);
     ~Indoor();
 

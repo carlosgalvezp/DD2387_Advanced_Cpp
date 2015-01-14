@@ -56,8 +56,8 @@ public:
 
 
     // Accessors
-    const std::string& type()                      const;
-    const std::string& name()                      const;
+    std::string type()                      const;
+    std::string name()                      const;
     int getLifePoints()                     const;
     virtual int getStrength()               const;
     virtual int getDefense()                const;

@@ -10,7 +10,6 @@ namespace places
 class Home : public House
 {
 public:
-    Home();
     Home(const std::string &name);
     ~Home();
 

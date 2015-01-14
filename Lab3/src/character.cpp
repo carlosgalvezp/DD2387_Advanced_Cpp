@@ -45,8 +45,8 @@ Character::~Character()
     }
 }
 
-const std::string& Character::type()     const { return this->type_;           }
-const std::string& Character::name()     const {    return this->name_;        }
+std::string Character::type()     const { return this->type_;           }
+std::string Character::name()     const {    return this->name_;        }
 
 bool Character::isConstantlyDamaged() const{ return this->constant_damage_points_ > 0;}
 

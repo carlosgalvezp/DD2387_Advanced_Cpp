@@ -27,8 +27,6 @@ class Character;
 class Place
 {
 public:
-
-    Place();
     Place(const std::string &name);
     virtual ~Place();
 

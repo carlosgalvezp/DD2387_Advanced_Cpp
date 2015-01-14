@@ -12,7 +12,6 @@ namespace places
 class Shop : public Indoor
 {
 public:
-    Shop();
     Shop(const std::string &name, bool is_open);
 
     virtual void restock();
