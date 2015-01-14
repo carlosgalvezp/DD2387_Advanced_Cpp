@@ -29,7 +29,7 @@ int Warrior::getDefense()   const
 ActionResult Warrior::action(bool display_info)
 {
     Character*c = lookForEnemies();
-    if(c != nullptr)            // ** Fight to animals if they appear in the place
+    if(c != nullptr && !c->isFighting())            // ** Fight to animals if they appear in the place
     {
         this->fight(*c);
     }
