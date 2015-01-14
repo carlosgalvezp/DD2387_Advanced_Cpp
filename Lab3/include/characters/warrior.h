@@ -15,7 +15,6 @@ namespace characters
 class Warrior : public Human
 {
 public:
-    Warrior();
     Warrior(const std::string &name, Place* place);
     ~Warrior();
 

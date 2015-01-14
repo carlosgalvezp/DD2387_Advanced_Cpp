@@ -89,7 +89,7 @@ public:
 protected:
     std::string name_;
     std::string type_;
-    Place* current_place_;
+    Place* current_place_;  // Not using reference since it cannot be changed afterwards!!
 
     // ** Attributes
     int life_points_;

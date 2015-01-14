@@ -5,9 +5,6 @@ using namespace lab3;
 
 int Vampire::id_ = 1;
 
-Vampire::Vampire()
-{}
-
 Vampire::Vampire(Place* place, Place* natural_habitat)
     : Animal (std::string(TYPE_VAMPIRE) + std::string(" ")+std::to_string(Vampire::id_++),
               TYPE_VAMPIRE, place, natural_habitat, VAMPIRE_REPRODUCTION_FREQUENCY),
@@ -70,4 +67,15 @@ double Vampire::getPoisonConcentration()    const{  return this->poison_concentr
 bool Vampire::isEnemy(const Character &ch) const
 {
     return ch.type() != TYPE_VAMPIRE && ch.type() != TYPE_TROLL; // They don't attack vampires or trolls (they are afraid of them)
+}
+
+Character* Vampire::reproduce()
+{
+    if(this->current_place_ == this->natural_habitat_ &&
+       this->days_since_last_reproduced_ > this->reproduction_frequency_)
+    {
+        lab3::utils_io::print_newline(">>>> " + this->name()+ " has reproduced! <<<<");
+        return new Vampire(this->currentPlace(), this->currentPlace());
+    }
+    return nullptr;
 }

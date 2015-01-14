@@ -2,13 +2,12 @@
 
 using namespace lab3::characters;
 
-Animal::Animal()
-{
 
-}
-Animal::Animal(const std::string &name, const std::string &type, Place* place, Place* natural_habitat, int reproduction_frequency)
+Animal::Animal(const std::string &name, const std::string &type, Place *place, Place *natural_habitat, int reproduction_frequency)
     : Character(name,type, place), natural_habitat_(natural_habitat),
-      p_food_(0.8), p_go_(0.2)
+      p_food_(0.8), p_go_(0.2),
+      reproduction_frequency_(reproduction_frequency),
+      days_since_last_reproduced_(0)
 {
     this->talk_msgs_ =
     {
@@ -74,9 +73,4 @@ bool Animal::lookForFood()
     }
     lab3::utils_io::print_newline("It did not find food");
     return false;
-}
-
-void Animal::reproduce() const
-{
-
 }

@@ -4,7 +4,7 @@
 #include <places/outdoor.h>
 #include <characters/vampire.h>
 
-#define N_ANIMALS_CAVE      2
+
 namespace lab3
 {
 namespace places

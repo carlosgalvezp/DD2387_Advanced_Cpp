@@ -15,10 +15,7 @@ const std::map<std::string, std::vector<int>> attributes =
     {TYPE_FINAL_MONSTER,    {100,       20,         100,        20}}
 };
 
-Character::Character()
-{}
-
-Character::Character(const std::string &name, const std::string &type, Place *place)
+Character::Character(const std::string &name, const std::string &type, Place* place)
     : name_(name),
       type_(type),
       current_place_(place),
@@ -165,7 +162,7 @@ ActionResult Character::talk_to(Character &character)
 // ============================================================================================
 
 // ** Setters
-void Character::set_place(Place *p)         {    this->current_place_ = p;}
+void Character::set_place(Place* p)         {    this->current_place_ = p;}
 void Character::set_fighting(bool fighting) {    this->is_fighting_ = fighting;}
 void Character::set_damage(int damage)
 {

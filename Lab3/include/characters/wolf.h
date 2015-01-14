@@ -16,11 +16,12 @@ namespace characters
 class Wolf : public Animal
 {
 public:
-    Wolf();
     Wolf(Place *place, Place *natural_habitat);
     ~Wolf();
 
     ActionResult action(bool display_info);
+
+    Character* reproduce();
 
 private:
     int teeth_size_;    // The bigger, the more likely the bite works and the character bleeds forever.

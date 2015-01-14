@@ -5,9 +5,6 @@ using namespace lab3;
 
 int Wolf::id_ = 1;
 
-Wolf::Wolf()
-{}
-
 Wolf::Wolf(Place *place, Place *natural_habitat)
     : Animal(std::string(TYPE_WOLF) + std::string(" ")+std::to_string(Wolf::id_++),
              TYPE_WOLF, place, natural_habitat, WOLF_REPRODUCTION_FREQUENCY),
@@ -67,4 +64,14 @@ bool Wolf::isEnemy(const Character &ch) const
     return ch.type() != TYPE_WOLF;
 }
 
+Character* Wolf::reproduce()
+{
+    if(this->current_place_ == this->natural_habitat_ &&
+       this->days_since_last_reproduced_ > this->reproduction_frequency_)
+    {
+        lab3::utils_io::print_newline(">>>> " + this->name()+ " has reproduced! <<<<");
+        return new Wolf(this->currentPlace(), this->currentPlace());
+    }
+    return nullptr;
+}
 

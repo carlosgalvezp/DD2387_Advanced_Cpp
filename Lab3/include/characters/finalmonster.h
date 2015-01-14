@@ -13,7 +13,6 @@ namespace characters
 class FinalMonster : public Character
 {
 public:
-    FinalMonster();
     FinalMonster(const std::string &name, Place* place);
     ~FinalMonster();
 

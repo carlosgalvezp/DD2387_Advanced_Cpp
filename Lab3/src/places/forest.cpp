@@ -2,6 +2,8 @@
 #include <characters/wolf.h>
 #include <objects/torch.h>
 
+#define FOREST_MAX_POPULATION 5
+
 using namespace lab3::places;
 
 Forest::Forest()
@@ -26,9 +28,4 @@ void Forest::createCharacters()
     {
         new characters::Wolf(this, this);
     }
-}
-
-void Forest::reproduceCharacters()
-{
-    // Get Wolf
 }

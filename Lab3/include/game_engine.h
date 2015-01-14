@@ -72,7 +72,7 @@ private:
                              std::vector<places::Outdoor *> &animalPlaces);
     void createObjects();
 
-    void regenerateStuff();
+    void regenerateStuff(std::map<std::string, Character *> &characters);
 
     // ** Event callback functions
     void event_EnoughTrain();

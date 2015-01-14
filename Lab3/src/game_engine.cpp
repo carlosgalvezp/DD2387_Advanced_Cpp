@@ -207,7 +207,7 @@ void GameEngine::run()
         characters_map_= tmp;
 
         // ** Create more dynamic objects (restock potions, animals etc)
-//        regenerateStuff();
+        regenerateStuff(characters_map_);
     }
     lab3::utils_io::print_newline("Thanks for playing!");
 }
@@ -236,7 +236,7 @@ void GameEngine::createObjects()
     this->places_map_.at(NAME_OLD_HOUSE)->addObject(*torch);
 }
 
-void GameEngine::regenerateStuff()
+void GameEngine::regenerateStuff(std::map<std::string, Character *> &characters)
 {
     // Stock in the Multi_Shop
     for(std::pair<std::string, Place*> pair : places_map_)
@@ -252,8 +252,8 @@ void GameEngine::regenerateStuff()
     places::Outdoor* cave_ptr   = static_cast<places::Outdoor*>(places_map_.at("NAME_CAVE"));
     places::Outdoor* forest_ptr = static_cast<places::Outdoor*>(places_map_.at("NAME_FOREST"));
 
-    cave_ptr->reproduceCharacters();
-    forest_ptr->reproduceCharacters();
+    cave_ptr->reproduceCharacters(characters);
+    forest_ptr->reproduceCharacters(characters);
 }
 
 // ======================= Event callback functions ==========================

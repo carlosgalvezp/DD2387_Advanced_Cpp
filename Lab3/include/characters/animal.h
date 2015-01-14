@@ -16,12 +16,11 @@ namespace characters
 class Animal : public Character
 {
 public:
-    Animal();
     Animal(const std::string &name, const std::string &type, Place *place, Place *natural_habitat, int reproduction_frequency);
 
     ActionResult action(bool display_info)=0;
 
-    virtual void reproduce()    const;
+    virtual Character* reproduce() = 0;
     ~Animal();
 
 protected:
@@ -31,6 +30,8 @@ protected:
     bool lookForFood();               // Gives life points
 
     double p_food_, p_go_, p_fight_;
+    int reproduction_frequency_;
+    int days_since_last_reproduced_;
 };
 
 }

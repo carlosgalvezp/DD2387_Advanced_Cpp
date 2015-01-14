@@ -14,11 +14,12 @@ namespace characters
 class Troll : public Animal
 {
 public:
-    Troll();
     Troll(const std::string &name, Place *place, Place* natural_habitat);
 
     ActionResult action(bool display_info);
     ActionResult fight(Character &character);
+
+    Character* reproduce();
     ~Troll();
 
 private:

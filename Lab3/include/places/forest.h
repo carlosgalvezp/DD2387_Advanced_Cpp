@@ -6,7 +6,6 @@
 #include <objects/usable.h>
 
 #define N_ANIMALS_FOREST    3
-
 namespace lab3
 {
 namespace places
@@ -23,7 +22,6 @@ public:
     void generateObjects();
     void createCharacters();
 
-    void reproduceCharacters();
 private:
     int n_days_since_last_reproduction_;
 };

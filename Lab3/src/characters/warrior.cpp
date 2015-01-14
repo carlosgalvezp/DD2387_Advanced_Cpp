@@ -3,9 +3,6 @@
 using namespace lab3::characters;
 using namespace lab3;
 
-Warrior::Warrior()
-{}
-
 Warrior::Warrior(const std::string &name, Place *place)
     :Human(name, TYPE_HUMAN, place), skill_(WARRIOR_INITIAL_SKILL)
 {

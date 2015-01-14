@@ -2,9 +2,6 @@
 
 using namespace lab3::characters;
 
-Player::Player()
-{}
-
 Player::Player(const std::string &name, Place *place)
     : Human(name, TYPE_PLAYER, place),
       finished_game_(false),

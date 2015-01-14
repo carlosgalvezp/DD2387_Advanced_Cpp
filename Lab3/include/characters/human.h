@@ -16,7 +16,6 @@ namespace characters
 class Human : public Character
 {
 public:
-    Human();
     Human(const std::string &name, const std::string &type, Place *p);
     ~Human();
 

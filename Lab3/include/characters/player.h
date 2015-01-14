@@ -36,8 +36,6 @@ namespace characters
 class Player : public Human
 {
 public:
-
-    Player();
     Player(const std::string &name, Place *place);
     ~Player();
 

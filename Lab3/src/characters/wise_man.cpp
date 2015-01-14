@@ -2,9 +2,6 @@
 
 using namespace lab3::characters;
 
-Wise_Man::Wise_Man()
-{}
-
 Wise_Man::Wise_Man(const std::string &name, Place *place)
     : Human(name, TYPE_HUMAN, place),
       will_tell_about_wizard_(false),

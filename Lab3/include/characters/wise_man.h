@@ -12,7 +12,6 @@ namespace characters
 class Wise_Man : public Human
 {
 public:
-    Wise_Man();
     Wise_Man(const std::string &name, Place *place);
     ~Wise_Man();
 

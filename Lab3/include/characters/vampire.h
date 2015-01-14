@@ -19,13 +19,13 @@ namespace characters
 class Vampire : Animal
 {
 public:
-    Vampire();
     Vampire(Place* place, Place* natural_habitat);
 
     ActionResult action(bool display_info); //  = 0;
 
     double getPoisonConcentration() const;
 
+    Character* reproduce();
     ~Vampire();
 
 private:

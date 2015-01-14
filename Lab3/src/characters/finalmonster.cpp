@@ -3,9 +3,6 @@
 using namespace lab3;
 using namespace lab3::characters;
 
-FinalMonster::FinalMonster()
-{}
-
 FinalMonster::FinalMonster(const std::string &name, Place *place)
     : Character(name, TYPE_FINAL_MONSTER, place),
       defeated_player_(false)

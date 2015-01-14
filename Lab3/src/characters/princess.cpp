@@ -2,9 +2,6 @@
 
 using namespace lab3::characters;
 
-Princess::Princess()
-{}
-
 Princess::Princess(const std::string &name, Place *place)
     : Human(name, TYPE_HUMAN, place), hope_(0)
 {
