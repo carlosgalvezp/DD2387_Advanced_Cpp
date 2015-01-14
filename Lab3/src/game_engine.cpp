@@ -63,6 +63,7 @@ void GameEngine::initGame()
 
 int GameEngine::mainMenu()
 {
+
     // ** Create options
     std::vector<std::string> menu_options = {"new game", "quit"};
 
@@ -74,6 +75,9 @@ int GameEngine::mainMenu()
         lab3::utils_io::clearScreen();
 
         // ** Display menu
+        lab3::utils_io::print_newline("=============================================================================");
+        lab3::utils_io::print_newline("======= CPROG'14 - Lab 3: 'Rescue the Princess (yet another version)' =======");
+        lab3::utils_io::print_newline("=============================================================================");
         std::string s = lab3::input::read_input(menu_options);
         auto it = std::find(menu_options.begin(), menu_options.end(), s);
         if(it != menu_options.end())
@@ -160,7 +164,7 @@ void GameEngine::run()
             if(c!= nullptr && c->isAlive())
             {
                 lab3::utils_io::print_newline("--------------------------------------------------------------------");
-                lab3::utils_io::print_newline(c->name() + "'s turn");
+                lab3::utils_io::print_newline(c->name() + "'s turn [at "+c->currentPlace()->name()+"]");
                 // ** Execute action
                 ActionResult result = c->action(c->currentPlace() == player->currentPlace()); // Switch to true to see all messages
                 std::string event = result.event_;

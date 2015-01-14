@@ -4,7 +4,7 @@
 #include <characters/human.h>
 
 #define WARRIOR_TRAIN_INCREASE_SKILL    5
-#define WARRIOR_INITIAL_SKILL           5
+#define WARRIOR_INITIAL_SKILL           1
 #define TRAIN_PROB           0.6
 
 namespace lab3

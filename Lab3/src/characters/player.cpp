@@ -36,7 +36,7 @@ lab3::objects::Protection*Player::getProtection()   const{return static_cast<lab
 
 ActionResult Player::action(bool display_info)
 {
-    return lab3::input::read_player_input(this);
+    return lab3::input::read_player_input(*this);
 }
 
 ActionResult Player::pick_up(Object &object)
@@ -131,9 +131,9 @@ ActionResult Player::drop(Object &object)
 {
     std::stringstream ss;
     // ** Check if it's any of the objects we already have
-    for(Object* o : objects_)
+    for(Object* &o : objects_)
     {
-        if(*o == object)
+        if(o!= nullptr && *o == object)
         {
             o = nullptr;
             this->current_place_->drop(object);
