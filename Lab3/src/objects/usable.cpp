@@ -2,9 +2,6 @@
 
 using namespace lab3::objects;
 
-Usable::Usable()
-{}
-
 Usable::Usable(const std::string &name,
                const std::string &description,
                int price,

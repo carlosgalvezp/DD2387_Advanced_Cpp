@@ -11,7 +11,6 @@ namespace objects
 class Equipment : public Object
 {
 public:
-    Equipment();
     Equipment(const std::string &name, const std::string &description,
               int price,
               int volume,

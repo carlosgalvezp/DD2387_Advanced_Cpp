@@ -45,8 +45,8 @@ Character::~Character()
     }
 }
 
-std::string Character::type()     const { return this->type_;           }
-std::string Character::name()     const {    return this->name_;        }
+const std::string& Character::type()     const { return this->type_;           }
+const std::string& Character::name()     const {    return this->name_;        }
 
 bool Character::isConstantlyDamaged() const{ return this->constant_damage_points_ > 0;}
 
@@ -272,7 +272,8 @@ const Place* Character::currentPlace()      const           {    return this->cu
 const std::vector<Object*>& Character::objects()  const {    return this->objects_;          }
       std::vector<Object*>& Character::objects()        {    return this->objects_;          }
 
-Character* Character::fighter() {return this->fighter_;}
+const Character* Character::fighter()   const {return this->fighter_;}
+      Character* Character::fighter()         {return this->fighter_;}
 
 bool Character::operator ==(const Character &obj) const
 {

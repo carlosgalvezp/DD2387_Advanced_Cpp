@@ -2,9 +2,6 @@
 
 using namespace lab3::objects;
 
-Potion::Potion()
-{}
-
 Potion::Potion(const std::string &name,
                const std::string &description,
                int extra_points,

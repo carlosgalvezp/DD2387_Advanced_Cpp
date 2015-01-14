@@ -3,9 +3,6 @@
 using namespace lab3::objects;
 using namespace lab3;
 
-Key::Key()
-{}
-
 Key::Key(const std::string &name, Place *place)
     : Usable(name, "It opens a specific door",100,0,0, false), place_(place)
 {}

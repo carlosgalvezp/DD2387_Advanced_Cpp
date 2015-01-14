@@ -2,9 +2,6 @@
 
 using namespace lab3::objects;
 
-Protection::Protection()
-{}
-
 Protection::Protection(const std::string &name,
                        int defense_points,
                        int price,

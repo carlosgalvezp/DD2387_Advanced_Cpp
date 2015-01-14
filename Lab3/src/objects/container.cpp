@@ -2,9 +2,6 @@
 
 using namespace lab3::objects;
 
-Container::Container()
-{}
-
 Container::Container(const std::string &name,
                      int price,
                      int volume,

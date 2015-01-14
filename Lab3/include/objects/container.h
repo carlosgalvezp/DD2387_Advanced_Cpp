@@ -17,7 +17,6 @@ namespace objects
 class Container : public Object
 {
 public:
-    Container();
     Container(const std::string &name, int price, int volume, int weight, int max_volume,int max_weight);
     ~Container();
 

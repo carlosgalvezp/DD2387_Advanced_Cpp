@@ -26,7 +26,6 @@ class Place;        // Forward declaration
 class Character
 {
 public:
-    Character();
     Character(const std::string &name, const std::string &type, Place *place);
     virtual ~Character();
 
@@ -53,39 +52,39 @@ public:
     void remove_constantly_damaged();
 
     void applyConstantDamage();
-
     void endFight();
 
 
     // Accessors
-    int getLifePoints()             const;
+    const std::string& type()                      const;
+    const std::string& name()                      const;
+    int getLifePoints()                     const;
     virtual int getStrength()               const;
     virtual int getDefense()                const;
     virtual int getInitiative()             const;
-    bool isAlive()                  const;
-    bool isFighting()               const;
+    bool isAlive()                          const;
+    bool isFighting()                       const;
 
-    const Place* currentPlace()      const;
-    Place*       currentPlace()      ;
+    const Place* currentPlace()             const;  // Read-only
+    Place*       currentPlace();
 
-    Character* fighter();
+    const Character* fighter()              const;
+          Character* fighter();
 
 
     const    std::vector<Object*>& objects()    const;
              std::vector<Object*>& objects();
 
     virtual const std::vector<std::string> &getCommands()         const;
-    const std::vector<std::string> & getTalkMessages()            const;
+            const std::vector<std::string> &getTalkMessages()     const;
 
-    std::string type()                      const;
-    std::string name()                      const;
 
-    bool isConstantlyDamaged()              const;
+    bool isConstantlyDamaged()                      const;
 
-    bool operator==(const Character &ch)    const;
-    bool operator!=(const Character &ch)    const;
+    bool operator==(const Character &ch)            const;
+    bool operator!=(const Character &ch)            const;
 
-    virtual bool isEnemy(const Character &ch)       const =0;
+    virtual bool isEnemy(const Character &ch)       const = 0;
     virtual Character* lookForEnemies()             const;
 protected:
     std::string name_;
@@ -105,13 +104,10 @@ protected:
     std::string constant_damage_type_;
 
     std::vector<Object*> objects_;
-
-
     std::vector<std::string> talk_msgs_;
     std::vector<std::string> action_commands_;
 
     Character* fighter_;
-
 };
 
 int computeDamage(const Character &attacker, const Character &defender);

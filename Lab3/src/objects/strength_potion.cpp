@@ -2,9 +2,6 @@
 
 using namespace lab3::objects;
 
-Strength_Potion::Strength_Potion()
-{}
-
 Strength_Potion::Strength_Potion(const std::string &name,
                                  int extra_points,
                                  int price,

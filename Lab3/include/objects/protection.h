@@ -10,7 +10,6 @@ namespace objects
 class Protection : public Equipment
 {
 public:
-    Protection();
     Protection(const std::string &name,
            int defense_points,
            int price,

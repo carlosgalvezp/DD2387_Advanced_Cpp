@@ -12,7 +12,6 @@ namespace objects
 class Potion : public Usable
 {
 public:
-    Potion();
     Potion(const std::string &name,
            const std::string &description,
            int extra_points,

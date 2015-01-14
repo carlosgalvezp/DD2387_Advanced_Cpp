@@ -11,7 +11,6 @@ namespace objects
 class Weapon : public Equipment
 {
 public:
-    Weapon();
     Weapon(const std::string &name,
            int hands_required,
            int attack_points,

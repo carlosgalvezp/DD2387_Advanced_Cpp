@@ -12,7 +12,6 @@ namespace lab3
 class Object
 {
 public:
-    Object();
     Object(const std::string &name,
            const std::string &description,
            int price,

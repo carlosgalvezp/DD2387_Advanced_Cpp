@@ -12,7 +12,6 @@ namespace objects
 class Key : public Usable
 {
 public:
-    Key();
     Key(const std::string &name, lab3::Place* place);
 
     ActionResult use(Character &c);

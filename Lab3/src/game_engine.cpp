@@ -61,7 +61,7 @@ void GameEngine::initGame()
     }
 }
 
-int GameEngine::mainMenu()
+int GameEngine::mainMenu() const
 {
 
     // ** Create options

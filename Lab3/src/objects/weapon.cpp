@@ -2,8 +2,6 @@
 
 using namespace lab3::objects;
 
-Weapon::Weapon()
-{}
 
 Weapon::Weapon(const std::string &name,
                int hands_required,

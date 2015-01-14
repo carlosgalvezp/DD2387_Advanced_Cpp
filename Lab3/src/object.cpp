@@ -1,8 +1,6 @@
 #include "object.h"
 
 using namespace lab3;
-Object::Object()
-{}
 
 Object::Object(const std::string &name, const std::string &description, int price, int volume, int weight)
     : name_(name),

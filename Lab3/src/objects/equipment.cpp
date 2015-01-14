@@ -2,9 +2,6 @@
 
 using namespace lab3::objects;
 
-Equipment::Equipment()
-{}
-
 Equipment::Equipment(const std::string &name,
                      const std::string &description,
                      int price,

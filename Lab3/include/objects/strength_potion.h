@@ -11,7 +11,6 @@ namespace objects
 class Strength_Potion : public Potion
 {
 public:
-    Strength_Potion();
     Strength_Potion(const std::string &name,
                     int extra_points,
                     int price,

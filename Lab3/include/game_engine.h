@@ -56,7 +56,6 @@ public:
     void run();
 
 private:
-    std::vector<Object*> objects_;
     std::map<std::string, Character*> characters_map_;
     std::map<std::string, Place*> places_map_;
 
@@ -64,8 +63,7 @@ private:
     std::string introduction_;
     std::string ending_;
 
-
-    int mainMenu();
+    int mainMenu()      const;
     void newGame();
 
     void createCharacters(std::map<std::string, Character *> &characters,
