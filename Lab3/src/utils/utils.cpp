@@ -52,13 +52,18 @@ std::string oppositeDirection(const std::string &dir)
 
 double fRand(double fMin, double fMax)
 {
-    double f = (double)rand() / RAND_MAX;
+    double f = (double)std::rand() / RAND_MAX;
     return fMin + f * (fMax - fMin);
+}
+
+int iRand(int min, int max)
+{
+    return min + (std::rand() % (int)(max - min + 1));
 }
 
 int rollDice()
 {
-    return (rand() % 6 + 1);
+    return (std::rand() % 6 + 1);
 }
 
 bool eventHappens(double prob)
@@ -104,6 +109,19 @@ std::string getRandomCommandPoints(const std::vector<std::string> &commands, con
     return getRandomCommandProbs(commands, commandProbs);
 }
 
+void normalizeProbabilities(std::vector<double> &probs)
+{
+    double sum(0);
+    for(double p : probs)   sum +=p;
+
+    if(sum!=0)
+    {
+        for(std::size_t i = 0; i < probs.size(); ++i)
+        {
+            probs[i] /= sum;
+        }
+    }
+}
 
 }
 }

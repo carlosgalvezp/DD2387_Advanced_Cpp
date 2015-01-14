@@ -28,21 +28,7 @@ ActionResult Vampire::action(bool display_info)
     }
     else
     {
-        // ** Decide whether fight or look for food
-        Character* enemy = this->lookForEnemies();
-        if(enemy != nullptr)
-        {
-            double food_prob = 1;// - this->life_points_ / MAX_LIFE;
-            if(lab3::utils::eventHappens(food_prob))
-            {
-                this->lookForFood();
-            }
-            else
-            {
-                this->fight(*enemy);
-            }
-            return EVENT_NULL;
-        }
+        return Animal::action(display_info);
     }
     lab3::utils_io::print_newline(this->name() + " is sleeping...");
     return EVENT_NULL;

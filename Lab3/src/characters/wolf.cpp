@@ -28,27 +28,7 @@ ActionResult Wolf::action(bool display_info)
     }
     else
     {
-        // ** Decide whether fight or look for food
-        Character* enemy = this->lookForEnemies();
-        if(enemy != nullptr)
-        {
-            double food_prob = 1;// - this->life_points_ / MAX_LIFE;
-            if(lab3::utils::eventHappens(food_prob))
-            {
-                this->lookForFood();
-            }
-            else
-            {
-                if(!enemy->isFighting())
-                {
-                    this->fight(*enemy);
-                }
-            }
-        }
-        else
-        {
-            this->lookForFood();
-        }
+        return Animal::action(display_info);
     }
     return EVENT_NULL;
 }

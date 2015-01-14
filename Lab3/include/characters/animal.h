@@ -27,6 +27,8 @@ protected:
     int age_;                       // Animals get old and therefore fight worse. Eventually they die
 
     bool lookForFood();               // Gives life points
+
+    double p_food_, p_go, p_fight_;
 };
 
 }

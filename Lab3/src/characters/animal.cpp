@@ -18,6 +18,45 @@ Animal::Animal(const std::string &name, const std::string &type, Place* place, P
 Animal::~Animal()
 {}
 
+ActionResult Animal::action(bool display_info)
+{
+    // ** Decide whether to fight, look for food or go elsewhere
+    Character* enemy = this->lookForEnemies();
+    double p_fight = (enemy != nullptr && !enemy->isFighting()) ? this->p_fight_ : 0;
+
+    std::vector<double> probabilities = {p_fight, this->p_food_, this->p_go};
+    std::vector<std::string> commands = {CMD_FIGHT, CMD_LOOK_FOOD, CMD_GO};
+    lab3::utils::normalizeProbabilities(probabilities);
+
+    // Select command at random
+    std::string cmd = lab3::utils::getRandomCommandProbs(commands, probabilities);
+    if(cmd == CMD_FIGHT)
+    {
+        return this->fight(*enemy);
+    }
+    else if (cmd == CMD_LOOK_FOOD)
+    {
+        return this->lookForFood();
+
+    }
+    else if (cmd == CMD_GO)
+    {
+        // Get directions
+        const std::map<std::string, Place*> directions = this->currentPlace()->directions();
+        // Get random direction
+        int d = lab3::utils::iRand(0, directions.size()-1);
+        int i = 0;
+        for(auto it = directions.begin();  it != directions.end(); ++it, ++i)
+        {
+            if (i == d)
+            {
+                return this->go(it->first);
+            }
+        }
+    }
+    return EVENT_NULL;
+}
+
 bool Animal::lookForFood()
 {
     std::stringstream ss;
